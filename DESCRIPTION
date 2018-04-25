@@ -1,7 +1,7 @@
 Package: netplot
 Title: What the Package Does (one line, title case)
 Version: 0.0.0.9000
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
+Authors@R: person("George", "Vega Yon", email = "g.vegayon@gmail.com", role = c("aut", "cre"))
 Description: What the package does (one paragraph).
 Depends: R (>= 3.4.4)
 License: MIT + file LICENSE
@@ -9,6 +9,7 @@ Encoding: UTF-8
 LazyData: true
 Remotes: USCbiostats/polygons
 RoxygenNote: 6.0.1.9000
+Roxygen: list(markdown = TRUE)
 Imports: 
     viridis,
     graphics,

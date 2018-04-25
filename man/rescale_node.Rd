@@ -10,12 +10,12 @@ rescale_node(size, rel = c(0.01, 0.05, 3))
 \item{size}{Numeric vector. Size of the node (radious).}
 
 \item{rel}{Numeric vector of length 3. Relative size for the minimum and maximum
-of the plot, and curvature of the scale. The third number is used as `size^rel[3]`.}
+of the plot, and curvature of the scale. The third number is used as \code{size^rel[3]}.}
 }
 \description{
 Rescale the size of a node to make it relative to the aspect ratio of the device
 }
 \details{
-This function is to be called after [plot.new], as it takes the parameter `usr`
+This function is to be called after \link{plot.new}, as it takes the parameter \code{usr}
 from the
 }

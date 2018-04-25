@@ -1,4 +1,5 @@
 library(netdiffuseR)
+library(netplot)
 
 x <- igraph::graph_from_edgelist(
   matrix(

@@ -194,7 +194,7 @@ fit_coords_to_dev <- function(coords, adj = graphics::par("pin")[1:2]) {
 #' @param i,j Integer scalar. Indices of ego and alter from 1 through n.
 #' @param p Numeric scalar from 0 to 1. Proportion of mixing.
 #' @param vcols Vector of colors.
-#' @param alpha Numeric scalar from 0 to 1. Passed to [grDevices:colorRamp]
+#' @param alpha Numeric scalar from 0 to 1. Passed to [grDevices::colorRamp()]
 #' @return A color.
 edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 
@@ -225,6 +225,14 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' @importFrom grDevices adjustcolor
 #' @importFrom graphics lines par plot polygon rect
 #' @importFrom polygons piechart npolygon
+#' @examples
+#' library(igraph)
+#' library(netplot)
+#' set.seed(1)
+#' x <- sample_smallworld(1, 200, 5, 0.03)
+#'
+#' plot(x) # ala igraph
+#' nplot(x) # ala netplot
 nplot <- function(
   x,
   layout             = igraph::layout_with_fr(x),

@@ -15,7 +15,7 @@ fit_coords_to_dev(coords, adj = graphics::par("pin")[1:2])
 Adjust coordinates to fit aspect ratio of the device
 }
 \details{
-It first adjusts `coords` to range between `-1,1`, and then, using
-`graphics::par("pin")`, it rescales the second column of it (`y`) to adjust
+It first adjusts \code{coords} to range between \code{-1,1}, and then, using
+\code{graphics::par("pin")}, it rescales the second column of it (\code{y}) to adjust
 for the device's aspec ratio.
 }

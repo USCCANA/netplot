@@ -11,29 +11,38 @@ nplot(x, layout = igraph::layout_with_fr(x),
   edge.width = NULL, edge.width.range = c(1, 2), edge.arrow.size = NULL)
 }
 \arguments{
-\item{x}{An `igraph` object.}
+\item{x}{An \code{igraph} object.}
 
 \item{layout}{Numeric two-column matrix with the graph layout.}
 
-\item{vertex.size}{Numeric vector of length `vcount(x)`. Absolute size of the vertex.}
+\item{vertex.size}{Numeric vector of length \code{vcount(x)}. Absolute size of the vertex.}
 
 \item{bg.col}{Color of the background.}
 
-\item{vertex.shape}{Numeric vector of length `vcount(x)`. Number of sizes of
+\item{vertex.shape}{Numeric vector of length \code{vcount(x)}. Number of sizes of
 the vertex. E.g. three is a triangle, and 100 approximates a circle.}
 
-\item{vertex.color}{Vector of length `vcount(x)`. Vertex colors.}
+\item{vertex.color}{Vector of length \code{vcount(x)}. Vertex colors.}
 
-\item{vertex.size.range}{Vector of length `vcount(x)`.}
+\item{vertex.size.range}{Vector of length \code{vcount(x)}.}
 
-\item{vertex.frame.color}{Vector of length `vcount(x)`.}
+\item{vertex.frame.color}{Vector of length \code{vcount(x)}.}
 
-\item{edge.width}{Vector of length `ecount(x)`.}
+\item{edge.width}{Vector of length \code{ecount(x)}.}
 
-\item{edge.width.range}{Vector of length `ecount(x)`.}
+\item{edge.width.range}{Vector of length \code{ecount(x)}.}
 
-\item{edge.arrow.size}{Vector of length `ecount(x)`.}
+\item{edge.arrow.size}{Vector of length \code{ecount(x)}.}
 }
 \description{
 Plot a network
+}
+\examples{
+library(igraph)
+library(netplot)
+set.seed(1)
+x <- sample_smallworld(1, 200, 5, 0.03)
+
+plot(x) # ala igraph
+nplot(x) # ala netplot
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/netplot.r
 \name{edge_color_mixer}
 \alias{edge_color_mixer}
-\title{A wrapper of `rgb(colorRamp)`}
+\title{A wrapper of \code{rgb(colorRamp)}}
 \usage{
 edge_color_mixer(i, j, vcols, p = 0.5, alpha = 0.15)
 }
@@ -13,11 +13,11 @@ edge_color_mixer(i, j, vcols, p = 0.5, alpha = 0.15)
 
 \item{p}{Numeric scalar from 0 to 1. Proportion of mixing.}
 
-\item{alpha}{Numeric scalar from 0 to 1. Passed to [grDevices:colorRamp]}
+\item{alpha}{Numeric scalar from 0 to 1. Passed to \code{\link[grDevices:colorRamp]{grDevices::colorRamp()}}}
 }
 \value{
 A color.
 }
 \description{
-A wrapper of `rgb(colorRamp)`
+A wrapper of \code{rgb(colorRamp)}
 }
