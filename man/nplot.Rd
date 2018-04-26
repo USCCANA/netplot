@@ -6,9 +6,10 @@
 \usage{
 nplot(x, layout = igraph::layout_with_fr(x),
   vertex.size = igraph::degree(x), bg.col = "lightgray",
-  vertex.shape = rep(100, igraph::vcount(x)), vertex.color = NULL,
-  vertex.size.range = c(0.01, 0.03), vertex.frame.color = NULL,
-  edge.width = NULL, edge.width.range = c(1, 2), edge.arrow.size = NULL)
+  vertex.shape = 100, vertex.color = NULL, vertex.size.range = c(0.01,
+  0.03), vertex.frame.color = NULL, edge.width = NULL,
+  edge.width.range = c(1, 2), edge.arrow.size = NULL,
+  edge.color.mix = 0.5, edge.curvature = pi/3)
 }
 \arguments{
 \item{x}{An \code{igraph} object.}
@@ -33,6 +34,13 @@ the vertex. E.g. three is a triangle, and 100 approximates a circle.}
 \item{edge.width.range}{Vector of length \code{ecount(x)}.}
 
 \item{edge.arrow.size}{Vector of length \code{ecount(x)}.}
+
+\item{edge.color.mix}{Numeric vector of length \code{ecount(x)} with values in
+\code{[0,1]}. 0 means color equal to ego's vertex color, one equals to alter's
+vertex color.}
+
+\item{edge.curvature}{Numeric vector of length \code{ecount(x)}. Curvature of edges
+in terms of radians.}
 }
 \description{
 Plot a network

@@ -16,6 +16,15 @@ knitr::opts_chunk$set(
 
 The goal of netplot is to provide a more flexible yet nicer graph plotting function with better defaults
 
+Some features:
+
+1.  Auto-scaling of vertices using sizes relative to the plotting device.
+2.  Embedded edge color mixer.
+3.  True curved edges drawing.
+4.  User-defined edge curvature.
+5.  Nicer vertex frame color.
+6.  Better use of space filling the plotting device.
+
 ## Installation
 
 <!-- You can install the released version of netplot from [CRAN](https://CRAN.R-project.org) with: -->

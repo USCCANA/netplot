@@ -9,6 +9,16 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+Some features:
+
+1.  Auto-scaling of vertices using sizes relative to the plotting device.
+2.  Embedded edge color mixer.
+3.  True curved edges drawing.
+4.  User-defined edge curvature.
+5.  Nicer vertex frame color.
+6.  Better use of space filling the plotting device.
+
+
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -58,14 +68,14 @@ nplot(x, layout = l, edge.color.mix = 0, vertex.size.range = c(.05,.1))
 par(oldpar)
 ```
 
-```{r edge-curvature, fig.width=7, fig.height=3, fig.cap="Modifying `edge.curvature`: Each figure shows a different parameter for the edge curvature. From left to right, (a) almost straight edges, (b) the edge between ego and alter is an arc that measures $\\pi/2$ radians (90 degree), and (c) the edge as an arc between ego and alter that measures $\\pi$ radians (180 degrees)."}
+```{r edge-curvature, fig.width=7, fig.height=3, fig.cap="Modifying `edge.curvature`: Each figure shows a different parameter for the edge curvature. From left to right, (a) straight edges, (b) the edge between ego and alter is an arc that measures $\\pi/2$ radians (90 degree), and (c) the edge as an arc between ego and alter that measures $\\pi$ radians (180 degrees)."}
 set.seed(12233)
 
 x <- sample_smallworld(1, size = 10, nei = 2, .1)
 l <- layout_with_fr(x)
 
 oldpar <- par(mfrow = c(1,3))
-nplot(x, layout = l, edge.curvature = 0.1, vertex.size.range = c(.05,.1))
+nplot(x, layout = l, edge.curvature = 0, vertex.size.range = c(.05,.1))
 nplot(x, layout = l, edge.curvature = pi/2, vertex.size.range = c(.05,.1))
 nplot(x, layout = l, edge.curvature = pi, vertex.size.range = c(.05,.1))
 par(oldpar)

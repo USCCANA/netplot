@@ -24,13 +24,17 @@ arc <- function(
   p0,
   p1,
   alpha = pi/3,
-  n=40L,
+  n     = 40L,
   radii = c(0, 0)
 ) {
 
   # If no curve, nothing to do (old fashioned straight line)
-  if (alpha == 0)
-    return(rbind(p0, p1))
+  if (alpha == 0) {
+    alpha <- 1e-5
+    n     <- 3
+  }
+
+
 
   elevation <- atan2(p1[2]-p0[2], p1[1] - p0[1])
 
@@ -219,6 +223,11 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' @param edge.width Vector of length `ecount(x)`.
 #' @param edge.width.range Vector of length `ecount(x)`.
 #' @param edge.arrow.size Vector of length `ecount(x)`.
+#' @param edge.curvature Numeric vector of length `ecount(x)`. Curvature of edges
+#' in terms of radians.
+#' @param edge.color.mix Numeric vector of length `ecount(x)` with values in
+#' `[0,1]`. 0 means color equal to ego's vertex color, one equals to alter's
+#' vertex color.
 #' @export
 #' @importFrom viridis viridis
 #' @importFrom igraph layout_with_fr degree vcount ecount

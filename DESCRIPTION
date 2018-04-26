@@ -16,3 +16,8 @@ Imports:
     grDevices,
     igraph,
     polygons
+Suggests: 
+    knitr, rmarkdown
+VignetteBuilder: knitr 
+URL: https://github.com/USCCANA/netplot
+BugReports: https://github.com/USCCANA/netplot/issues
