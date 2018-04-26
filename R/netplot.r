@@ -238,13 +238,15 @@ nplot <- function(
   layout             = igraph::layout_with_fr(x),
   vertex.size        = igraph::degree(x),
   bg.col             = "lightgray",
-  vertex.shape       = rep(100, igraph::vcount(x)),
+  vertex.shape       = 100,
   vertex.color       = NULL,
   vertex.size.range  = c(.01, .03),
   vertex.frame.color = NULL,
   edge.width         = NULL,
   edge.width.range   = c(1, 2),
-  edge.arrow.size    = NULL
+  edge.arrow.size    = NULL,
+  edge.color.mix     = .5,
+  edge.curvature     = pi/3
 ) {
 
   # Computing colors
@@ -256,12 +258,9 @@ nplot <- function(
       ]
   }
 
-  # Creating the window
-  oldpar <- graphics::par(no.readonly = TRUE)
+  # # Creating the window
+  oldpar <- graphics::par(mai=rep(.05, 4))
   on.exit(graphics::par(oldpar))
-
-  # Setting margin
-  par(mai=rep(.25, 4))
 
   # Adjusting layout to fit the device
   layout <- fit_coords_to_dev(layout)
@@ -293,7 +292,7 @@ nplot <- function(
   E <- igraph::as_edgelist(x, names = FALSE)
 
   if (!length(edge.arrow.size))
-    edge.arrow.size <- vertex.size[E[,1]]/2
+    edge.arrow.size <- vertex.size[E[,1]]/1.5
 
   # Calculating arrow adjustment
   arrow.size.adj <- edge.arrow.size*cos(pi/6)/(
@@ -301,6 +300,10 @@ nplot <- function(
   )/cos(pi/6)
 
   ans <- vector("list", nrow(E))
+
+  if (length(edge.curvature) == 1)
+    edge.curvature <- rep(edge.curvature, length(ans))
+
   for (e in 1:nrow(E)) {
 
     i <- E[e,1]
@@ -308,12 +311,24 @@ nplot <- function(
 
     ans[[e]] <- arc(
       layout[i,], layout[j,],
-      radii = vertex.size[c(i,j)] + c(0, arrow.size.adj[e])
+      radii = vertex.size[c(i,j)] + c(0, arrow.size.adj[e]),
+      alpha = edge.curvature[e]
     )
 
   }
 
   # Edges
+  if (!length(edge.color.mix))
+    edge.color.mix <- rep(.5, length(ans))
+  else if (length(edge.color.mix) == 1)
+    edge.color.mix <- rep(edge.color.mix, length(ans))
+
+  # if (!length(edge.color.alpha))
+  #   edge.color.alpha <- rep(.5, igraph::ecount(x))
+  # else if (length(edge.color.alpha) == 1)
+  #   edge.color.alpha <- rep(edge.color.alpha, igraph::ecount(x))
+
+
   for (i in seq_along(ans)) {
 
     if (!length(ans[[i]]))
@@ -325,8 +340,12 @@ nplot <- function(
 
     # Computing edge color
     col <- edge_color_mixer(
-      E[i, 1], E[i, 2],
-      vertex.color, alpha = .5)
+      i     = E[i, 1],
+      j     = E[i, 2],
+      vcols = vertex.color,
+      p     = edge.color.mix[i],
+      alpha = .5
+      )
 
     # Drawing lines
     lines(ans[[i]], lwd= edge.width[i], col = col)
@@ -354,6 +373,9 @@ nplot <- function(
     vertex.frame.color <- adjustcolor(vertex.color, red.f = .75, blue.f = .75, green.f = .75)
 
   # Nodes
+  if (length(vertex.shape) == 1)
+    vertex.shape <- rep(vertex.shape, nrow(layout))
+
   for (i in 1:nrow(layout)) {
 
     # Circle

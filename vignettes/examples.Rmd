@@ -1,0 +1,72 @@
+---
+title: "Graph drawing with netplot"
+author: "George G. Vega Yon"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r nplot-vs-plot, fig.width=7, fig.height=6, fig.cap="Comparision of default `igraph` vs `netplot` default call. `nplot` fills completely the plotting area, and adjusts vertex size, edge width, and edge arrows' size accordingly to the plotting area and plotting device."}
+library(netplot)
+library(igraph)
+
+
+set.seed(225)
+x <- sample_smallworld(1, 100, 4, .1)
+l <- layout_with_fr(x)
+
+oldpar <- par(no.readonly = TRUE)
+par(mfrow = c(1,2))
+plot(x, layout = l)
+nplot(x, layout = l)
+par(oldpar)
+```
+
+
+```{r node-scaling, fig.width=7, fig.height=7, fig.cap="Modifying `vertex.size.range`: Each figure shows a different parameter for the vertex size range. From left to right, and top down: (a) Has all vertices with the same scale of 2.5%, (b) "}
+oldpar <- par(no.readonly = TRUE)
+par(mfrow = c(2,2))
+nplot(x, layout = l, vertex.size.range = c(.025, .025))
+nplot(x, layout = l, vertex.size.range = c(.01, .025))
+nplot(x, layout = l, vertex.size.range = c(.01, .025, 4))
+nplot(x, layout = l, vertex.size.range = c(.02, .05, 4))
+par(oldpar)
+```
+
+# Edges
+
+```{r edge-color, fig.width=7, fig.height=3, fig.cap="Modifying `edge.color.mix`: Each figure shows a different parameter for the edge color mixer. From left to right, (a) colors the edges as alter, (b) mixes ego and alter's colors, and (c) only uses ego"}
+set.seed(12233)
+
+x <- sample_smallworld(1, size = 10, nei = 2, .1)
+l <- layout_with_fr(x)
+
+oldpar <- par(mfrow = c(1,3))
+nplot(x, layout = l, edge.color.mix = 1, vertex.size.range = c(.05,.1))
+nplot(x, layout = l, edge.color.mix = .5, vertex.size.range = c(.05,.1))
+nplot(x, layout = l, edge.color.mix = 0, vertex.size.range = c(.05,.1))
+par(oldpar)
+```
+
+```{r edge-curvature, fig.width=7, fig.height=3, fig.cap="Modifying `edge.curvature`: Each figure shows a different parameter for the edge curvature. From left to right, (a) almost straight edges, (b) the edge between ego and alter is an arc that measures $\\pi/2$ radians (90 degree), and (c) the edge as an arc between ego and alter that measures $\\pi$ radians (180 degrees)."}
+set.seed(12233)
+
+x <- sample_smallworld(1, size = 10, nei = 2, .1)
+l <- layout_with_fr(x)
+
+oldpar <- par(mfrow = c(1,3))
+nplot(x, layout = l, edge.curvature = 0.1, vertex.size.range = c(.05,.1))
+nplot(x, layout = l, edge.curvature = pi/2, vertex.size.range = c(.05,.1))
+nplot(x, layout = l, edge.curvature = pi, vertex.size.range = c(.05,.1))
+par(oldpar)
+```
