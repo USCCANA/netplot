@@ -5,6 +5,15 @@ netplot
 
 The goal of netplot is to provide a more flexible yet nicer graph plotting function with better defaults
 
+Some features:
+
+1.  Auto-scaling of vertices using sizes relative to the plotting device.
+2.  Embedded edge color mixer.
+3.  True curved edges drawing.
+4.  User-defined edge curvature.
+5.  Nicer vertex frame color.
+6.  Better use of space filling the plotting device.
+
 Installation
 ------------
 
@@ -37,14 +46,34 @@ library(igraph)
 library(netplot)
 set.seed(1)
 x <- sample_smallworld(1, 200, 5, 0.03)
+l <- layout_with_fr(x)
 
-plot(x) # ala igraph
+plot(x, layout = l) # ala igraph
 ```
 
 <img src="man/figures/README-example-1.png" width="70%" />
 
 ``` r
-nplot(x) # ala netplot
+nplot(x, layout = l) # ala netplot
 ```
 
 <img src="man/figures/README-example-2.png" width="70%" />
+
+``` r
+sna::gplot(intergraph::asNetwork(x), coord=l)
+```
+
+<img src="man/figures/README-example-3.png" width="70%" />
+
+``` r
+nplot(
+  x,
+  edge.curvature = pi,
+  edge.color.alpha = .2,
+  edge.width.range = c(2,2),
+  bg.col = "white",
+  layout = l
+  )
+```
+
+<img src="man/figures/README-unnamed-chunk-1-1.png" width="70%" />

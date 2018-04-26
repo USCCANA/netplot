@@ -209,6 +209,24 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 
 }
 
+
+line_gradient <- function(x, y = NULL, col.alpha.range = c(0, 1), col = "black",...) {
+
+  # Getting new coords
+  x   <- grDevices::xy.coords(x, y)
+  n   <- length(x$x) - 1L
+  col <- sapply(0:(n-1)/(n-1), grDevices::adjustcolor, col=col)
+
+  # Creating traces
+  idx <- lapply(apply(cbind(1:n, 2:(n+1)), 1, list), unlist)
+  y   <- lapply(idx, function(i) x$y[i])
+  x   <- lapply(idx, function(i) x$x[i])
+
+  invisible(Map(function(.x, .y, .col, ...) lines(x=.x, y = .y, col=.col, ...),
+      .col=col, .x=x, .y=y, ...))
+
+}
+
 #' Plot a network
 #'
 #' @param x An `igraph` object.
@@ -228,6 +246,11 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' @param edge.color.mix Numeric vector of length `ecount(x)` with values in
 #' `[0,1]`. 0 means color equal to ego's vertex color, one equals to alter's
 #' vertex color.
+#' @param edge.color.alpha Numeric vector of length `ecount(x)` with values in
+#' `[0,1]`. Alpha (transparency) levels.
+#' @param edge.line.type Vector of length `ecount(x)`.
+#' @param edge.line.lty Vector of length `ecount(x)`.
+#' @param edge.line.pch  Vector of length `ecount(x)`.
 #' @export
 #' @importFrom viridis viridis
 #' @importFrom igraph layout_with_fr degree vcount ecount
@@ -255,7 +278,11 @@ nplot <- function(
   edge.width.range   = c(1, 2),
   edge.arrow.size    = NULL,
   edge.color.mix     = .5,
-  edge.curvature     = pi/3
+  edge.color.alpha   = .5,
+  edge.curvature     = pi/3,
+  edge.line.type     = NULL,
+  edge.line.lty      = "solid",
+  edge.line.pch      = 20
 ) {
 
   # Computing colors
@@ -332,6 +359,26 @@ nplot <- function(
   else if (length(edge.color.mix) == 1)
     edge.color.mix <- rep(edge.color.mix, length(ans))
 
+  if (!length(edge.line.type))
+    edge.line.type <- rep("l", length(ans))
+  else if (length(edge.line.type) == 1)
+    edge.line.type <- rep(edge.line.type, length(ans))
+
+  if (!length(edge.line.lty))
+    edge.line.lty <- rep(1L, length(ans))
+  else if (length(edge.line.lty) == 1)
+    edge.line.lty <- rep(edge.line.lty, length(ans))
+
+  if (!length(edge.line.pch))
+    edge.line.pch <- rep(20L, length(ans))
+  else if (length(edge.line.pch) == 1)
+    edge.line.pch <- rep(edge.line.pch, length(ans))
+
+  if (!length(edge.color.alpha))
+    edge.color.alpha <- rep(.5, length(ans))
+  else if (length(edge.color.alpha) == 1)
+    edge.color.alpha <- rep(edge.color.alpha, length(ans))
+
   # if (!length(edge.color.alpha))
   #   edge.color.alpha <- rep(.5, igraph::ecount(x))
   # else if (length(edge.color.alpha) == 1)
@@ -353,11 +400,12 @@ nplot <- function(
       j     = E[i, 2],
       vcols = vertex.color,
       p     = edge.color.mix[i],
-      alpha = .5
+      alpha = edge.color.alpha[i]
       )
 
     # Drawing lines
-    lines(ans[[i]], lwd= edge.width[i], col = col)
+    lines(ans[[i]], lwd= edge.width[i], col = col, type = edge.line.type[i],
+          lty = edge.line.lty[i], pch = edge.line.pch[i])
 
     # Computing arrow
     alpha1 <- attr(ans[[i]], "alpha1")

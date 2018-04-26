@@ -48,8 +48,22 @@ library(igraph)
 library(netplot)
 set.seed(1)
 x <- sample_smallworld(1, 200, 5, 0.03)
+l <- layout_with_fr(x)
 
-plot(x) # ala igraph
-nplot(x) # ala netplot
-
+plot(x, layout = l) # ala igraph
+nplot(x, layout = l) # ala netplot
+sna::gplot(intergraph::asNetwork(x), coord=l)
 ```
+
+
+```{r}
+nplot(
+  x,
+  edge.curvature = pi,
+  edge.color.alpha = .2,
+  edge.width.range = c(2,2),
+  bg.col = "white",
+  layout = l
+  )
+```
+
