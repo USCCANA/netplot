@@ -7,10 +7,11 @@
 nplot(x, layout = igraph::layout_with_fr(x),
   vertex.size = igraph::degree(x), bg.col = "lightgray",
   vertex.shape = 100, vertex.color = NULL, vertex.size.range = c(0.01,
-  0.03), vertex.frame.color = NULL, edge.width = NULL,
-  edge.width.range = c(1, 2), edge.arrow.size = NULL,
+  0.03), vertex.frame.color = NULL, vertex.shape.degree = 0,
+  edge.width = NULL, edge.width.range = c(1, 2), edge.arrow.size = NULL,
   edge.color.mix = 0.5, edge.color.alpha = 0.5, edge.curvature = pi/3,
-  edge.line.type = NULL, edge.line.lty = "solid", edge.line.pch = 20)
+  edge.line.type = NULL, edge.line.lty = "solid", edge.line.breaks = 20,
+  edge.line.pch = 20)
 }
 \arguments{
 \item{x}{An \code{igraph} object.}
@@ -29,6 +30,9 @@ the vertex. E.g. three is a triangle, and 100 approximates a circle.}
 \item{vertex.size.range}{Vector of length \code{vcount(x)}.}
 
 \item{vertex.frame.color}{Vector of length \code{vcount(x)}.}
+
+\item{vertex.shape.degree}{Vector of length \code{vcount(x)}. Passed to \link[polygons:npolygon]{polygons::npolygon},
+elevation degree from which the polygon is drawn.}
 
 \item{edge.width}{Vector of length \code{ecount(x)}.}
 
@@ -49,6 +53,9 @@ in terms of radians.}
 \item{edge.line.type}{Vector of length \code{ecount(x)}.}
 
 \item{edge.line.lty}{Vector of length \code{ecount(x)}.}
+
+\item{edge.line.breaks}{Vector of length \code{ecount(x)}. Number of vertices to
+draw (approximate) the arc (edge).}
 
 \item{edge.line.pch}{Vector of length \code{ecount(x)}.}
 }

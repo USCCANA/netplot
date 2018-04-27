@@ -18,22 +18,13 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
-<!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
-
-
-<meta property="og:title" content="Plot a network — nplot" />
-
-<meta property="og:description" content="Plot a network" />
-<meta name="twitter:card" content="summary" />
-
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -56,12 +47,8 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">netplot</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.0.9000</span>
-      </span>
+      <a class="navbar-brand" href="../index.html">netplot</a>
     </div>
-
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -95,7 +82,6 @@
   </a>
 </li>
       </ul>
-      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -103,28 +89,26 @@
       
       </header>
 
-<div class="row">
+      <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Plot a network</h1>
-    <small class="dont-index">Source: <a href='https://github.com/USCCANA/netplot/blob/master/R/netplot.r'><code>R/netplot.r</code></a></small>
-    <div class="hidden name"><code>nplot.Rd</code></div>
     </div>
 
-    <div class="ref-description">
     
     <p>Plot a network</p>
     
-    </div>
 
     <pre class="usage"><span class='fu'>nplot</span>(<span class='no'>x</span>, <span class='kw'>layout</span> <span class='kw'>=</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/igraph/topics/layout_with_fr'>layout_with_fr</a></span>(<span class='no'>x</span>),
   <span class='kw'>vertex.size</span> <span class='kw'>=</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/igraph/topics/degree'>degree</a></span>(<span class='no'>x</span>), <span class='kw'>bg.col</span> <span class='kw'>=</span> <span class='st'>"lightgray"</span>,
   <span class='kw'>vertex.shape</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>vertex.color</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>vertex.size.range</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.01</span>,
-  <span class='fl'>0.03</span>), <span class='kw'>vertex.frame.color</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>edge.width</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>edge.width.range</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>), <span class='kw'>edge.arrow.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>edge.color.mix</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>edge.curvature</span> <span class='kw'>=</span> <span class='no'>pi</span>/<span class='fl'>3</span>)</pre>
+  <span class='fl'>0.03</span>), <span class='kw'>vertex.frame.color</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>vertex.shape.degree</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>edge.width</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>edge.width.range</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>), <span class='kw'>edge.arrow.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>edge.color.mix</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>edge.color.alpha</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>edge.curvature</span> <span class='kw'>=</span> <span class='no'>pi</span>/<span class='fl'>3</span>,
+  <span class='kw'>edge.line.type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>edge.line.lty</span> <span class='kw'>=</span> <span class='st'>"solid"</span>, <span class='kw'>edge.line.breaks</span> <span class='kw'>=</span> <span class='fl'>20</span>,
+  <span class='kw'>edge.line.pch</span> <span class='kw'>=</span> <span class='fl'>20</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -161,6 +145,11 @@ the vertex. E.g. three is a triangle, and 100 approximates a circle.</p></td>
       <td><p>Vector of length <code>vcount(x)</code>.</p></td>
     </tr>
     <tr>
+      <th>vertex.shape.degree</th>
+      <td><p>Vector of length <code>vcount(x)</code>. Passed to <a href='http://www.rdocumentation.org/packages/polygons/topics/npolygon'>polygons::npolygon</a>,
+elevation degree from which the polygon is drawn.</p></td>
+    </tr>
+    <tr>
       <th>edge.width</th>
       <td><p>Vector of length <code>ecount(x)</code>.</p></td>
     </tr>
@@ -179,9 +168,31 @@ the vertex. E.g. three is a triangle, and 100 approximates a circle.</p></td>
 vertex color.</p></td>
     </tr>
     <tr>
+      <th>edge.color.alpha</th>
+      <td><p>Numeric vector of length <code>ecount(x)</code> with values in
+<code>[0,1]</code>. Alpha (transparency) levels.</p></td>
+    </tr>
+    <tr>
       <th>edge.curvature</th>
       <td><p>Numeric vector of length <code>ecount(x)</code>. Curvature of edges
 in terms of radians.</p></td>
+    </tr>
+    <tr>
+      <th>edge.line.type</th>
+      <td><p>Vector of length <code>ecount(x)</code>.</p></td>
+    </tr>
+    <tr>
+      <th>edge.line.lty</th>
+      <td><p>Vector of length <code>ecount(x)</code>.</p></td>
+    </tr>
+    <tr>
+      <th>edge.line.breaks</th>
+      <td><p>Vector of length <code>ecount(x)</code>. Number of vertices to
+draw (approximate) the arc (edge).</p></td>
+    </tr>
+    <tr>
+      <th>edge.line.pch</th>
+      <td><p>Vector of length <code>ecount(x)</code>.</p></td>
     </tr>
     </table>
     
@@ -192,7 +203,7 @@ in terms of radians.</p></td>
 <span class='fu'>set.seed</span>(<span class='fl'>1</span>)
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/igraph/topics/sample_smallworld'>sample_smallworld</a></span>(<span class='fl'>1</span>, <span class='fl'>200</span>, <span class='fl'>5</span>, <span class='fl'>0.03</span>)
 
-<span class='fu'>plot</span>(<span class='no'>x</span>) <span class='co'># ala igraph</span></div><div class='img'><img src='nplot-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>nplot</span>(<span class='no'>x</span>) <span class='co'># ala netplot</span></div><div class='img'><img src='nplot-2.png' alt='' width='700' height='433' /></div></pre>
+<span class='fu'>plot</span>(<span class='no'>x</span>) <span class='co'># ala igraph</span></div><div class='img'><img src='nplot-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='fu'>nplot</span>(<span class='no'>x</span>) <span class='co'># ala netplot</span></div><div class='img'><img src='nplot-2.png' alt='' width='700' height='432.632880098887' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -217,8 +228,5 @@ in terms of radians.</p></td>
       </footer>
    </div>
 
-  
-
   </body>
 </html>
-

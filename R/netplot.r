@@ -238,6 +238,8 @@ line_gradient <- function(x, y = NULL, col.alpha.range = c(0, 1), col = "black",
 #' @param vertex.color Vector of length `vcount(x)`. Vertex colors.
 #' @param vertex.size.range Vector of length `vcount(x)`.
 #' @param vertex.frame.color Vector of length `vcount(x)`.
+#' @param vertex.shape.degree Vector of length `vcount(x)`. Passed to [polygons::npolygon],
+#' elevation degree from which the polygon is drawn.
 #' @param edge.width Vector of length `ecount(x)`.
 #' @param edge.width.range Vector of length `ecount(x)`.
 #' @param edge.arrow.size Vector of length `ecount(x)`.
@@ -250,6 +252,8 @@ line_gradient <- function(x, y = NULL, col.alpha.range = c(0, 1), col = "black",
 #' `[0,1]`. Alpha (transparency) levels.
 #' @param edge.line.type Vector of length `ecount(x)`.
 #' @param edge.line.lty Vector of length `ecount(x)`.
+#' @param edge.line.breaks Vector of length `ecount(x)`. Number of vertices to
+#' draw (approximate) the arc (edge).
 #' @param edge.line.pch  Vector of length `ecount(x)`.
 #' @export
 #' @importFrom viridis viridis
@@ -267,22 +271,24 @@ line_gradient <- function(x, y = NULL, col.alpha.range = c(0, 1), col = "black",
 #' nplot(x) # ala netplot
 nplot <- function(
   x,
-  layout             = igraph::layout_with_fr(x),
-  vertex.size        = igraph::degree(x),
-  bg.col             = "lightgray",
-  vertex.shape       = 100,
-  vertex.color       = NULL,
-  vertex.size.range  = c(.01, .03),
-  vertex.frame.color = NULL,
-  edge.width         = NULL,
-  edge.width.range   = c(1, 2),
-  edge.arrow.size    = NULL,
-  edge.color.mix     = .5,
-  edge.color.alpha   = .5,
-  edge.curvature     = pi/3,
-  edge.line.type     = NULL,
-  edge.line.lty      = "solid",
-  edge.line.pch      = 20
+  layout              = igraph::layout_with_fr(x),
+  vertex.size         = igraph::degree(x),
+  bg.col              = "lightgray",
+  vertex.shape        = 100,
+  vertex.color        = NULL,
+  vertex.size.range   = c(.01, .03),
+  vertex.frame.color  = NULL,
+  vertex.shape.degree = 0,
+  edge.width          = NULL,
+  edge.width.range    = c(1, 2),
+  edge.arrow.size     = NULL,
+  edge.color.mix      = .5,
+  edge.color.alpha    = .5,
+  edge.curvature      = pi/3,
+  edge.line.type      = NULL,
+  edge.line.lty       = "solid",
+  edge.line.breaks    = 20,
+  edge.line.pch       = 20
 ) {
 
   # Computing colors
@@ -340,6 +346,9 @@ nplot <- function(
   if (length(edge.curvature) == 1)
     edge.curvature <- rep(edge.curvature, length(ans))
 
+  if (length(edge.line.breaks) == 1)
+    edge.line.breaks <- rep(edge.line.breaks, length(ans))
+
   for (e in 1:nrow(E)) {
 
     i <- E[e,1]
@@ -348,7 +357,8 @@ nplot <- function(
     ans[[e]] <- arc(
       layout[i,], layout[j,],
       radii = vertex.size[c(i,j)] + c(0, arrow.size.adj[e]),
-      alpha = edge.curvature[e]
+      alpha = edge.curvature[e],
+      n     = edge.line.breaks[e]
     )
 
   }
@@ -433,6 +443,9 @@ nplot <- function(
   if (length(vertex.shape) == 1)
     vertex.shape <- rep(vertex.shape, nrow(layout))
 
+  if (length(vertex.shape.degree) == 1)
+    vertex.shape.degree <- rep(vertex.shape.degree, nrow(layout))
+
   for (i in 1:nrow(layout)) {
 
     # Circle
@@ -441,7 +454,7 @@ nplot <- function(
         layout[i,1], layout[i,2],
         n = vertex.shape[i],
         r = vertex.size[i]*.9,
-        FALSE
+        vertex.shape.degree[i]
       ),
       col    = vertex.color[i],
       border = vertex.color[i],
