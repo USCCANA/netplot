@@ -24,17 +24,14 @@ arc <- function(
   p0,
   p1,
   alpha = pi/3,
-  n     = 40L,
+  n     = 20L,
   radii = c(0, 0)
 ) {
 
   # If no curve, nothing to do (old fashioned straight line)
   if (alpha == 0) {
     alpha <- 1e-5
-    n     <- 3
   }
-
-
 
   elevation <- atan2(p1[2]-p0[2], p1[1] - p0[1])
 
@@ -210,20 +207,32 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 }
 
 
-line_gradient <- function(x, y = NULL, col.alpha.range = c(0, 1), col = "black",...) {
+segments_gradient <- function(
+  x, y = NULL,
+  col  = grDevices::colorRamp(c("transparent", "black"), TRUE),
+  lend = 1,
+  ...) {
 
   # Getting new coords
   x   <- grDevices::xy.coords(x, y)
   n   <- length(x$x) - 1L
-  col <- sapply(0:(n-1)/(n-1), grDevices::adjustcolor, col=col)
+  col <- lapply(0:(n-1)/(n-1), col)
+  col <- sapply(col, function(z) rgb(z, alpha=z[4], maxColorValue = 255))
 
   # Creating traces
   idx <- lapply(apply(cbind(1:n, 2:(n+1)), 1, list), unlist)
   y   <- lapply(idx, function(i) x$y[i])
   x   <- lapply(idx, function(i) x$x[i])
 
-  invisible(Map(function(.x, .y, .col, ...) lines(x=.x, y = .y, col=.col, ...),
-      .col=col, .x=x, .y=y, ...))
+  invisible(Map(function(.x, .y, .col, .lend, ...) {
+    segments(
+      x0 = .x[1],
+      x1 = .x[2],
+      y0 = .y[1],
+      y1 = .y[2],
+      col=.col, lend = .lend,...)
+  },
+  .col=col, .x=x, .y=y, .lend = lend,...))
 
 }
 
@@ -250,15 +259,16 @@ line_gradient <- function(x, y = NULL, col.alpha.range = c(0, 1), col = "black",
 #' vertex color.
 #' @param edge.color.alpha Numeric vector of length `ecount(x)` with values in
 #' `[0,1]`. Alpha (transparency) levels.
-#' @param edge.line.type Vector of length `ecount(x)`.
 #' @param edge.line.lty Vector of length `ecount(x)`.
 #' @param edge.line.breaks Vector of length `ecount(x)`. Number of vertices to
 #' draw (approximate) the arc (edge).
-#' @param edge.line.pch  Vector of length `ecount(x)`.
+#' @param sample.edges Numeric scalar between 0 and 1. Proportion of edges to sample.
+#' @param skip.vertices Logical scalar. When `TRUE` vertices are not plotted.
+#' @param skip.edges Logical scalar. When `TRUE` edges are not plotted.
 #' @export
 #' @importFrom viridis viridis
 #' @importFrom igraph layout_with_fr degree vcount ecount
-#' @importFrom grDevices adjustcolor
+#' @importFrom grDevices adjustcolor rgb segments
 #' @importFrom graphics lines par plot polygon rect
 #' @importFrom polygons piechart npolygon
 #' @examples
@@ -271,10 +281,10 @@ line_gradient <- function(x, y = NULL, col.alpha.range = c(0, 1), col = "black",
 #' nplot(x) # ala netplot
 nplot <- function(
   x,
-  layout              = igraph::layout_with_fr(x),
-  vertex.size         = igraph::degree(x),
+  layout              = igraph::layout_nicely(x),
+  vertex.size         = igraph::degree(x, mode="in"),
   bg.col              = "lightgray",
-  vertex.shape        = 100,
+  vertex.shape        = 50,
   vertex.color        = NULL,
   vertex.size.range   = c(.01, .03),
   vertex.frame.color  = NULL,
@@ -285,10 +295,11 @@ nplot <- function(
   edge.color.mix      = .5,
   edge.color.alpha    = .5,
   edge.curvature      = pi/3,
-  edge.line.type      = NULL,
   edge.line.lty       = "solid",
   edge.line.breaks    = 20,
-  edge.line.pch       = 20
+  sample.edges        = 1,
+  skip.vertices       = FALSE,
+  skip.edges          = FALSE
 ) {
 
   # Computing colors
@@ -322,6 +333,13 @@ nplot <- function(
   # Rescaling size
   vertex.size <- rescale_node(vertex.size, rel = vertex.size.range)
 
+  # Computing shapes -----------------------------------------------------------
+  E <- igraph::as_edgelist(x, names = FALSE)
+
+  if (sample.edges < 1) {
+    sample.edges <- sample.int(nrow(E), floor(nrow(E)*sample.edges))
+    E <- E[sample.edges, , drop=FALSE]
+  }
 
   # Weights
   if (!length(edge.width))
@@ -330,8 +348,6 @@ nplot <- function(
   # Rescaling edges
   edge.width <- rescale_edge(edge.width/max(edge.width, na.rm=TRUE), rel = edge.width.range)
 
-  # Computing shapes -----------------------------------------------------------
-  E <- igraph::as_edgelist(x, names = FALSE)
 
   if (!length(edge.arrow.size))
     edge.arrow.size <- vertex.size[E[,1]]/1.5
@@ -369,20 +385,10 @@ nplot <- function(
   else if (length(edge.color.mix) == 1)
     edge.color.mix <- rep(edge.color.mix, length(ans))
 
-  if (!length(edge.line.type))
-    edge.line.type <- rep("l", length(ans))
-  else if (length(edge.line.type) == 1)
-    edge.line.type <- rep(edge.line.type, length(ans))
-
   if (!length(edge.line.lty))
     edge.line.lty <- rep(1L, length(ans))
   else if (length(edge.line.lty) == 1)
     edge.line.lty <- rep(edge.line.lty, length(ans))
-
-  if (!length(edge.line.pch))
-    edge.line.pch <- rep(20L, length(ans))
-  else if (length(edge.line.pch) == 1)
-    edge.line.pch <- rep(edge.line.pch, length(ans))
 
   if (!length(edge.color.alpha))
     edge.color.alpha <- rep(.5, length(ans))
@@ -411,28 +417,33 @@ nplot <- function(
       vcols = vertex.color,
       p     = edge.color.mix[i],
       alpha = edge.color.alpha[i]
-      )
+    )
 
     # Drawing lines
-    lines(ans[[i]], lwd= edge.width[i], col = col, type = edge.line.type[i],
-          lty = edge.line.lty[i], pch = edge.line.pch[i])
+    if (!skip.edges) {
+      segments_gradient(
+        ans[[i]], lwd= edge.width[i],
+        col = grDevices::colorRamp(c("transparent", col), alpha = TRUE),
+        lty = edge.line.lty[i]
+      )
 
-    # Computing arrow
-    alpha1 <- attr(ans[[i]], "alpha1")
-    arr <- arrow_fancy(
-      x = ans[[i]][nrow(ans[[i]]),1:2] +
-        arrow.size.adj[i]*c(cos(alpha1), sin(alpha1)),
-      alpha = alpha1,
-      l     = edge.arrow.size[i]
-    )
+      # Computing arrow
+      alpha1 <- attr(ans[[i]], "alpha1")
+      arr <- arrow_fancy(
+        x = ans[[i]][nrow(ans[[i]]),1:2] +
+          arrow.size.adj[i]*c(cos(alpha1), sin(alpha1)),
+        alpha = alpha1,
+        l     = edge.arrow.size[i]
+      )
 
-    # Drawing arrows
-    graphics::polygon(
-      arr,
-      col    = col,
-      border = col,
-      lwd    = edge.width[i]
-    )
+      # Drawing arrows
+      graphics::polygon(
+        arr,
+        col    = col,
+        border = col,
+        lwd    = edge.width[i]
+      )
+    }
 
   }
 
@@ -446,40 +457,41 @@ nplot <- function(
   if (length(vertex.shape.degree) == 1)
     vertex.shape.degree <- rep(vertex.shape.degree, nrow(layout))
 
-  for (i in 1:nrow(layout)) {
+  if (!skip.vertices)
+    for (i in 1:nrow(layout)) {
 
-    # Circle
-    graphics::polygon(
-      polygons::npolygon(
-        layout[i,1], layout[i,2],
-        n = vertex.shape[i],
-        r = vertex.size[i]*.9,
-        vertex.shape.degree[i]
-      ),
-      col    = vertex.color[i],
-      border = vertex.color[i],
-      lwd=1
-    )
+      # Circle
+      graphics::polygon(
+        polygons::npolygon(
+          layout[i,1], layout[i,2],
+          n = vertex.shape[i],
+          r = vertex.size[i]*.9,
+          vertex.shape.degree[i]
+        ),
+        col    = vertex.color[i],
+        border = vertex.color[i],
+        lwd=1
+      )
 
-    # Border
-    graphics::polygon(
-      polygons::piechart(
-        1,
-        origin = layout[i,],
-        edges  = vertex.shape[i],
-        radius = vertex.size[i],
-        doughnut = vertex.size[i]*.9,
-        rescale = FALSE,
-        add     = TRUE,
-        skip.plot.slices = TRUE
-      )$slices[[1]],
-      col    = vertex.frame.color[i],
-      border = vertex.frame.color[i],
-      lwd=1
-    )
+      # Border
+      graphics::polygon(
+        polygons::piechart(
+          1,
+          origin = layout[i,],
+          edges  = vertex.shape[i],
+          radius = vertex.size[i],
+          doughnut = vertex.size[i]*.9,
+          rescale = FALSE,
+          add     = TRUE,
+          skip.plot.slices = TRUE
+        )$slices[[1]],
+        col    = vertex.frame.color[i],
+        border = vertex.frame.color[i],
+        lwd=1
+      )
 
 
-  }
+    }
 
 }
 

@@ -4,14 +4,14 @@
 \alias{nplot}
 \title{Plot a network}
 \usage{
-nplot(x, layout = igraph::layout_with_fr(x),
-  vertex.size = igraph::degree(x), bg.col = "lightgray",
-  vertex.shape = 100, vertex.color = NULL, vertex.size.range = c(0.01,
-  0.03), vertex.frame.color = NULL, vertex.shape.degree = 0,
-  edge.width = NULL, edge.width.range = c(1, 2), edge.arrow.size = NULL,
+nplot(x, layout = igraph::layout_nicely(x), vertex.size = igraph::degree(x,
+  mode = "in"), bg.col = "lightgray", vertex.shape = 50,
+  vertex.color = NULL, vertex.size.range = c(0.01, 0.03),
+  vertex.frame.color = NULL, vertex.shape.degree = 0, edge.width = NULL,
+  edge.width.range = c(1, 2), edge.arrow.size = NULL,
   edge.color.mix = 0.5, edge.color.alpha = 0.5, edge.curvature = pi/3,
-  edge.line.type = NULL, edge.line.lty = "solid", edge.line.breaks = 20,
-  edge.line.pch = 20)
+  edge.line.lty = "solid", edge.line.breaks = 20, sample.edges = 1,
+  skip.vertices = FALSE, skip.edges = FALSE)
 }
 \arguments{
 \item{x}{An \code{igraph} object.}
@@ -50,14 +50,16 @@ vertex color.}
 \item{edge.curvature}{Numeric vector of length \code{ecount(x)}. Curvature of edges
 in terms of radians.}
 
-\item{edge.line.type}{Vector of length \code{ecount(x)}.}
-
 \item{edge.line.lty}{Vector of length \code{ecount(x)}.}
 
 \item{edge.line.breaks}{Vector of length \code{ecount(x)}. Number of vertices to
 draw (approximate) the arc (edge).}
 
-\item{edge.line.pch}{Vector of length \code{ecount(x)}.}
+\item{sample.edges}{Numeric scalar between 0 and 1. Proportion of edges to sample.}
+
+\item{skip.vertices}{Logical scalar. When \code{TRUE} vertices are not plotted.}
+
+\item{skip.edges}{Logical scalar. When \code{TRUE} edges are not plotted.}
 }
 \description{
 Plot a network

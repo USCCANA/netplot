@@ -90,8 +90,8 @@ par(oldpar)
 ```{r edge-line-type, fig.width=6, fig.height=6, fig.cap="Changing the number of breaks in the edge (arc) and the type of line to be drawn."}
 oldpar <- par(mfrow = c(2,2))
 nplot(x, layout = l, edge.line.breaks=3)
-nplot(x, layout = l, edge.line.type = "b", edge.line.breaks=10)
-nplot(x, layout = l, edge.line.type = "p", edge.line.breaks=10)
-nplot(x, layout = l, edge.line.type = "p", edge.line.breaks=10, edge.line.pch = 3)
+nplot(x, layout = l, edge.line.lty = 2, edge.line.breaks=10)
+nplot(x, layout = l, edge.line.lty = 3, edge.line.breaks=10)
+nplot(x, layout = l, edge.line.lty = 4, edge.line.breaks=10)
 par(oldpar)
 ```
