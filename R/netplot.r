@@ -1,16 +1,4 @@
-#' Rotation of polygon
-#' @param mat Two-column numeric matrix. Coordinates of the polygon.
-#' @param p0 Numeric vector of length two. Origin.
-#' @param alpha Numeric scalar. Rotation degree in radians.
-#' @export
-rotate <- function(mat, p0, alpha) {
-  R <- matrix(
-    c(cos(alpha), -sin(alpha), sin(alpha), cos(alpha)),
-    nrow = 2, byrow = TRUE)
 
-  p0 <- matrix(c(p0[1], p0[2]), ncol=2, nrow = nrow(mat), byrow = TRUE)
-  t(R %*% t(mat - p0)) + p0
-}
 
 #' Arc between two nodes
 #'
@@ -71,7 +59,7 @@ arc <- function(
 
 
   # Rotation and return
-  ans <- rotate(ans, p0, elevation)
+  ans <- polygons::rotate(ans, p0, elevation)
 
   structure(
     ans,
@@ -104,7 +92,7 @@ arrow_fancy <- function(x, alpha = 0, l=.25, a=pi/6, b = pi/1.5) {
 
   # Rotation
 
-  rotate(ans, p_top, alpha = alpha)
+  polygons::rotate(ans, p_top, alpha = alpha)
 
 
 }
@@ -191,48 +179,18 @@ fit_coords_to_dev <- function(coords, adj = graphics::par("pin")[1:2]) {
 }
 
 
-#' A wrapper of `rgb(colorRamp)`
+#' A wrapper of `colorRamp2`
 #' @param i,j Integer scalar. Indices of ego and alter from 1 through n.
 #' @param p Numeric scalar from 0 to 1. Proportion of mixing.
 #' @param vcols Vector of colors.
-#' @param alpha Numeric scalar from 0 to 1. Passed to [grDevices::colorRamp()]
+#' @param alpha Numeric scalar from 0 to 1. Passed to [polygons::colorRamp2]
 #' @return A color.
 edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 
   grDevices::adjustcolor(grDevices::rgb(
-    grDevices::colorRamp(vcols[c(i,j)], alpha = FALSE)(p),
+    polygons::colorRamp2(vcols[c(i,j)], alpha = FALSE)(p),
     maxColorValue = 255
   ), alpha = alpha)
-
-}
-
-
-segments_gradient <- function(
-  x, y = NULL,
-  col  = grDevices::colorRamp(c("transparent", "black"), TRUE),
-  lend = 1,
-  ...) {
-
-  # Getting new coords
-  x   <- grDevices::xy.coords(x, y)
-  n   <- length(x$x) - 1L
-  col <- lapply(0:(n-1)/(n-1), col)
-  col <- sapply(col, function(z) rgb(z, alpha=z[4], maxColorValue = 255))
-
-  # Creating traces
-  idx <- lapply(apply(cbind(1:n, 2:(n+1)), 1, list), unlist)
-  y   <- lapply(idx, function(i) x$y[i])
-  x   <- lapply(idx, function(i) x$x[i])
-
-  invisible(Map(function(.x, .y, .col, .lend, ...) {
-    segments(
-      x0 = .x[1],
-      x1 = .x[2],
-      y0 = .y[1],
-      y1 = .y[2],
-      col=.col, lend = .lend,...)
-  },
-  .col=col, .x=x, .y=y, .lend = lend,...))
 
 }
 
@@ -268,9 +226,9 @@ segments_gradient <- function(
 #' @export
 #' @importFrom viridis viridis
 #' @importFrom igraph layout_with_fr degree vcount ecount
-#' @importFrom grDevices adjustcolor rgb segments
-#' @importFrom graphics lines par plot polygon rect
-#' @importFrom polygons piechart npolygon
+#' @importFrom grDevices adjustcolor rgb
+#' @importFrom graphics lines par plot polygon rect segments
+#' @importFrom polygons piechart npolygon rotate colorRamp2 segments_gradient
 #' @examples
 #' library(igraph)
 #' library(netplot)
@@ -299,7 +257,9 @@ nplot <- function(
   edge.line.breaks    = 20,
   sample.edges        = 1,
   skip.vertices       = FALSE,
-  skip.edges          = FALSE
+  skip.edges          = FALSE,
+  add                 = FALSE,
+  zero.margins        = TRUE
 ) {
 
   # Computing colors
@@ -312,14 +272,19 @@ nplot <- function(
   }
 
   # # Creating the window
-  oldpar <- graphics::par(mai=rep(.05, 4))
-  on.exit(graphics::par(oldpar))
+  if (zero.margins) {
+    oldpar <- graphics::par(mai=rep(0, 4))
+    on.exit(graphics::par(oldpar))
+  }
+
+  if (!add)
+    plot.new()
 
   # Adjusting layout to fit the device
   layout <- fit_coords_to_dev(layout)
 
   # Plotting
-  plot(layout, type = "n", bty="n", xaxt="n", yaxt="n", ylab="", xlab="", asp=1)
+  plot.window(range(layout[,1]), range(layout[,2]), asp=1, new=FALSE)
 
   # Adding rectangle
   if (length(bg.col)) {
@@ -401,6 +366,21 @@ nplot <- function(
   #   edge.color.alpha <- rep(edge.color.alpha, igraph::ecount(x))
 
 
+
+
+  # Nodes
+  if (length(vertex.color) == 1)
+    vertex.color <- rep(vertex.color, nrow(layout))
+
+  if (!length(vertex.frame.color))
+    vertex.frame.color <- adjustcolor(vertex.color, red.f = .75, blue.f = .75, green.f = .75)
+
+  if (length(vertex.shape) == 1)
+    vertex.shape <- rep(vertex.shape, nrow(layout))
+
+  if (length(vertex.shape.degree) == 1)
+    vertex.shape.degree <- rep(vertex.shape.degree, nrow(layout))
+
   for (i in seq_along(ans)) {
 
     if (!length(ans[[i]]))
@@ -421,9 +401,9 @@ nplot <- function(
 
     # Drawing lines
     if (!skip.edges) {
-      segments_gradient(
+      polygons::segments_gradient(
         ans[[i]], lwd= edge.width[i],
-        col = grDevices::colorRamp(c("transparent", col), alpha = TRUE),
+        col = polygons::colorRamp2(c(adjustcolor(col, alpha.f = .7), col), alpha = TRUE),
         lty = edge.line.lty[i]
       )
 
@@ -446,16 +426,6 @@ nplot <- function(
     }
 
   }
-
-  if (!length(vertex.frame.color))
-    vertex.frame.color <- adjustcolor(vertex.color, red.f = .75, blue.f = .75, green.f = .75)
-
-  # Nodes
-  if (length(vertex.shape) == 1)
-    vertex.shape <- rep(vertex.shape, nrow(layout))
-
-  if (length(vertex.shape.degree) == 1)
-    vertex.shape.degree <- rep(vertex.shape.degree, nrow(layout))
 
   if (!skip.vertices)
     for (i in 1:nrow(layout)) {
