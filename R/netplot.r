@@ -215,20 +215,31 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' @param edge.color.mix Numeric vector of length `ecount(x)` with values in
 #' `[0,1]`. 0 means color equal to ego's vertex color, one equals to alter's
 #' vertex color.
-#' @param edge.color.alpha Numeric vector of length `ecount(x)` with values in
-#' `[0,1]`. Alpha (transparency) levels.
+#' @param edge.color.alpha Either a vector of length 1 or 2, or a matrix of
+#' size `ecount(x)*2` with values in `[0,1]`. Alpha (transparency) levels (see
+#' details)
 #' @param edge.line.lty Vector of length `ecount(x)`.
 #' @param edge.line.breaks Vector of length `ecount(x)`. Number of vertices to
 #' draw (approximate) the arc (edge).
 #' @param sample.edges Numeric scalar between 0 and 1. Proportion of edges to sample.
 #' @param skip.vertices Logical scalar. When `TRUE` vertices are not plotted.
 #' @param skip.edges Logical scalar. When `TRUE` edges are not plotted.
+#' @param add Logical scalar.
+#' @param zero.margins Logical scalar.
 #' @export
 #' @importFrom viridis viridis
 #' @importFrom igraph layout_with_fr degree vcount ecount
 #' @importFrom grDevices adjustcolor rgb
 #' @importFrom graphics lines par plot polygon rect segments
 #' @importFrom polygons piechart npolygon rotate colorRamp2 segments_gradient
+#'
+#' @details
+#' In the case of `edge.color.alpha`, the user can specify up to 2 alpha levels
+#' per edge. Edges are drawn using [polygons::segments_gradient] which allows
+#' drawing segments with a color gradient. In this case setting, for example
+#' `c(.1, .5)` will make the edge start with a transparency of 0.1 and end
+#' with 0.5.
+#'
 #' @examples
 #' library(igraph)
 #' library(netplot)
@@ -251,7 +262,7 @@ nplot <- function(
   edge.width.range    = c(1, 2),
   edge.arrow.size     = NULL,
   edge.color.mix      = .5,
-  edge.color.alpha    = .5,
+  edge.color.alpha    = c(.1, .5),
   edge.curvature      = pi/3,
   edge.line.lty       = "solid",
   edge.line.breaks    = 20,
@@ -356,9 +367,9 @@ nplot <- function(
     edge.line.lty <- rep(edge.line.lty, length(ans))
 
   if (!length(edge.color.alpha))
-    edge.color.alpha <- rep(.5, length(ans))
-  else if (length(edge.color.alpha) == 1)
-    edge.color.alpha <- rep(edge.color.alpha, length(ans))
+    edge.color.alpha <- matrix(.5, nrow= length(ans), ncol=2)
+  else if (length(edge.color.alpha) <= 2)
+    edge.color.alpha <- matrix(edge.color.alpha, nrow= length(ans), ncol=2, byrow = TRUE)
 
   # if (!length(edge.color.alpha))
   #   edge.color.alpha <- rep(.5, igraph::ecount(x))
@@ -396,14 +407,19 @@ nplot <- function(
       j     = E[i, 2],
       vcols = vertex.color,
       p     = edge.color.mix[i],
-      alpha = edge.color.alpha[i]
+      alpha = 1
     )
 
     # Drawing lines
     if (!skip.edges) {
       polygons::segments_gradient(
         ans[[i]], lwd= edge.width[i],
-        col = polygons::colorRamp2(c(adjustcolor(col, alpha.f = .7), col), alpha = TRUE),
+        col = polygons::colorRamp2(
+          c(
+            adjustcolor(col, alpha.f = edge.color.alpha[i,1]),
+            adjustcolor(col, alpha.f = edge.color.alpha[i,2])
+            ),
+          alpha = TRUE),
         lty = edge.line.lty[i]
       )
 
