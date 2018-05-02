@@ -7,11 +7,12 @@
 nplot(x, layout = igraph::layout_nicely(x), vertex.size = igraph::degree(x,
   mode = "in"), bg.col = "lightgray", vertex.shape = 50,
   vertex.color = NULL, vertex.size.range = c(0.01, 0.03),
-  vertex.frame.color = NULL, vertex.shape.degree = 0, edge.width = NULL,
-  edge.width.range = c(1, 2), edge.arrow.size = NULL,
-  edge.color.mix = 0.5, edge.color.alpha = 0.5, edge.curvature = pi/3,
-  edge.line.lty = "solid", edge.line.breaks = 20, sample.edges = 1,
-  skip.vertices = FALSE, skip.edges = FALSE)
+  vertex.frame.color = NULL, vertex.shape.degree = 0,
+  vertex.frame.prop = 0.1, edge.width = NULL, edge.width.range = c(1, 2),
+  edge.arrow.size = NULL, edge.color.mix = 0.5, edge.color.alpha = 0.5,
+  edge.curvature = pi/3, edge.line.lty = "solid", edge.line.breaks = 20,
+  sample.edges = 1, skip.vertices = FALSE, skip.edges = FALSE,
+  add = FALSE, zero.margins = TRUE)
 }
 \arguments{
 \item{x}{An \code{igraph} object.}
@@ -33,6 +34,9 @@ the vertex. E.g. three is a triangle, and 100 approximates a circle.}
 
 \item{vertex.shape.degree}{Vector of length \code{vcount(x)}. Passed to \link[polygons:npolygon]{polygons::npolygon},
 elevation degree from which the polygon is drawn.}
+
+\item{vertex.frame.prop}{Vector of length \code{vcount(x)}. What proportion of the
+vertex does the frame occupy (values between 0 and 1).}
 
 \item{edge.width}{Vector of length \code{ecount(x)}.}
 

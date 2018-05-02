@@ -205,6 +205,8 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' @param vertex.color Vector of length `vcount(x)`. Vertex colors.
 #' @param vertex.size.range Vector of length `vcount(x)`.
 #' @param vertex.frame.color Vector of length `vcount(x)`.
+#' @param vertex.frame.prop Vector of length `vcount(x)`. What proportion of the
+#' vertex does the frame occupy (values between 0 and 1).
 #' @param vertex.shape.degree Vector of length `vcount(x)`. Passed to [polygons::npolygon],
 #' elevation degree from which the polygon is drawn.
 #' @param edge.width Vector of length `ecount(x)`.
@@ -247,6 +249,7 @@ nplot <- function(
   vertex.size.range   = c(.01, .03),
   vertex.frame.color  = NULL,
   vertex.shape.degree = 0,
+  vertex.frame.prop   = .1,
   edge.width          = NULL,
   edge.width.range    = c(1, 2),
   edge.arrow.size     = NULL,
@@ -381,6 +384,9 @@ nplot <- function(
   if (length(vertex.shape.degree) == 1)
     vertex.shape.degree <- rep(vertex.shape.degree, nrow(layout))
 
+  if (length(vertex.frame.prop) == 1)
+    vertex.frame.prop <- rep(vertex.frame.prop, nrow(layout))
+
   for (i in seq_along(ans)) {
 
     if (!length(ans[[i]]))
@@ -427,6 +433,8 @@ nplot <- function(
 
   }
 
+  vertex.frame.prop <- 1 - vertex.frame.prop
+
   if (!skip.vertices)
     for (i in 1:nrow(layout)) {
 
@@ -435,7 +443,7 @@ nplot <- function(
         polygons::npolygon(
           layout[i,1], layout[i,2],
           n = vertex.shape[i],
-          r = vertex.size[i]*.9,
+          r = vertex.size[i]*vertex.frame.prop[i],
           vertex.shape.degree[i]
         ),
         col    = vertex.color[i],
@@ -450,7 +458,7 @@ nplot <- function(
           origin = layout[i,],
           edges  = vertex.shape[i],
           radius = vertex.size[i],
-          doughnut = vertex.size[i]*.9,
+          doughnut = vertex.size[i]*vertex.frame.prop[i],
           rescale = FALSE,
           add     = TRUE,
           skip.plot.slices = TRUE
