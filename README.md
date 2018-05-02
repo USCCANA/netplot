@@ -3,7 +3,9 @@
 netplot
 =======
 
-The goal of netplot is to provide a more flexible yet nicer graph plotting function with better defaults
+[![Travis build status](https://travis-ci.org/USCCANA/netplot.svg?branch=master)](https://travis-ci.org/USCCANA/netplot) [![Build status](https://ci.appveyor.com/api/projects/status/3k2m3oq6o99qcs0r?svg=true)](https://ci.appveyor.com/project/gvegayon/netplot)
+
+An alternative graph visualization engine that puts an emphasis on aesthetics at the same time of providing default parameters that provide visualizations that are out-of-the-box nice.
 
 Some features:
 
@@ -45,34 +47,34 @@ library(igraph)
 #>     union
 library(netplot)
 set.seed(1)
-x <- sample_smallworld(1, 200, 5, 0.03)
-l <- layout_with_fr(x)
+data("UKfaculty", package = "igraphdata")
+l <- layout_with_fr(UKfaculty)
 
-plot(x, layout = l) # ala igraph
+plot(UKfaculty, layout = l) # ala igraph
 ```
 
 <img src="man/figures/README-example-1.png" width="70%" />
 
 ``` r
-nplot(x, layout = l) # ala netplot
+nplot(UKfaculty, layout = l) # ala netplot
 ```
 
 <img src="man/figures/README-example-2.png" width="70%" />
 
 ``` r
-sna::gplot(intergraph::asNetwork(x), coord=l)
+sna::gplot(intergraph::asNetwork(UKfaculty), coord=l)
 ```
 
 <img src="man/figures/README-example-3.png" width="70%" />
 
 ``` r
 nplot(
-  x,
-  edge.curvature = pi,
-  edge.color.alpha = .2,
-  edge.width.range = c(2,2),
+  UKfaculty,
   bg.col = "white",
-  layout = l
+  vertex.size.range = c(.01, .075, 5), 
+  layout = l,
+  edge.curvature = .5,
+  edge.color.alpha = c(0, .5), edge.arrow.size = 0
   )
 ```
 

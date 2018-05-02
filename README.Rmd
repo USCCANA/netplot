@@ -14,7 +14,14 @@ knitr::opts_chunk$set(
 ```
 # netplot
 
-The goal of netplot is to provide a more flexible yet nicer graph plotting function with better defaults
+[![Travis build status](https://travis-ci.org/USCCANA/netplot.svg?branch=master)](https://travis-ci.org/USCCANA/netplot)
+[![Build status](https://ci.appveyor.com/api/projects/status/3k2m3oq6o99qcs0r?svg=true)](https://ci.appveyor.com/project/gvegayon/netplot)
+
+
+
+An alternative graph visualization engine that puts an emphasis on 
+  aesthetics at the same time of providing default parameters that provide visualizations
+  that are out-of-the-box nice.
 
 Some features:
 
@@ -47,23 +54,23 @@ This is a basic example which shows you how to solve a common problem:
 library(igraph)
 library(netplot)
 set.seed(1)
-x <- sample_smallworld(1, 200, 5, 0.03)
-l <- layout_with_fr(x)
+data("UKfaculty", package = "igraphdata")
+l <- layout_with_fr(UKfaculty)
 
-plot(x, layout = l) # ala igraph
-nplot(x, layout = l) # ala netplot
-sna::gplot(intergraph::asNetwork(x), coord=l)
+plot(UKfaculty, layout = l) # ala igraph
+nplot(UKfaculty, layout = l) # ala netplot
+sna::gplot(intergraph::asNetwork(UKfaculty), coord=l)
 ```
 
 
 ```{r}
 nplot(
-  x,
-  edge.curvature = pi,
-  edge.color.alpha = .2,
-  edge.width.range = c(2,2),
+  UKfaculty,
   bg.col = "white",
-  layout = l
+  vertex.size.range = c(.01, .075, 5), 
+  layout = l,
+  edge.curvature = .5,
+  edge.color.alpha = c(0, .5), edge.arrow.size = 0
   )
 ```
 

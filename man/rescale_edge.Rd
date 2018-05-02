@@ -4,7 +4,7 @@
 \alias{rescale_edge}
 \title{Function to rescale the edge-width.}
 \usage{
-rescale_edge(width, rel = c(1, 3))
+rescale_edge(width, rel = c(1, 3, 1))
 }
 \arguments{
 \item{width}{Numeric vector. width of the edges.}

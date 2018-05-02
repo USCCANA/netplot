@@ -105,11 +105,11 @@ arrow_fancy <- function(x, alpha = 0, l=.25, a=pi/6, b = pi/1.5) {
 #' @details
 #' This function is to be called after [plot.new], as it takes the parameter `usr`
 #' from the
-rescale_node <- function(size, rel=c(.01, .05, 3)) {
+rescale_node <- function(size, rel=c(.01, .05, 1)) {
 
   # Checking the rel size
   if (length(rel) == 2)
-    rel <- c(rel, 3)
+    rel <- c(rel, 1)
   else if (length(rel) > 3) {
     warning("`rel` has more than 3 elements. Only the first 3 will be used.")
   } else if (length(rel) < 2) {
@@ -140,7 +140,19 @@ rescale_node <- function(size, rel=c(.01, .05, 3)) {
 #' @param rel Vector of length 2 with the min and max width.
 #' @param width Numeric vector. width of the edges.
 #' @export
-rescale_edge <- function(width, rel=c(1, 3)) {
+rescale_edge <- function(width, rel=c(1, 3, 1)) {
+
+  # Checking the rel size
+  if (length(rel) == 2)
+    rel <- c(rel, 1)
+  else if (length(rel) > 3) {
+    warning("`rel` has more than 3 elements. Only the first 3 will be used.")
+  } else if (length(rel) < 2) {
+    stop("`rel` must be at least of length 2 and at most of length 3.")
+  }
+
+  # Creating curvature
+  width <- width^rel[3]
 
   ran   <- range(width, na.rm = TRUE)
   if (ran[1] != ran[2])
@@ -217,20 +229,31 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' @param edge.color.mix Numeric vector of length `ecount(x)` with values in
 #' `[0,1]`. 0 means color equal to ego's vertex color, one equals to alter's
 #' vertex color.
-#' @param edge.color.alpha Numeric vector of length `ecount(x)` with values in
-#' `[0,1]`. Alpha (transparency) levels.
+#' @param edge.color.alpha Either a vector of length 1 or 2, or a matrix of
+#' size `ecount(x)*2` with values in `[0,1]`. Alpha (transparency) levels (see
+#' details)
 #' @param edge.line.lty Vector of length `ecount(x)`.
 #' @param edge.line.breaks Vector of length `ecount(x)`. Number of vertices to
 #' draw (approximate) the arc (edge).
 #' @param sample.edges Numeric scalar between 0 and 1. Proportion of edges to sample.
-#' @param skip.vertices Logical scalar. When `TRUE` vertices are not plotted.
-#' @param skip.edges Logical scalar. When `TRUE` edges are not plotted.
+#' @param skip.vertices,skip.edges,skip.arrows Logical scalar. When `TRUE` the object
+#' is not plotted.
+#' @param add Logical scalar.
+#' @param zero.margins Logical scalar.
 #' @export
 #' @importFrom viridis viridis
 #' @importFrom igraph layout_with_fr degree vcount ecount
 #' @importFrom grDevices adjustcolor rgb
-#' @importFrom graphics lines par plot polygon rect segments
+#' @importFrom graphics lines par plot polygon rect segments plot.new plot.window
 #' @importFrom polygons piechart npolygon rotate colorRamp2 segments_gradient
+#'
+#' @details
+#' In the case of `edge.color.alpha`, the user can specify up to 2 alpha levels
+#' per edge. Edges are drawn using [polygons::segments_gradient] which allows
+#' drawing segments with a color gradient. In this case setting, for example
+#' `c(.1, .5)` will make the edge start with a transparency of 0.1 and end
+#' with 0.5.
+#'
 #' @examples
 #' library(igraph)
 #' library(netplot)
@@ -254,13 +277,14 @@ nplot <- function(
   edge.width.range    = c(1, 2),
   edge.arrow.size     = NULL,
   edge.color.mix      = .5,
-  edge.color.alpha    = .5,
+  edge.color.alpha    = c(.1, .5),
   edge.curvature      = pi/3,
   edge.line.lty       = "solid",
-  edge.line.breaks    = 20,
+  edge.line.breaks    = 15,
   sample.edges        = 1,
   skip.vertices       = FALSE,
   skip.edges          = FALSE,
+  skip.arrows         = skip.edges,
   add                 = FALSE,
   zero.margins        = TRUE
 ) {
@@ -281,13 +305,13 @@ nplot <- function(
   }
 
   if (!add)
-    plot.new()
+    graphics::plot.new()
 
   # Adjusting layout to fit the device
   layout <- fit_coords_to_dev(layout)
 
   # Plotting
-  plot.window(range(layout[,1]), range(layout[,2]), asp=1, new=FALSE)
+  graphics::plot.window(range(layout[,1]), range(layout[,2]), asp=1, new=FALSE)
 
   # Adding rectangle
   if (length(bg.col)) {
@@ -316,60 +340,66 @@ nplot <- function(
   # Rescaling edges
   edge.width <- rescale_edge(edge.width/max(edge.width, na.rm=TRUE), rel = edge.width.range)
 
-
   if (!length(edge.arrow.size))
     edge.arrow.size <- vertex.size[E[,1]]/1.5
+  else if (length(edge.arrow.size) == 1L)
+    edge.arrow.size <- rep(edge.arrow.size, nrow(E))
 
   # Calculating arrow adjustment
   arrow.size.adj <- edge.arrow.size*cos(pi/6)/(
     cos(pi/6) + cos(pi - pi/6 - pi/1.5)
   )/cos(pi/6)
 
-  ans <- vector("list", nrow(E))
+  # Making space for the arrow and edges coordinates
+  edges.coords <- vector("list", nrow(E))
+  edges.arrow.coords <- vector("list", length(edges.coords))
 
   if (length(edge.curvature) == 1)
-    edge.curvature <- rep(edge.curvature, length(ans))
+    edge.curvature <- rep(edge.curvature, length(edges.coords))
 
   if (length(edge.line.breaks) == 1)
-    edge.line.breaks <- rep(edge.line.breaks, length(ans))
+    edge.line.breaks <- rep(edge.line.breaks, length(edges.coords))
+
 
   for (e in 1:nrow(E)) {
 
     i <- E[e,1]
     j <- E[e,2]
 
-    ans[[e]] <- arc(
+    # Calculating edges coordinates
+    edges.coords[[e]] <- arc(
       layout[i,], layout[j,],
       radii = vertex.size[c(i,j)] + c(0, arrow.size.adj[e]),
       alpha = edge.curvature[e],
       n     = edge.line.breaks[e]
     )
 
+    # Computing arrow
+    alpha1 <- attr(edges.coords[[e]], "alpha1")
+    edges.arrow.coords[[e]] <- arrow_fancy(
+      x = edges.coords[[e]][nrow(edges.coords[[e]]),1:2] +
+        arrow.size.adj[e]*c(cos(alpha1), sin(alpha1)),
+      alpha = alpha1,
+      l     = edge.arrow.size[e]
+    )
+
   }
 
   # Edges
   if (!length(edge.color.mix))
-    edge.color.mix <- rep(.5, length(ans))
+    edge.color.mix <- rep(.5, length(edges.coords))
   else if (length(edge.color.mix) == 1)
-    edge.color.mix <- rep(edge.color.mix, length(ans))
+    edge.color.mix <- rep(edge.color.mix, length(edges.coords))
 
   if (!length(edge.line.lty))
-    edge.line.lty <- rep(1L, length(ans))
+    edge.line.lty <- rep(1L, length(edges.coords))
   else if (length(edge.line.lty) == 1)
-    edge.line.lty <- rep(edge.line.lty, length(ans))
+    edge.line.lty <- rep(edge.line.lty, length(edges.coords))
 
   if (!length(edge.color.alpha))
-    edge.color.alpha <- rep(.5, length(ans))
-  else if (length(edge.color.alpha) == 1)
-    edge.color.alpha <- rep(edge.color.alpha, length(ans))
-
-  # if (!length(edge.color.alpha))
-  #   edge.color.alpha <- rep(.5, igraph::ecount(x))
-  # else if (length(edge.color.alpha) == 1)
-  #   edge.color.alpha <- rep(edge.color.alpha, igraph::ecount(x))
-
-
-
+    edge.color.alpha <- matrix(.5, nrow= length(edges.coords), ncol=2)
+  else if (length(edge.color.alpha) <= 2)
+    edge.color.alpha <- matrix(edge.color.alpha, nrow= length(edges.coords), ncol=2, byrow = TRUE)
 
   # Nodes
   if (length(vertex.color) == 1)
@@ -387,9 +417,9 @@ nplot <- function(
   if (length(vertex.frame.prop) == 1)
     vertex.frame.prop <- rep(vertex.frame.prop, nrow(layout))
 
-  for (i in seq_along(ans)) {
+  for (i in seq_along(edges.coords)) {
 
-    if (!length(ans[[i]]))
+    if (!length(edges.coords[[i]]))
       next
 
     # Not plotting self (for now)
@@ -402,29 +432,27 @@ nplot <- function(
       j     = E[i, 2],
       vcols = vertex.color,
       p     = edge.color.mix[i],
-      alpha = edge.color.alpha[i]
+      alpha = 1
     )
 
     # Drawing lines
     if (!skip.edges) {
       polygons::segments_gradient(
-        ans[[i]], lwd= edge.width[i],
-        col = polygons::colorRamp2(c(adjustcolor(col, alpha.f = .7), col), alpha = TRUE),
+        edges.coords[[i]], lwd= edge.width[i],
+        col = polygons::colorRamp2(
+          c(
+            adjustcolor(col, alpha.f = edge.color.alpha[i,1]),
+            adjustcolor(col, alpha.f = edge.color.alpha[i,2])
+            ),
+          alpha = TRUE),
         lty = edge.line.lty[i]
       )
+    }
 
-      # Computing arrow
-      alpha1 <- attr(ans[[i]], "alpha1")
-      arr <- arrow_fancy(
-        x = ans[[i]][nrow(ans[[i]]),1:2] +
-          arrow.size.adj[i]*c(cos(alpha1), sin(alpha1)),
-        alpha = alpha1,
-        l     = edge.arrow.size[i]
-      )
-
+    if (!skip.arrows) {
       # Drawing arrows
       graphics::polygon(
-        arr,
+        edges.arrow.coords[[i]],
         col    = col,
         border = col,
         lwd    = edge.width[i]
@@ -435,17 +463,33 @@ nplot <- function(
 
   vertex.frame.prop <- 1 - vertex.frame.prop
 
+  vertex.coords <- vector("list", nrow(layout))
+  vertex.frame.coords <- vector("list", nrow(layout))
+
   if (!skip.vertices)
     for (i in 1:nrow(layout)) {
+      # Computing coordinates
+      vertex.coords[[i]] <- polygons::npolygon(
+        layout[i,1], layout[i,2],
+        n = vertex.shape[i],
+        r = vertex.size[i]*vertex.frame.prop[i],
+        vertex.shape.degree[i]
+      )
+      vertex.frame.coords[[i]] <- polygons::piechart(
+        1,
+        origin = layout[i,],
+        edges  = vertex.shape[i],
+        radius = vertex.size[i],
+        doughnut = vertex.size[i]*vertex.frame.prop[i],
+        rescale = FALSE,
+        add     = TRUE,
+        skip.plot.slices = TRUE
+      )$slices[[1]]
+
 
       # Circle
       graphics::polygon(
-        polygons::npolygon(
-          layout[i,1], layout[i,2],
-          n = vertex.shape[i],
-          r = vertex.size[i]*vertex.frame.prop[i],
-          vertex.shape.degree[i]
-        ),
+        vertex.coords[[i]],
         col    = vertex.color[i],
         border = vertex.color[i],
         lwd=1
@@ -453,16 +497,7 @@ nplot <- function(
 
       # Border
       graphics::polygon(
-        polygons::piechart(
-          1,
-          origin = layout[i,],
-          edges  = vertex.shape[i],
-          radius = vertex.size[i],
-          doughnut = vertex.size[i]*vertex.frame.prop[i],
-          rescale = FALSE,
-          add     = TRUE,
-          skip.plot.slices = TRUE
-        )$slices[[1]],
+        vertex.frame.coords[[i]],
         col    = vertex.frame.color[i],
         border = vertex.frame.color[i],
         lwd=1
@@ -470,6 +505,16 @@ nplot <- function(
 
 
     }
+
+  invisible({
+    list(
+      vertex.coords       = vertex.coords,
+      vertex.frame.coords = vertex.frame.coords,
+      edges.coords        = edges.coords,
+      edges.arrow.coords  = edges.arrow.coords
+    )
+  })
+
 
 }
 

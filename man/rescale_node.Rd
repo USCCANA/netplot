@@ -4,7 +4,7 @@
 \alias{rescale_node}
 \title{Rescale the size of a node to make it relative to the aspect ratio of the device}
 \usage{
-rescale_node(size, rel = c(0.01, 0.05, 3))
+rescale_node(size, rel = c(0.01, 0.05, 1))
 }
 \arguments{
 \item{size}{Numeric vector. Size of the node (radious).}

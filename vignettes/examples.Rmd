@@ -32,15 +32,15 @@ knitr::opts_chunk$set(
 library(netplot)
 library(igraph)
 
+data("UKfaculty", package = "igraphdata")
 
 set.seed(225)
-x <- sample_smallworld(1, 100, 4, .1)
-l <- layout_with_fr(x)
+l <- layout_with_fr(UKfaculty)
 
 oldpar <- par(mfrow = c(2,2))
-plot(x, layout = l)
-sna::gplot(as.matrix(as_adj(x)), coord = l)
-nplot(x, layout = l)
+plot(UKfaculty, layout = l)
+sna::gplot(as.matrix(as_adj(UKfaculty)), coord = l)
+nplot(UKfaculty, layout = l)
 par(oldpar)
 ```
 
@@ -48,10 +48,10 @@ par(oldpar)
 
 ```{r node-scaling, fig.width=7, fig.height=7, fig.cap="Modifying `vertex.size.range`: Each figure shows a different parameter for the vertex size range. From left to right, and top down: (a) Has all vertices with the same scale of 2.5%, (b) "}
 oldpar <- par(mfrow=c(2,2))
-nplot(x, layout = l, vertex.size.range = c(.025, .025))
-nplot(x, layout = l, vertex.size.range = c(.01, .025))
-nplot(x, layout = l, vertex.size.range = c(.01, .025, 4))
-nplot(x, layout = l, vertex.size.range = c(.02, .05, 4))
+nplot(UKfaculty, layout = l, vertex.size.range = c(.025, .025))
+nplot(UKfaculty, layout = l, vertex.size.range = c(.01, .025))
+nplot(UKfaculty, layout = l, vertex.size.range = c(.01, .025, 4))
+nplot(UKfaculty, layout = l, vertex.size.range = c(.02, .05, 4))
 par(oldpar)
 ```
 

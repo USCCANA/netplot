@@ -9,10 +9,11 @@ nplot(x, layout = igraph::layout_nicely(x), vertex.size = igraph::degree(x,
   vertex.color = NULL, vertex.size.range = c(0.01, 0.03),
   vertex.frame.color = NULL, vertex.shape.degree = 0,
   vertex.frame.prop = 0.1, edge.width = NULL, edge.width.range = c(1, 2),
-  edge.arrow.size = NULL, edge.color.mix = 0.5, edge.color.alpha = 0.5,
-  edge.curvature = pi/3, edge.line.lty = "solid", edge.line.breaks = 20,
-  sample.edges = 1, skip.vertices = FALSE, skip.edges = FALSE,
-  add = FALSE, zero.margins = TRUE)
+  edge.arrow.size = NULL, edge.color.mix = 0.5, edge.color.alpha = c(0.1,
+  0.5), edge.curvature = pi/3, edge.line.lty = "solid",
+  edge.line.breaks = 15, sample.edges = 1, skip.vertices = FALSE,
+  skip.edges = FALSE, skip.arrows = skip.edges, add = FALSE,
+  zero.margins = TRUE)
 }
 \arguments{
 \item{x}{An \code{igraph} object.}
@@ -48,8 +49,9 @@ vertex does the frame occupy (values between 0 and 1).}
 \code{[0,1]}. 0 means color equal to ego's vertex color, one equals to alter's
 vertex color.}
 
-\item{edge.color.alpha}{Numeric vector of length \code{ecount(x)} with values in
-\code{[0,1]}. Alpha (transparency) levels.}
+\item{edge.color.alpha}{Either a vector of length 1 or 2, or a matrix of
+size \code{ecount(x)*2} with values in \code{[0,1]}. Alpha (transparency) levels (see
+details)}
 
 \item{edge.curvature}{Numeric vector of length \code{ecount(x)}. Curvature of edges
 in terms of radians.}
@@ -61,12 +63,22 @@ draw (approximate) the arc (edge).}
 
 \item{sample.edges}{Numeric scalar between 0 and 1. Proportion of edges to sample.}
 
-\item{skip.vertices}{Logical scalar. When \code{TRUE} vertices are not plotted.}
+\item{skip.vertices, skip.edges, skip.arrows}{Logical scalar. When \code{TRUE} the object
+is not plotted.}
 
-\item{skip.edges}{Logical scalar. When \code{TRUE} edges are not plotted.}
+\item{add}{Logical scalar.}
+
+\item{zero.margins}{Logical scalar.}
 }
 \description{
 Plot a network
+}
+\details{
+In the case of \code{edge.color.alpha}, the user can specify up to 2 alpha levels
+per edge. Edges are drawn using \link[polygons:segments_gradient]{polygons::segments_gradient} which allows
+drawing segments with a color gradient. In this case setting, for example
+\code{c(.1, .5)} will make the edge start with a transparency of 0.1 and end
+with 0.5.
 }
 \examples{
 library(igraph)

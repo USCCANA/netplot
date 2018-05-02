@@ -1,8 +1,10 @@
 Package: netplot
-Title: What the Package Does (one line, title case)
-Version: 0.0.0.9000
+Title: Beautiful graph drawing
+Version: 0.1.9000
 Authors@R: person("George", "Vega Yon", email = "g.vegayon@gmail.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Description: An alternative graph visualization engine that puts an emphasis on 
+  aesthetics at the same time of providing default parameters that provide visualizations
+  that are out-of-the-box nice.
 Depends: R (>= 3.4.4)
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -17,7 +19,10 @@ Imports:
     igraph,
     polygons
 Suggests: 
-    knitr, rmarkdown
+    knitr,
+    rmarkdown,
+    sna,
+    igraphdata
 VignetteBuilder: knitr 
 URL: https://github.com/USCCANA/netplot
 BugReports: https://github.com/USCCANA/netplot/issues
