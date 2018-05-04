@@ -335,7 +335,7 @@ nplot <- function(
 
   # Weights
   if (!length(edge.width))
-    edge.width <- rep(1.0, length(igraph::E(x)))
+    edge.width <- rep(1.0, igraph::ecount(x))
 
   # Rescaling edges
   edge.width <- rescale_edge(edge.width/max(edge.width, na.rm=TRUE), rel = edge.width.range)
