@@ -26,7 +26,7 @@ grid.edit(
 # Updating xlabel
 
 grid.remove("hola")
-  
+
 
 barchart(Party ~ Amount_Donated, sortedTotals)
 
@@ -44,7 +44,7 @@ grid.text(
 # Adding a plot in the bottom left
 vp <- viewport(
   width=.5, height=.5, just = c(0,1),
-  name = trellis.grobname("GRAPH", ""), 
+  name = trellis.grobname("GRAPH", ""),
   )
 grid.newpage()
 pushViewport(vp)
@@ -66,11 +66,8 @@ grid.edit(
   vjust = .5,
   hjust = 1
   )
-  
+
 grid.remove("myrect")
-
-view
-
 
 library(netplot)
 library(gridGraphics)
@@ -87,3 +84,123 @@ grid.echo(newpage = TRUE)
 grid.ls()
 grid.edit("graphics-plot-1-main-1", gp = gpar(col="red"))
 grid.remove("graphics-plot-1-main-1")
+
+
+grid.newpage()
+vpgen    <- viewport(name = "gen")
+vptop    <- viewport(.25, .75, width = .5, height = .5, name="vp-top")
+vpbottom <- viewport(.75, .25, width = .5, height = .5, name="vp-bottom")
+
+pushViewport(vpgen)
+pushViewport(vptop)
+upViewport()
+pushViewport(bottom)
+
+grid.rect(gp = gpar(lty=2), vp=vpgen)
+grid.rect(gp = gpar(lty=1), vp=vptop)
+grid.text(y=.75, label = "Some drawing in 1",vp=vptop)
+grid.text(y=.25, label = "More drawing in 1",vp=vptop)
+
+grid.rect(gp = gpar(lty=1), vp=vpbottom)
+grid.text(y=.75, label = "Some drawing in 2",vp=vpbottom)
+grid.text(y=.25, label = "More drawing in 2",vp=vpbottom)
+
+grid.ls(viewports = TRUE)
+
+
+library(netplot)
+library(grid)
+
+net <- igraph::sample_smallworld(1, 10, 4, .1)
+
+data(UKfaculty, package="igraphdata")
+
+ans <- nplot(UKfaculty)
+
+# Aspect ratio -----------------------------------------------------------------
+asp <- list(
+  unit(max(1,diff(ans$xlim)/diff(ans$ylim)), "snpc"),
+  unit(max(1,diff(ans$ylim)/diff(ans$xlim)), "snpc")
+  )
+
+# Creating the viewport
+top <- viewport(
+  width  = asp[[1]], # aspect ratio preserved
+  height = asp[[2]],
+  xscale = ans$xlim + .04*diff(ans$xlim)*c(-1,1),
+  yscale = ans$ylim + .04*diff(ans$ylim)*c(-1,1)
+  )
+
+grid.newpage()
+pushViewport(top)
+
+# Drawing ----------------------------------------------------------------------
+
+# Drawing edges
+for (i in seq_along(ans$edges.coords)) {
+
+  # Computing vector of colors
+  n     <- nrow(ans$edges.coords[[i]])
+  col   <- ans$edges.color[[i]](seq(0, 1, length.out = n-1))
+  col   <- rgb(col[,1:3], alpha = col[,4], maxColorValue = 255)
+  coord <- ans$edges.coords[[i]]
+
+  grid.polyline(
+    as.vector(t(cbind(coord[-n,1], coord[-1,1]))),
+    as.vector(t(cbind(coord[-n,2], coord[-1,2]))),
+    default.units = "native",
+    name = paste0("edges.coords",i),
+    id = sort(rep(1:(n-1), 2)),
+    gp = gpar(col = col, lwd=2, lineend=1)
+    )
+
+  ans$edges.color[[i]] <- col[n-1]
+}
+
+# Drawing arrows
+for (i in seq_along(ans$edges.arrow.coords))
+  grid.polygon(
+    ans$edges.arrow.coords[[i]][,1],
+    ans$edges.arrow.coords[[i]][,2],
+    default.units = "native",
+    name = paste0("edges.arrow.coords",i),
+    gp = gpar(col = ans$edges.color[[i]], fill=ans$edges.color[[i]])
+    )
+
+# Drawing vertices
+for (i in seq_along(ans$vertex.coords)) {
+  grid.polygon(
+    ans$vertex.coords[[i]][,1],
+    ans$vertex.coords[[i]][,2],
+    default.units = "native",
+    gp = gpar(fill = ans$vertex.color[i], col = ans$vertex.color[i]),
+    name = paste0("vertex.coords",i)
+  )
+
+  grid.polygon(
+    ans$vertex.frame.coords[[i]][,1],
+    ans$vertex.frame.coords[[i]][,2],
+    default.units = "native",
+    gp = gpar(fill = ans$vertex.frame.color[i], col = ans$vertex.frame.color[i]),
+    name = paste0("vertex.frame.coords",i)
+  )
+}
+
+
+# Exporting --------------------------------------------------------------------
+grid.DLapply(function(x) {
+
+  if (is.grob(x)) {
+
+    gridSVG::garnishGrob(
+      x,
+      `stroke-linecap`="butt",
+      onclick = sprintf("alert('This is element: %s')", x$name)
+      )
+
+  } else
+    x
+
+})
+
+gridSVG::grid.export("playground/grid.svg", progress = TRUE, htmlWrapper = TRUE)

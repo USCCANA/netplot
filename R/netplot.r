@@ -311,7 +311,9 @@ nplot <- function(
   layout <- fit_coords_to_dev(layout)
 
   # Plotting
-  graphics::plot.window(range(layout[,1]), range(layout[,2]), asp=1, new=FALSE)
+  xlim <- range(layout[,1])
+  ylim <- range(layout[,2])
+  graphics::plot.window(xlim, ylim, asp=1, new=FALSE)
 
   # Adding rectangle
   if (length(bg.col)) {
@@ -417,6 +419,8 @@ nplot <- function(
   if (length(vertex.frame.prop) == 1)
     vertex.frame.prop <- rep(vertex.frame.prop, nrow(layout))
 
+  edges.color <- vector("list", length(edges.coords))
+
   for (i in seq_along(edges.coords)) {
 
     if (!length(edges.coords[[i]]))
@@ -435,16 +439,17 @@ nplot <- function(
       alpha = 1
     )
 
+    edges.color[[i]] <- polygons::colorRamp2(
+      c(
+        adjustcolor(col, alpha.f = edge.color.alpha[i,1]),
+        adjustcolor(col, alpha.f = edge.color.alpha[i,2])
+      ), alpha = TRUE)
+
     # Drawing lines
     if (!skip.edges) {
       polygons::segments_gradient(
         edges.coords[[i]], lwd= edge.width[i],
-        col = polygons::colorRamp2(
-          c(
-            adjustcolor(col, alpha.f = edge.color.alpha[i,1]),
-            adjustcolor(col, alpha.f = edge.color.alpha[i,2])
-            ),
-          alpha = TRUE),
+        col = edges.color[[i]],
         lty = edge.line.lty[i]
       )
     }
@@ -509,9 +514,14 @@ nplot <- function(
   invisible({
     list(
       vertex.coords       = vertex.coords,
+      vertex.color        = vertex.color,
       vertex.frame.coords = vertex.frame.coords,
+      vertex.frame.color  = vertex.frame.color,
+      edges.color         = edges.color,
       edges.coords        = edges.coords,
-      edges.arrow.coords  = edges.arrow.coords
+      edges.arrow.coords  = edges.arrow.coords,
+      xlim                = xlim,
+      ylim                = ylim
     )
   })
 
