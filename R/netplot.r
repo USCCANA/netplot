@@ -43,7 +43,7 @@ arc <- function(
   alpha_i <- seq(
     pi/2 + (alpha/2 - alpha0) ,
     pi/2 - (alpha/2 - alpha1),
-    length.out = n
+    length.out = n + 1
   )
 
   # Middle point
@@ -60,6 +60,12 @@ arc <- function(
 
   # Rotation and return
   ans <- polygons::rotate(ans, p0, elevation)
+
+  # Separating the segments
+  ans <- cbind(
+    as.vector(t(cbind(ans[-n,1], ans[-1,1]))),
+    as.vector(t(cbind(ans[-n,2], ans[-1,2])))
+  )
 
   structure(
     ans,
@@ -240,7 +246,6 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' is not plotted.
 #' @param add Logical scalar.
 #' @param zero.margins Logical scalar.
-#' @export
 #' @importFrom viridis viridis
 #' @importFrom igraph layout_with_fr degree vcount ecount
 #' @importFrom grDevices adjustcolor rgb
@@ -262,6 +267,273 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #'
 #' plot(x) # ala igraph
 #' nplot(x) # ala netplot
+#' @name nplot
+NULL
+
+nplot_obj <- function(
+  x,
+  layout,
+  vertex.size,
+  vertes.size.range,
+  vertex.shape,
+  vertex.color,
+  vertex.frame.color,
+  vertex.frame.prop,
+  edge.width,
+  edge.width.range,
+  edge.color,
+  edge.color.type, # = c("mix", "plain")
+  edge.color.alpha,
+  edge.curvature,
+  edge.line.lty,
+  edge.breaks
+) {
+
+
+
+}
+
+#' List of valid gp parameters
+#' @noRd
+gparArgs <- c("col",
+  "fill",
+  "alpha",
+  "lty",
+  "lwd",
+  "lex",
+  "lineend",
+  "linejoin",
+  "linemitre",
+  "fontsize",
+  "cex",
+  "fontfamily",
+  "fontface",
+  "lineheight",
+  "font"
+  )
+
+
+#' Compute coordinates for an nsided polygon
+#' @noRd
+npolygon <- function (x = 0, y = 0, n = 6L, r = 1, d = 2 * pi/(n)/2) {
+  deg <- seq(d, 2 * pi + d, length.out = n + 1)[-(n + 1)]
+  cbind(x = cos(deg) * r + x, y = sin(deg) * r + y)
+}
+
+
+#' @export
+nplot2 <- function(...) UseMethod("nplot2")
+
+#' @export
+nplot2.igraph <- function(
+  x,
+  layout = igraph::layout_nicely(x),
+  ...
+  ) {
+
+  nplot2.default(
+    edgelist = igraph::as_edgelist(x),
+    layout   = layout,
+    ...
+  )
+
+}
+
+#' @export
+nplot2.default <- function(
+  edgelist,
+  layout,
+  vertex.size         = 1,
+  bg.col              = "lightgray",
+  vertex.nsides       = 50,
+  vertex.color        = viridis::viridis(1),
+  vertex.size.range   = c(.01, .03),
+  vertex.frame.color  = grDevices::adjustcolor(vertex.color, red.f = 1.5, green.f = 1.5, blue.f = 1.5),
+  vertex.shape.degree = 0,
+  vertex.frame.prop   = .1,
+  edge.width          = NULL,
+  edge.width.range    = c(1, 2),
+  edge.arrow.size     = NULL,
+  edge.color.mix      = .5,
+  edge.color.alpha    = c(.1, .5),
+  edge.curvature      = pi/3,
+  edge.line.lty       = "solid",
+  edge.line.breaks    = 15,
+  sample.edges        = 1,
+  skip.vertices       = FALSE,
+  skip.edges          = FALSE,
+  skip.arrows         = skip.edges,
+  add                 = FALSE,
+  zero.margins        = TRUE,
+  ...
+  ) {
+
+
+  # listing objects
+  netenv <- as.environment(mget(ls()))
+
+  netenv$N <- nrow(layout)
+  netenv$M <- nrow(edgelist)
+
+  # This function will repeat a patter taking into account the number of columns
+  .rep <- function(x, .times) {
+    matrix(rep(x, .times), ncol = length(x), byrow = TRUE)
+  }
+
+  # Checking defaults for vertex
+  for (p in ls(pattern = "^vertex", envir = netenv))
+    if (length(netenv[[p]]) > 0 && length(netenv[[p]]) < netenv$N)
+      netenv[[p]] <- .rep(netenv[[p]], netenv$N)
+
+  # Checking defaults for edges
+  for (p in ls(patter = "^edge", envir = netenv))
+    if (length(netenv[[p]]) > 0 && length(netenv[[p]]) < netenv$M)
+      netenv[[p]] <- .rep(netenv[[p]], netenv$M)
+
+
+  # Adjusting size -------------------------------------------------------------
+
+  # Adjusting layout to fit the device
+  layout <- fit_coords_to_dev(layout)
+
+  # Rescaling size
+  vertex.size <- rescale_node(
+    vertex.size,
+    rel = vertex.size.range
+    )
+
+  # Rescaling edges
+  edge.width <- rescale_edge(
+    edge.width/max(edge.width, na.rm=TRUE),
+    rel = edge.width.range
+    )
+
+
+  # Generating grobs -----------------------------------------------------------
+  for (v in 1:netenv$N)
+    grob_vertex(netenv, v)
+
+  for (e in 1:netenv$M)
+    grob_edge(netenv, e)
+
+
+  # Plotting -------------------------------------------------------------------
+  viewport()
+
+
+  netenv
+
+
+}
+
+#' Functions to calculate graph polygons coordinates
+#' @param netenv An object of class network environment.
+#' @param v,e Integer scalars. vertex or edge index.
+#'
+#' @return
+# Generating coordinates
+grob_vertex <- function(netenv, v) {
+
+  # Computing coordinates
+  coords <- npolygon(
+      x = netenv$layout[v, 1],
+      y = netenv$layout[v, 2],
+      n = netenv$vertex.nsides[v],
+      r = netenv$vertex.size[v]*(1 - netenv$vertex.frame.prop[v])
+    )
+
+  # Frame coordinates
+  framecoords <- npolygon(
+      x = netenv$layout[v, 1],
+      y = netenv$layout[v, 2],
+      n = netenv$vertex.nsides[v],
+      r = netenv$vertex.size[v]
+      )
+
+  # If the list is empty
+  if (!length(netenv$grob.vertex))
+    netenv$grob.vertex <- vector("list", netenv$N)
+
+  # Returning
+  netenv$grob.vertex[[v]] <-
+    grid::polygonGrob(
+      x    = unit(c(framecoords[,1], coords[,1]), "native"),
+      y    = unit(c(framecoords[,2], coords[,2]), "native"),
+      id.lengths = c(nrow(coords), nrow(framecoords)),
+      gp   = grid::gpar(
+        fill = c(netenv$vertex.color[v], netenv$vertex.frame.color[v]),
+        col  = c(netenv$vertex.color[v], netenv$vertex.frame.color)
+      ),
+      name = paste0("vertex.", v)
+      )
+
+  invisible(NULL)
+}
+
+#' Computes edges
+#' @noRd
+grob_edge <- function(netenv, e) {
+
+  # Obtaining positions of ego and alter
+  i <- netenv$edgelist[e, 1]
+  j <- netenv$edgelist[e, 2]
+
+  # Computing coordinates
+  coords <- arc(
+    p0    = netenv$layout[i,],
+    p1    = netenv$layout[j,],
+    radii = netenv$vertex.size[c(i,j)] + c(0, netenv$arrow.size.adj[e]),
+    alpha = netenv$edge.curvature[e],
+    n     = netenv$edge.line.breaks[e]
+  )
+
+  # If the list is empty
+  if (!length(netenv$grob.edge))
+    netenv$grob.edge <- vector("list", netenv$M)
+
+  # Computing colors using colorRamp2
+  col <- polygons::colorRamp2(
+    c(
+      adjustcolor(netenv$vertex.color[i], alpha.f = netenv$edge.color.alpha[e,1]),
+      adjustcolor(netenv$vertex.color[j], alpha.f = netenv$edge.color.alpha[e,2])
+    ), alpha = TRUE)
+
+
+  # Generating grob
+  netenv$grob.edge[[e]] <- grid::polylineGrob(
+    x          = coords[,1],
+    y          = coords[,2],
+    id.lengths = rep(2, netenv$edge.line.breaks[e]),
+    gp         = grid::gpar(
+      col = col(seq(0,1, length.out = netenv$edge.line.breaks[e])),
+      lty = netenv$edge.line.lty[e],
+      lwd = netenv$edge.width[e]
+    )
+    )
+
+  invisible(NULL)
+
+}
+
+#' Look at `chull` from `grDevices`
+#' @noRd
+
+#
+# coords_calc_edge <- function(netenv, e) {
+#
+#
+#
+# }
+#
+# coords_calc_arrow <- function(netenv, e) {
+#
+#
+#
+# }
+
+
+#' @rdname nplot
+#' @export
 nplot <- function(
   x,
   layout              = igraph::layout_nicely(x),
@@ -520,6 +792,7 @@ nplot <- function(
       edges.color         = edges.color,
       edges.coords        = edges.coords,
       edges.arrow.coords  = edges.arrow.coords,
+      edges.width         = edge.width,
       xlim                = xlim,
       ylim                = ylim
     )

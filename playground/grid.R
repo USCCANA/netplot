@@ -119,8 +119,8 @@ ans <- nplot(UKfaculty)
 
 # Aspect ratio -----------------------------------------------------------------
 asp <- list(
-  unit(max(1,diff(ans$xlim)/diff(ans$ylim)), "snpc"),
-  unit(max(1,diff(ans$ylim)/diff(ans$xlim)), "snpc")
+  unit(min(1,diff(ans$xlim)/diff(ans$ylim)), "snpc"),
+  unit(min(1,diff(ans$ylim)/diff(ans$xlim)), "snpc")
   )
 
 # Creating the viewport
@@ -151,7 +151,7 @@ for (i in seq_along(ans$edges.coords)) {
     default.units = "native",
     name = paste0("edges.coords",i),
     id = sort(rep(1:(n-1), 2)),
-    gp = gpar(col = col, lwd=2, lineend=1)
+    gp = gpar(col = col, lwd=ans$edges.width[i], lineend=1)
     )
 
   ans$edges.color[[i]] <- col[n-1]
@@ -164,7 +164,8 @@ for (i in seq_along(ans$edges.arrow.coords))
     ans$edges.arrow.coords[[i]][,2],
     default.units = "native",
     name = paste0("edges.arrow.coords",i),
-    gp = gpar(col = ans$edges.color[[i]], fill=ans$edges.color[[i]])
+    gp = gpar(col = ans$edges.color[[i]], fill=ans$edges.color[[i]],
+              lwd=ans$edges.width[i])
     )
 
 # Drawing vertices
@@ -192,10 +193,18 @@ grid.DLapply(function(x) {
 
   if (is.grob(x)) {
 
-    gridSVG::garnishGrob(
-      x,
-      `stroke-linecap`="butt",
-      onclick = sprintf("alert('This is element: %s')", x$name)
+    if (grepl("vertex\\.coords", x$name))
+      gridSVG::garnishGrob(
+        x,
+        `stroke-linecap`="butt",
+        onclick = sprintf("alert('This is element: %s')", x$name),
+        onmouseover="evt.target.setAttribute('opacity', '0.5');",
+        onmouseout="evt.target.setAttribute('opacity','1)');"
+        )
+    else
+      gridSVG::garnishGrob(
+        x,
+        `stroke-linecap`="butt"
       )
 
   } else
@@ -203,4 +212,4 @@ grid.DLapply(function(x) {
 
 })
 
-gridSVG::grid.export("playground/grid.svg", progress = TRUE, htmlWrapper = TRUE)
+gridSVG::grid.export("playground/grid.svg", progress = TRUE, htmlWrapper = TRUE, )
