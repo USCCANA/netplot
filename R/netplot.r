@@ -63,14 +63,14 @@ arc <- function(
 
   # Separating the segments
   ans <- cbind(
-    as.vector(t(cbind(ans[-n,1], ans[-1,1]))),
-    as.vector(t(cbind(ans[-n,2], ans[-1,2])))
+    as.vector(t(cbind(ans[-(n + 1),1], ans[-1,1]))),
+    as.vector(t(cbind(ans[-(n + 1),2], ans[-1,2])))
   )
 
   structure(
     ans,
     alpha0 = atan2(ans[1,2] - p0[2], ans[1,1] - p0[1]),
-    alpha1 = atan2(p1[2] - ans[n,2], p1[1] - ans[n,1]),
+    alpha1 = atan2(p1[2] - ans[n*2,2], p1[1] - ans[n*2,1]),
     midpoint = ans[ceiling(n/2),]
   )
 
@@ -137,8 +137,9 @@ rescale_node <- function(size, rel=c(.01, .05, 1)) {
   size <- size * (rel[2] - rel[1]) + rel[1]
 
   # Getting coords
-  usr <- graphics::par()$usr[1:2]
-  size * (usr[2] - usr[1])/2
+  # usr <- graphics::par()$usr[1:2]
+  # size * (usr[2] - usr[1])/2
+  size
 
 }
 
@@ -162,7 +163,7 @@ rescale_edge <- function(width, rel=c(1, 3, 1)) {
 
   ran   <- range(width, na.rm = TRUE)
   if (ran[1] != ran[2])
-    width <- (width - ran[1])/(ran[2] - ran[1])
+    width <- (width - ran[1])/(ran[2] - ran[1] + 1e-10)
   else
     width <- width/ran[1]
 
@@ -351,7 +352,7 @@ nplot2.default <- function(
   vertex.frame.color  = grDevices::adjustcolor(vertex.color, red.f = 1.5, green.f = 1.5, blue.f = 1.5),
   vertex.shape.degree = 0,
   vertex.frame.prop   = .1,
-  edge.width          = NULL,
+  edge.width          = 1,
   edge.width.range    = c(1, 2),
   edge.arrow.size     = NULL,
   edge.color.mix      = .5,
@@ -377,6 +378,8 @@ nplot2.default <- function(
 
   # This function will repeat a patter taking into account the number of columns
   .rep <- function(x, .times) {
+    if (grepl("range$", p))
+      return(x)
     matrix(rep(x, .times), ncol = length(x), byrow = TRUE)
   }
 
@@ -394,20 +397,28 @@ nplot2.default <- function(
   # Adjusting size -------------------------------------------------------------
 
   # Adjusting layout to fit the device
-  layout <- fit_coords_to_dev(layout)
+  netenv$layout <- fit_coords_to_dev(netenv$layout)
 
   # Rescaling size
-  vertex.size <- rescale_node(
-    vertex.size,
-    rel = vertex.size.range
+  netenv$vertex.size <- rescale_node(
+    netenv$vertex.size,
+    rel = netenv$vertex.size.range
     )
 
   # Rescaling edges
-  edge.width <- rescale_edge(
-    edge.width/max(edge.width, na.rm=TRUE),
-    rel = edge.width.range
+  netenv$edge.width <- rescale_edge(
+    netenv$edge.width/max(netenv$edge.width, na.rm=TRUE),
+    rel = netenv$edge.width.range
     )
 
+  # Rescaling arrows
+  if (!length(netenv$edge.arrow.size))
+    netenv$edge.arrow.size <- netenv$vertex.size[edgelist[,1]]/1.5
+
+  # Calculating arrow adjustment
+  netenv$arrow.size.adj <- netenv$edge.arrow.size*cos(pi/6)/(
+    cos(pi/6) + cos(pi - pi/6 - pi/1.5)
+  )/cos(pi/6)
 
   # Generating grobs -----------------------------------------------------------
   for (v in 1:netenv$N)
@@ -418,8 +429,30 @@ nplot2.default <- function(
 
 
   # Plotting -------------------------------------------------------------------
-  viewport()
+  netenv$xlim <- range(netenv$layout[,1])
+  netenv$ylim <- range(netenv$layout[,2])
 
+  asp <- list(
+    grid::unit(min(1,diff(netenv$xlim)/diff(netenv$ylim)), "snpc"),
+    grid::unit(min(1,diff(netenv$ylim)/diff(netenv$xlim)), "snpc")
+  )
+
+  # Creating the viewport
+  top <- grid::viewport(
+    width  = asp[[1]], # aspect ratio preserved
+    height = asp[[2]],
+    xscale = netenv$xlim + .01*diff(netenv$xlim)*c(-1,1),
+    yscale = netenv$ylim + .01*diff(netenv$ylim)*c(-1,1)
+  )
+
+  grid::grid.newpage()
+  grid::pushViewport(top)
+
+  # Drawing
+  invisible(sapply(netenv$grob.edge, grid::grid.draw))
+  invisible(sapply(netenv$grob.vertex, grid::grid.draw))
+
+  grid::popViewport()
 
   netenv
 
@@ -457,13 +490,14 @@ grob_vertex <- function(netenv, v) {
   # Returning
   netenv$grob.vertex[[v]] <-
     grid::polygonGrob(
-      x    = unit(c(framecoords[,1], coords[,1]), "native"),
-      y    = unit(c(framecoords[,2], coords[,2]), "native"),
+      x    = c(framecoords[,1], coords[,1]),
+      y    = c(framecoords[,2], coords[,2]),
       id.lengths = c(nrow(coords), nrow(framecoords)),
       gp   = grid::gpar(
         fill = c(netenv$vertex.color[v], netenv$vertex.frame.color[v]),
-        col  = c(netenv$vertex.color[v], netenv$vertex.frame.color)
+        col  = c(netenv$vertex.color[v], netenv$vertex.frame.color[v])
       ),
+      default.units = "native",
       name = paste0("vertex.", v)
       )
 
@@ -475,8 +509,9 @@ grob_vertex <- function(netenv, v) {
 grob_edge <- function(netenv, e) {
 
   # Obtaining positions of ego and alter
-  i <- netenv$edgelist[e, 1]
-  j <- netenv$edgelist[e, 2]
+  i       <- netenv$edgelist[e, 1]
+  j       <- netenv$edgelist[e, 2]
+  nbreaks <- netenv$edge.line.breaks[e]
 
   # Computing coordinates
   coords <- arc(
@@ -484,7 +519,7 @@ grob_edge <- function(netenv, e) {
     p1    = netenv$layout[j,],
     radii = netenv$vertex.size[c(i,j)] + c(0, netenv$arrow.size.adj[e]),
     alpha = netenv$edge.curvature[e],
-    n     = netenv$edge.line.breaks[e]
+    n     = nbreaks
   )
 
   # If the list is empty
@@ -492,23 +527,58 @@ grob_edge <- function(netenv, e) {
     netenv$grob.edge <- vector("list", netenv$M)
 
   # Computing colors using colorRamp2
+  col <- polygons::colorRamp2(c(netenv$vertex.color[i], netenv$vertex.color[j]))(.5)
+  col <- rgb(col, maxColorValue = 255)
+
   col <- polygons::colorRamp2(
     c(
-      adjustcolor(netenv$vertex.color[i], alpha.f = netenv$edge.color.alpha[e,1]),
-      adjustcolor(netenv$vertex.color[j], alpha.f = netenv$edge.color.alpha[e,2])
+      adjustcolor(col, alpha.f = netenv$edge.color.alpha[e,1]),
+      adjustcolor(col, alpha.f = netenv$edge.color.alpha[e,2])
     ), alpha = TRUE)
+
+  col <- col(seq(0,1, length.out = nbreaks))
+  col <- grDevices::rgb(col, alpha = col[,4], maxColorValue = 255)
 
 
   # Generating grob
   netenv$grob.edge[[e]] <- grid::polylineGrob(
     x          = coords[,1],
     y          = coords[,2],
-    id.lengths = rep(2, netenv$edge.line.breaks[e]),
+    id.lengths = rep(2, nbreaks),
+    default.units = "native",
     gp         = grid::gpar(
-      col = col(seq(0,1, length.out = netenv$edge.line.breaks[e])),
-      lty = netenv$edge.line.lty[e],
-      lwd = netenv$edge.width[e]
+      col = c(col),
+      lty = rep(netenv$edge.line.lty[e], nbreaks),
+      lwd = rep(netenv$edge.width[e], nbreaks),
+      lineend = rep(1, nbreaks)
+    ),
+    name = "line"
     )
+
+  # Arrow
+  # Computing arrow
+  alpha1 <- attr(coords, "alpha1")
+  arrow  <- arrow_fancy(
+    x     = coords[nbreaks*2, 1:2] +
+      netenv$arrow.size.adj[e]*c(cos(alpha1), sin(alpha1)),
+    alpha = alpha1,
+    l     = netenv$edge.arrow.size[e]
+  )
+
+  netenv$grob.edge[[e]] <- grid::grobTree(
+    netenv$grob.edge[[e]],
+    grid::polygonGrob(
+      arrow[,1],
+      arrow[,2],
+      default.units = "native",
+      name = "arrow",
+      gp   = gpar(
+        col  = col[nbreaks],
+        fill = col[nbreaks],
+        lwd  = netenv$edges.width[e]
+      )
+    ),
+    name = paste0("edge", i, "-",j)
     )
 
   invisible(NULL)
@@ -563,10 +633,10 @@ nplot <- function(
 
   # Computing colors
   if (!length(vertex.color)) {
-    vertex.color <- length(table(igraph::degree(x)))
+    vertex.color <- length(table(igraph::degree(x, mode = "in")))
     vertex.color <- viridis::viridis(vertex.color)
     vertex.color <- vertex.color[
-      as.factor(igraph::degree(x))
+      as.factor(igraph::degree(x, mode = "in"))
       ]
   }
 
