@@ -180,7 +180,7 @@ rescale_edge <- function(width, rel=c(1, 3, 1)) {
 #' for the device's aspec ratio.
 #' @param adj Numeric vector of length 2.
 #' @export
-fit_coords_to_dev <- function(coords, adj = graphics::par("pin")[1:2]) {
+fit_coords_to_dev <- function(coords, adj = grDevices::dev.size()) {
 
   # Making it -1 to 1
   yran <- range(coords[,2], na.rm = TRUE)
@@ -428,29 +428,39 @@ nplot2.default <- function(
     grob_edge(netenv, e)
 
 
+  # Agregated grob
+  netenv$grob <- do.call(
+    grid::grobTree,
+    c(
+      netenv$grob.edge,
+      netenv$grob.vertex,
+      list(name = "graph")
+    )
+    )
+
+
   # Plotting -------------------------------------------------------------------
   netenv$xlim <- range(netenv$layout[,1])
   netenv$ylim <- range(netenv$layout[,2])
 
   asp <- list(
     grid::unit(min(1,diff(netenv$xlim)/diff(netenv$ylim)), "snpc"),
-    grid::unit(min(1,diff(netenv$ylim)/diff(netenv$xlim)), "snpc")
+    grid::unit(min(1,diff(netenv$ylim)/diff(netenv$xlim)), "npc")
   )
 
   # Creating the viewport
   top <- grid::viewport(
     width  = asp[[1]], # aspect ratio preserved
     height = asp[[2]],
-    xscale = netenv$xlim + .01*diff(netenv$xlim)*c(-1,1),
-    yscale = netenv$ylim + .01*diff(netenv$ylim)*c(-1,1)
+    xscale = netenv$xlim, #+ .01*diff(netenv$xlim)*c(-1,1),
+    yscale = netenv$ylim #+ .01*diff(netenv$ylim)*c(-1,1)
   )
 
   grid::grid.newpage()
   grid::pushViewport(top)
 
   # Drawing
-  invisible(sapply(netenv$grob.edge, grid::grid.draw))
-  invisible(sapply(netenv$grob.vertex, grid::grid.draw))
+  grid::grid.draw(netenv$grob)
 
   grid::popViewport()
 
@@ -572,7 +582,7 @@ grob_edge <- function(netenv, e) {
       arrow[,2],
       default.units = "native",
       name = "arrow",
-      gp   = gpar(
+      gp   = grid::gpar(
         col  = col[nbreaks],
         fill = col[nbreaks],
         lwd  = netenv$edges.width[e]
