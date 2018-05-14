@@ -420,6 +420,30 @@ nplot2.default <- function(
     cos(pi/6) + cos(pi - pi/6 - pi/1.5)
   )/cos(pi/6)
 
+
+  # Creating viewport with fixed aspect ratio ----------------------------------
+  netenv$xlim <- range(netenv$layout[,1], na.rm=TRUE)
+  netenv$ylim <- range(netenv$layout[,2], na.rm=TRUE)
+
+
+  # Creating layout
+  # Solution from this answer https://stackoverflow.com/a/48084527
+  asp <- grDevices::dev.size()
+  lo  <- grid::grid.layout(
+    widths  = grid::unit(1, "null"),
+    heights = grid::unit(asp[2]/asp[1], "null"),
+    respect = TRUE # This forcces it to the aspect ratio
+    )
+
+  vp_graph <- grid::viewport(
+    xscale         = netenv$xlim + .04*diff(netenv$xlim)*c(-1,1),
+    yscale         = netenv$ylim + .04*diff(netenv$ylim)*c(-1,1),
+    clip           = "off",
+    layout.pos.col = 1,
+    layout.pos.row = 1,
+    name           = "graph-vp"
+  )
+
   # Generating grobs -----------------------------------------------------------
   for (v in 1:netenv$N)
     grob_vertex(netenv, v)
@@ -427,42 +451,18 @@ nplot2.default <- function(
   for (e in 1:netenv$M)
     grob_edge(netenv, e)
 
-
-  # Agregated grob
+  # Agregated grob -------------------------------------------------------------
   netenv$grob <- do.call(
-    grid::grobTree,
-    c(
-      netenv$grob.edge,
-      netenv$grob.vertex,
-      list(name = "graph")
+    grid::gTree,
+    list(
+      children = do.call(grid::gList, c(netenv$grob.edge, netenv$grob.vertex)),
+      name     = "graph",
+      vp       = grid::vpTree(
+        parent   = grid::viewport(layout = lo, name = "frame-vp"),
+        children = grid::vpList(vp_graph)
+      )
     )
-    )
-
-
-  # Plotting -------------------------------------------------------------------
-  netenv$xlim <- range(netenv$layout[,1])
-  netenv$ylim <- range(netenv$layout[,2])
-
-  asp <- list(
-    grid::unit(min(1,diff(netenv$xlim)/diff(netenv$ylim)), "snpc"),
-    grid::unit(min(1,diff(netenv$ylim)/diff(netenv$xlim)), "npc")
   )
-
-  # Creating the viewport
-  top <- grid::viewport(
-    width  = asp[[1]], # aspect ratio preserved
-    height = asp[[2]],
-    xscale = netenv$xlim, #+ .01*diff(netenv$xlim)*c(-1,1),
-    yscale = netenv$ylim #+ .01*diff(netenv$ylim)*c(-1,1)
-  )
-
-  grid::grid.newpage()
-  grid::pushViewport(top)
-
-  # Drawing
-  grid::grid.draw(netenv$grob)
-
-  grid::popViewport()
 
   netenv
 
