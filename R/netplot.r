@@ -436,17 +436,19 @@ nplot2.default <- function(
   )
 
   # Generating grobs -----------------------------------------------------------
+  grob.vertex <- vector("list", netenv$N)
   for (v in 1:netenv$N)
-    grob_vertex(netenv, v)
+    grob.vertex[[v]] <- grob_vertex(netenv, v)
 
+  grob.edge <- vector("list", netenv$M)
   for (e in 1:netenv$M)
-    grob_edge(netenv, e)
+    grob.edge[[e]] <- grob_edge(netenv, e)
 
   # Agregated grob -------------------------------------------------------------
   netenv$grob <- do.call(
     grid::gTree,
     list(
-      children = do.call(grid::gList, c(netenv$grob.edge, netenv$grob.vertex)),
+      children = do.call(grid::gList, c(grob.edge, grob.vertex)),
       name     = "graph",
       vp       = grid::vpTree(
         parent   = grid::viewport(layout = lo, name = "frame-vp"),
@@ -536,13 +538,8 @@ grob_vertex <- function(netenv, v) {
       r = netenv$vertex.size[v]
       )
 
-  # If the list is empty
-  if (!length(netenv$grob.vertex))
-    netenv$grob.vertex <- vector("list", netenv$N)
-
   # Returning
-  netenv$grob.vertex[[v]] <-
-    grid::polygonGrob(
+  ans <- grid::polygonGrob(
       x    = c(framecoords[,1], coords[,1]),
       y    = c(framecoords[,2], coords[,2]),
       id.lengths = c(nrow(coords), nrow(framecoords)),
@@ -559,8 +556,8 @@ grob_vertex <- function(netenv, v) {
 
     # Only if it is big enough
     if (netenv$label_threshold <= netenv$vertex.size[v])
-      netenv$grob.vertex[[v]] <- grid::gList(
-        netenv$grob.vertex[[v]],
+      ans <- grid::gList(
+        ans,
         grid::textGrob(
           label = netenv$vertex.label[v],
           x     = netenv$layout[v, 1],
@@ -582,7 +579,7 @@ grob_vertex <- function(netenv, v) {
 
   }
 
-  invisible(NULL)
+  ans
 }
 
 #' Computes edges
@@ -603,10 +600,6 @@ grob_edge <- function(netenv, e) {
     n     = nbreaks
   )
 
-  # If the list is empty
-  if (!length(netenv$grob.edge))
-    netenv$grob.edge <- vector("list", netenv$M)
-
   # Computing colors using colorRamp2
   col <- polygons::colorRamp2(c(netenv$vertex.color[i], netenv$vertex.color[j]))(.5)
   col <- rgb(col, maxColorValue = 255)
@@ -622,7 +615,7 @@ grob_edge <- function(netenv, e) {
 
 
   # Generating grob
-  netenv$grob.edge[[e]] <- grid::polylineGrob(
+  ans <- grid::polylineGrob(
     x          = coords[,1],
     y          = coords[,2],
     id.lengths = rep(2, nbreaks),
@@ -646,8 +639,8 @@ grob_edge <- function(netenv, e) {
     l     = netenv$edge.arrow.size[e]
   )
 
-  netenv$grob.edge[[e]] <- grid::grobTree(
-    netenv$grob.edge[[e]],
+  ans <- grid::grobTree(
+    ans,
     grid::polygonGrob(
       arrow[,1],
       arrow[,2],
@@ -662,7 +655,7 @@ grob_edge <- function(netenv, e) {
     name = paste0("edge", i, "-",j)
     )
 
-  invisible(NULL)
+  ans
 
 }
 
