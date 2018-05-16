@@ -271,29 +271,6 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' @name nplot
 NULL
 
-nplot_obj <- function(
-  x,
-  layout,
-  vertex.size,
-  vertes.size.range,
-  vertex.shape,
-  vertex.color,
-  vertex.frame.color,
-  vertex.frame.prop,
-  edge.width,
-  edge.width.range,
-  edge.color,
-  edge.color.type, # = c("mix", "plain")
-  edge.color.alpha,
-  edge.curvature,
-  edge.line.lty,
-  edge.breaks
-) {
-
-
-
-}
-
 #' List of valid gp parameters
 #' @noRd
 gparArgs <- c("col",
@@ -344,28 +321,34 @@ nplot2.igraph <- function(
 nplot2.default <- function(
   edgelist,
   layout,
-  vertex.size         = 1,
-  bg.col              = "lightgray",
-  vertex.nsides       = 50,
-  vertex.color        = viridis::viridis(1),
-  vertex.size.range   = c(.01, .03),
-  vertex.frame.color  = grDevices::adjustcolor(vertex.color, red.f = 1.5, green.f = 1.5, blue.f = 1.5),
-  vertex.shape.degree = 0,
-  vertex.frame.prop   = .1,
-  edge.width          = 1,
-  edge.width.range    = c(1, 2),
-  edge.arrow.size     = NULL,
-  edge.color.mix      = .5,
-  edge.color.alpha    = c(.1, .5),
-  edge.curvature      = pi/3,
-  edge.line.lty       = "solid",
-  edge.line.breaks    = 15,
-  sample.edges        = 1,
-  skip.vertices       = FALSE,
-  skip.edges          = FALSE,
-  skip.arrows         = skip.edges,
-  add                 = FALSE,
-  zero.margins        = TRUE,
+  vertex.size             = 1,
+  bg.col                  = "lightgray",
+  vertex.nsides           = 50,
+  vertex.color            = viridis::viridis(1),
+  vertex.size.range       = c(.01, .03),
+  vertex.frame.color      = grDevices::adjustcolor(vertex.color, red.f = 1.5, green.f = 1.5, blue.f = 1.5),
+  vertex.shape.degree     = 0,
+  vertex.frame.prop       = .2,
+  vertex.label            = NULL,
+  vertex.label.fontsize   = NULL,
+  vertex.label.color      = "black",
+  vertex.label.fontfamily = "HersheySans",
+  vertex.label.fontface   = "bold",
+  vertex.label.show       = .3,
+  edge.width              = 1,
+  edge.width.range        = c(1, 2),
+  edge.arrow.size         = NULL,
+  edge.color.mix          = .5,
+  edge.color.alpha        = c(.1, .5),
+  edge.curvature          = pi/3,
+  edge.line.lty           = "solid",
+  edge.line.breaks        = 15,
+  sample.edges            = 1,
+  skip.vertices           = FALSE,
+  skip.edges              = FALSE,
+  skip.arrows             = skip.edges,
+  add                     = FALSE,
+  zero.margins            = TRUE,
   ...
   ) {
 
@@ -414,6 +397,14 @@ nplot2.default <- function(
   # Rescaling arrows
   if (!length(netenv$edge.arrow.size))
     netenv$edge.arrow.size <- netenv$vertex.size[edgelist[,1]]/1.5
+
+  # Rescaling text
+  if (!length(netenv$vertex.label.fontsize))
+    netenv$vertex.label.fontsize <- netenv$vertex.size
+
+  # Computing label threshold
+  netenv$label_threshold <- stats::quantile(
+    netenv$vertex.size, 1 - netenv$vertex.label.show[1])
 
   # Calculating arrow adjustment
   netenv$arrow.size.adj <- netenv$edge.arrow.size*cos(pi/6)/(
@@ -464,10 +455,62 @@ nplot2.default <- function(
     )
   )
 
-  netenv
+
+  structure(
+    list(
+      layout = netenv$layout,
+      xlim   = netenv$xlim,
+      ylim   = netenv$ylim,
+      grob   = netenv$grob
+      ),
+    class = "netplot"
+  )
 
 
 }
+
+print.netplot <- function(x, y = NULL, .new=TRUE, ...) {
+
+  if (.new) {
+    grid::grid.newpage()
+  }
+
+  grid::grid.draw(x$grob)
+
+  # Returning
+  invisible(x)
+
+}
+
+
+locate_vertex <- function(x) {
+
+  # Trying to fecth the
+  on.exit(grid::upViewport(0L))
+  res <- tryCatch(grid::downViewport("graph-vp"), error = function(e) e)
+
+  if (inherits(res, "error"))
+    stop("Couldn't find the network region. Perhaps there's none?", call. = FALSE)
+
+  loc <- grid::grid.locator()
+  loc <- as.vector(unlist(loc))
+  loc <- matrix(loc, ncol = 2, nrow = nrow(x$layout), byrow = TRUE)
+
+  # Which is the closests one
+  v <- which.min(abs(x$layout - loc))
+
+  list(
+    name = paste0("vertex.", v),
+    x    = loc[1,1],
+    y    = loc[1,2],
+    vp   = grid::current.viewport()
+    )
+
+}
+
+
+
+
 
 #' Functions to calculate graph polygons coordinates
 #' @param netenv An object of class network environment.
@@ -510,6 +553,34 @@ grob_vertex <- function(netenv, v) {
       default.units = "native",
       name = paste0("vertex.", v)
       )
+
+  # If the users is drawing text
+  if (length(netenv$vertex.label) && !is.na(netenv$vertex.label[v])) {
+
+    # Only if it is big enough
+    if (netenv$label_threshold <= netenv$vertex.size[v])
+      netenv$grob.vertex[[v]] <- grid::gList(
+        netenv$grob.vertex[[v]],
+        grid::textGrob(
+          label = netenv$vertex.label[v],
+          x     = netenv$layout[v, 1],
+          y     = netenv$layout[v, 2] + netenv$vertex.size[v]*1.1,
+          gp    = grid::gpar(
+            fontsize   = as.double(grid::convertWidth(
+              grid::unit(netenv$vertex.label.fontsize[v]*20, "cm"),
+              "points"
+              )),
+            col        = netenv$vertex.label.color[v],
+            fontfamily = netenv$vertex.label.fontfamily[v],
+            fontface   = netenv$vertex.label.fontface[v]
+            ),
+          vjust         = 0,
+          default.units = "native",
+          name = paste0("vertex-label.", v)
+          )
+      )
+
+  }
 
   invisible(NULL)
 }
