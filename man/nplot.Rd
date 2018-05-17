@@ -2,7 +2,6 @@
 % Please edit documentation in R/netplot.r
 \name{nplot}
 \alias{nplot}
-\alias{nplot}
 \alias{nplot.igraph}
 \alias{nplot.network}
 \alias{nplot.default}
@@ -13,7 +12,8 @@ nplot(...)
 
 \method{nplot}{igraph}(x, layout = igraph::layout_nicely(x),
   vertex.size = igraph::degree(x, mode = "in"),
-  vertex.color = set_colors(x), ...)
+  vertex.color = set_colors(x), edge.width = igraph::edge_attr(x, "weight"),
+  ...)
 
 \method{nplot}{network}(x, layout = sna::gplot.layout.kamadakawai(x, NULL),
   vertex.size = sna::degree(x, cmode = "indegree"),
@@ -23,16 +23,16 @@ nplot(...)
   bg.col = "lightgray", vertex.nsides = 50,
   vertex.color = viridis::viridis(1), vertex.size.range = c(0.01, 0.03),
   vertex.frame.color = grDevices::adjustcolor(vertex.color, red.f = 0.75,
-  green.f = 0.75, blue.f = 0.75), vertex.shape.degree = 0,
-  vertex.frame.prop = 0.2, vertex.label = NULL,
-  vertex.label.fontsize = NULL, vertex.label.color = "black",
-  vertex.label.fontfamily = "HersheySans", vertex.label.fontface = "bold",
-  vertex.label.show = 0.3, vertex.label.range = c(5, 15), edge.width = 1,
-  edge.width.range = c(1, 2), edge.arrow.size = NULL,
-  edge.color.mix = 0.5, edge.color.alpha = c(0.1, 0.5),
-  edge.curvature = pi/3, edge.line.lty = "solid", edge.line.breaks = 15,
-  sample.edges = 1, skip.vertices = FALSE, skip.edges = FALSE,
-  skip.arrows = skip.edges, add = FALSE, zero.margins = TRUE, ...)
+  green.f = 0.75, blue.f = 0.75), vertex.rot = 0, vertex.frame.prop = 0.2,
+  vertex.label = NULL, vertex.label.fontsize = NULL,
+  vertex.label.color = "black", vertex.label.fontfamily = "HersheySans",
+  vertex.label.fontface = "bold", vertex.label.show = 0.3,
+  vertex.label.range = c(5, 15), edge.width = 1, edge.width.range = c(1,
+  2), edge.arrow.size = NULL, edge.color.mix = 0.5,
+  edge.color.alpha = c(0.1, 0.5), edge.curvature = pi/3,
+  edge.line.lty = "solid", edge.line.breaks = 15, sample.edges = 1,
+  skip.vertices = FALSE, skip.edges = FALSE, skip.arrows = skip.edges,
+  add = FALSE, zero.margins = TRUE, ...)
 
 \method{print}{netplot}(x, y = NULL, .new = TRUE, ...)
 }
@@ -45,15 +45,20 @@ nplot(...)
 
 \item{vertex.color}{Vector of length \code{vcount(x)}. Vertex colors.}
 
+\item{edge.width}{Vector of length \code{ecount(x)}.}
+
 \item{edgelist}{An edgelist.}
 
 \item{bg.col}{Color of the background.}
+
+\item{vertex.nsides}{Numeric vector of length \code{vcount(x)}. Number of sizes of
+the vertex. E.g. three is a triangle, and 100 approximates a circle.}
 
 \item{vertex.size.range}{Vector of length \code{vcount(x)}.}
 
 \item{vertex.frame.color}{Vector of length \code{vcount(x)}.}
 
-\item{vertex.shape.degree}{Vector of length \code{vcount(x)}. Passed to \link[polygons:npolygon]{polygons::npolygon},
+\item{vertex.rot}{Vector of length \code{vcount(x)}. Passed to \link[polygons:npolygon]{polygons::npolygon},
 elevation degree from which the polygon is drawn.}
 
 \item{vertex.frame.prop}{Vector of length \code{vcount(x)}. What proportion of the
@@ -74,8 +79,6 @@ top ranking according to \code{vertex.size}.}
 
 \item{vertex.label.range}{Numeric vector of size 2 or 3. Relative scale of
 \code{vertex.label.fontsize} in points (see \link[grid:gpar]{grid::gpar}).}
-
-\item{edge.width}{Vector of length \code{ecount(x)}.}
 
 \item{edge.width.range}{Vector of length \code{ecount(x)}.}
 
@@ -109,9 +112,6 @@ is not plotted.}
 \item{y, ...}{Ignored}
 
 \item{.new}{Logical scalar. When \code{TRUE} calls \link[grid:grid.newpage]{grid::grid.newpage}.}
-
-\item{vertex.shape, vertex.nsides}{Numeric vector of length \code{vcount(x)}. Number of sizes of
-the vertex. E.g. three is a triangle, and 100 approximates a circle.}
 }
 \description{
 Plot a network

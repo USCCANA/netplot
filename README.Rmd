@@ -65,14 +65,28 @@ sna::gplot(intergraph::asNetwork(UKfaculty), coord=l)
 ```
 
 
-```{r}
-nplot(
+```{r, fig.width=14, fig.height=14}
+# Random names
+set.seed(1)
+nam <- sample(babynames::babynames$name, vcount(UKfaculty))
+
+ans <- nplot(
   UKfaculty,
-  bg.col = "white",
-  vertex.size.range = c(.01, .075, 5), 
-  layout = l,
-  edge.curvature = .5,
-  edge.color.alpha = c(0, .5), edge.arrow.size = 0
+  layout                = l,
+  vertex.color          = viridis::plasma(5)[V(UKfaculty)$Group + 1],
+  vertex.label          = nam,
+  vertex.size.range     = c(.01, .04, 4),
+  vertex.label.col      =  "black",
+  vertex.label.fontface = "bold",
+  bg.col                = "transparent",
+  vertex.label.show     = .5,
+  vertex.label.range    = c(10, 25),
+  edge.width.range      = c(1, 4, 5)
   )
+
+
+# Plot it!
+ans
+
 ```
 

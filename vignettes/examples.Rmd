@@ -4,7 +4,7 @@ author: "George G. Vega Yon"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Graph drawing with netplot}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -77,7 +77,7 @@ gridExtra::grid.arrange(
 ```
 
 ```{r node-shapes, fig.width=4, fig.height=4, fig.cap="Number of sides for node drawing."}
-nplot(make_ring(5), vertex.shape = 2:6,
+nplot(make_ring(5), vertex.nsides = 2:6,
       vertex.size.range = c(.1,.1),
       edge.curvature = 0)
 ```

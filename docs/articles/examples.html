@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">netplot</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.9000</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.9000</span>
       </span>
     </div>
 
@@ -128,7 +128,7 @@ Comparision of default <code>igraph</code> vs <code>netplot</code> default call.
 Comparision of default <code>igraph</code> vs <code>netplot</code> default call. <code>nplot</code> fills completely the plotting area, and adjusts vertex size, edge width, and edge arrows’ size accordingly to the plotting area and plotting device.
 </p>
 </div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">nplot</span>(UKfaculty, <span class="dt">layout =</span> l_ukf)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/nplot.html">nplot</a></span>(UKfaculty, <span class="dt">layout =</span> l_ukf)</code></pre></div>
 <div class="figure">
 <img src="examples_files/figure-html/nplot-vs-plot-3.png" alt="Comparision of default `igraph` vs `netplot` default call. `nplot` fills completely the plotting area, and adjusts vertex size, edge width, and edge arrows' size accordingly to the plotting area and plotting device." width="672"><p class="caption">
 Comparision of default <code>igraph</code> vs <code>netplot</code> default call. <code>nplot</code> fills completely the plotting area, and adjusts vertex size, edge width, and edge arrows’ size accordingly to the plotting area and plotting device.
@@ -146,8 +146,8 @@ l &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentat
 
 <span class="co"># Putting two plots in the same page (one using igraph and the other network)</span>
 gridExtra<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/gridExtra/topics/arrangeGrob">grid.arrange</a></span>(
-  <span class="kw">nplot</span>(x_igraph, <span class="dt">layout =</span> l),
-  <span class="kw">nplot</span>(x_network, <span class="dt">layout =</span> l), <span class="dt">ncol=</span><span class="dv">2</span>, <span class="dt">nrow=</span><span class="dv">1</span>
+  <span class="kw"><a href="../reference/nplot.html">nplot</a></span>(x_igraph, <span class="dt">layout =</span> l),
+  <span class="kw"><a href="../reference/nplot.html">nplot</a></span>(x_network, <span class="dt">layout =</span> l), <span class="dt">ncol=</span><span class="dv">2</span>, <span class="dt">nrow=</span><span class="dv">1</span>
 )</code></pre></div>
 <p><img src="examples_files/figure-html/unnamed-chunk-1-1.png" width="700"></p>
 </div>
@@ -156,10 +156,10 @@ gridExtra<span class="op">::</span><span class="kw"><a href="http://www.rdocumen
 <a href="#nodes" class="anchor"></a>Nodes</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
 gridExtra<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/gridExtra/topics/arrangeGrob">grid.arrange</a></span>(
-  <span class="kw">nplot</span>(UKfaculty, <span class="dt">layout =</span> l_ukf, <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">025</span>, .<span class="dv">025</span>)),
-  <span class="kw">nplot</span>(UKfaculty, <span class="dt">layout =</span> l_ukf, <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">01</span>, .<span class="dv">025</span>)),
-  <span class="kw">nplot</span>(UKfaculty, <span class="dt">layout =</span> l_ukf, <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">01</span>, .<span class="dv">025</span>, <span class="dv">4</span>)),
-  <span class="kw">nplot</span>(UKfaculty, <span class="dt">layout =</span> l_ukf, <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">02</span>, .<span class="dv">05</span>, <span class="dv">4</span>)),
+  <span class="kw"><a href="../reference/nplot.html">nplot</a></span>(UKfaculty, <span class="dt">layout =</span> l_ukf, <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">025</span>, .<span class="dv">025</span>)),
+  <span class="kw"><a href="../reference/nplot.html">nplot</a></span>(UKfaculty, <span class="dt">layout =</span> l_ukf, <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">01</span>, .<span class="dv">025</span>)),
+  <span class="kw"><a href="../reference/nplot.html">nplot</a></span>(UKfaculty, <span class="dt">layout =</span> l_ukf, <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">01</span>, .<span class="dv">025</span>, <span class="dv">4</span>)),
+  <span class="kw"><a href="../reference/nplot.html">nplot</a></span>(UKfaculty, <span class="dt">layout =</span> l_ukf, <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">02</span>, .<span class="dv">05</span>, <span class="dv">4</span>)),
   <span class="dt">ncol=</span><span class="dv">2</span>, <span class="dt">nrow=</span><span class="dv">2</span>
 )</code></pre></div>
 <div class="figure">
@@ -167,7 +167,7 @@ gridExtra<span class="op">::</span><span class="kw"><a href="http://www.rdocumen
 Modifying <code>vertex.size.range</code>: Each figure shows a different parameter for the vertex size range. From left to right, and top down: (a) Has all vertices with the same scale of 2.5%, (b)
 </p>
 </div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">nplot</span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/igraph/topics/make_ring">make_ring</a></span>(<span class="dv">5</span>), <span class="dt">vertex.shape =</span> <span class="dv">2</span><span class="op">:</span><span class="dv">6</span>,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/nplot.html">nplot</a></span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/igraph/topics/make_ring">make_ring</a></span>(<span class="dv">5</span>), <span class="dt">vertex.nsides =</span> <span class="dv">2</span><span class="op">:</span><span class="dv">6</span>,
       <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">1</span>,.<span class="dv">1</span>),
       <span class="dt">edge.curvature =</span> <span class="dv">0</span>)</code></pre></div>
 <div class="figure">
@@ -185,9 +185,9 @@ x &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentat
 l &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/igraph/topics/layout_with_fr">layout_with_fr</a></span>(x)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
 gridExtra<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/gridExtra/topics/arrangeGrob">grid.arrange</a></span>(
-  <span class="kw">nplot</span>(x, <span class="dt">layout =</span> l, <span class="dt">edge.color.mix =</span> <span class="dv">1</span>, <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">05</span>,.<span class="dv">1</span>)),
-  <span class="kw">nplot</span>(x, <span class="dt">layout =</span> l, <span class="dt">edge.color.mix =</span> .<span class="dv">5</span>, <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">05</span>,.<span class="dv">1</span>)),
-  <span class="kw">nplot</span>(x, <span class="dt">layout =</span> l, <span class="dt">edge.color.mix =</span> <span class="dv">0</span>, <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">05</span>,.<span class="dv">1</span>)),
+  <span class="kw"><a href="../reference/nplot.html">nplot</a></span>(x, <span class="dt">layout =</span> l, <span class="dt">edge.color.mix =</span> <span class="dv">1</span>, <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">05</span>,.<span class="dv">1</span>)),
+  <span class="kw"><a href="../reference/nplot.html">nplot</a></span>(x, <span class="dt">layout =</span> l, <span class="dt">edge.color.mix =</span> .<span class="dv">5</span>, <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">05</span>,.<span class="dv">1</span>)),
+  <span class="kw"><a href="../reference/nplot.html">nplot</a></span>(x, <span class="dt">layout =</span> l, <span class="dt">edge.color.mix =</span> <span class="dv">0</span>, <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">05</span>,.<span class="dv">1</span>)),
   <span class="dt">ncol=</span><span class="dv">3</span>, <span class="dt">nrow=</span><span class="dv">1</span>
 )</code></pre></div>
 <div class="figure">
@@ -196,9 +196,9 @@ Modifying <code>edge.color.mix</code>: Each figure shows a different parameter f
 </p>
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gridExtra<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/gridExtra/topics/arrangeGrob">grid.arrange</a></span>(
-  <span class="kw">nplot</span>(x, <span class="dt">layout =</span> l, <span class="dt">edge.curvature =</span> <span class="dv">0</span>, <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">05</span>,.<span class="dv">1</span>)),
-  <span class="kw">nplot</span>(x, <span class="dt">layout =</span> l, <span class="dt">edge.curvature =</span> pi<span class="op">/</span><span class="dv">2</span>, <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">05</span>,.<span class="dv">1</span>)),
-  <span class="kw">nplot</span>(x, <span class="dt">layout =</span> l, <span class="dt">edge.curvature =</span> pi, <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">05</span>,.<span class="dv">1</span>)),
+  <span class="kw"><a href="../reference/nplot.html">nplot</a></span>(x, <span class="dt">layout =</span> l, <span class="dt">edge.curvature =</span> <span class="dv">0</span>, <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">05</span>,.<span class="dv">1</span>)),
+  <span class="kw"><a href="../reference/nplot.html">nplot</a></span>(x, <span class="dt">layout =</span> l, <span class="dt">edge.curvature =</span> pi<span class="op">/</span><span class="dv">2</span>, <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">05</span>,.<span class="dv">1</span>)),
+  <span class="kw"><a href="../reference/nplot.html">nplot</a></span>(x, <span class="dt">layout =</span> l, <span class="dt">edge.curvature =</span> pi, <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">05</span>,.<span class="dv">1</span>)),
   <span class="dt">ncol =</span> <span class="dv">3</span>, <span class="dt">nrow=</span><span class="dv">1</span>
 )</code></pre></div>
 <div class="figure">
@@ -207,10 +207,10 @@ Modifying <code>edge.curvature</code>: Each figure shows a different parameter f
 </p>
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gridExtra<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/gridExtra/topics/arrangeGrob">grid.arrange</a></span>(
-  <span class="kw">nplot</span>(x, <span class="dt">layout =</span> l, <span class="dt">edge.line.breaks=</span><span class="dv">3</span>),
-  <span class="kw">nplot</span>(x, <span class="dt">layout =</span> l, <span class="dt">edge.line.lty =</span> <span class="dv">2</span>, <span class="dt">edge.line.breaks=</span><span class="dv">10</span>),
-  <span class="kw">nplot</span>(x, <span class="dt">layout =</span> l, <span class="dt">edge.line.lty =</span> <span class="dv">3</span>, <span class="dt">edge.line.breaks=</span><span class="dv">10</span>),
-  <span class="kw">nplot</span>(x, <span class="dt">layout =</span> l, <span class="dt">edge.line.lty =</span> <span class="dv">4</span>, <span class="dt">edge.line.breaks=</span><span class="dv">10</span>),
+  <span class="kw"><a href="../reference/nplot.html">nplot</a></span>(x, <span class="dt">layout =</span> l, <span class="dt">edge.line.breaks=</span><span class="dv">3</span>),
+  <span class="kw"><a href="../reference/nplot.html">nplot</a></span>(x, <span class="dt">layout =</span> l, <span class="dt">edge.line.lty =</span> <span class="dv">2</span>, <span class="dt">edge.line.breaks=</span><span class="dv">10</span>),
+  <span class="kw"><a href="../reference/nplot.html">nplot</a></span>(x, <span class="dt">layout =</span> l, <span class="dt">edge.line.lty =</span> <span class="dv">3</span>, <span class="dt">edge.line.breaks=</span><span class="dv">10</span>),
+  <span class="kw"><a href="../reference/nplot.html">nplot</a></span>(x, <span class="dt">layout =</span> l, <span class="dt">edge.line.lty =</span> <span class="dv">4</span>, <span class="dt">edge.line.breaks=</span><span class="dv">10</span>),
   <span class="dt">nrow=</span><span class="dv">2</span>, <span class="dt">ncol=</span><span class="dv">2</span>
 )</code></pre></div>
 <div class="figure">

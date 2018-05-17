@@ -184,14 +184,14 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' @param bg.col Color of the background.
 #' @param layout Numeric two-column matrix with the graph layout.
 #' @param vertex.size Numeric vector of length `vcount(x)`. Absolute size of the vertex.
-#' @param vertex.shape,vertex.nsides Numeric vector of length `vcount(x)`. Number of sizes of
+#' @param vertex.nsides Numeric vector of length `vcount(x)`. Number of sizes of
 #' the vertex. E.g. three is a triangle, and 100 approximates a circle.
 #' @param vertex.color Vector of length `vcount(x)`. Vertex colors.
 #' @param vertex.size.range Vector of length `vcount(x)`.
 #' @param vertex.frame.color Vector of length `vcount(x)`.
 #' @param vertex.frame.prop Vector of length `vcount(x)`. What proportion of the
 #' vertex does the frame occupy (values between 0 and 1).
-#' @param vertex.shape.degree Vector of length `vcount(x)`. Passed to [polygons::npolygon],
+#' @param vertex.rot Vector of length `vcount(x)`. Passed to [polygons::npolygon],
 #' elevation degree from which the polygon is drawn.
 #' @param vertex.label Character vector of length `vcount(x)`. Labels.
 #' @param vertex.label.fontsize Numeric vector.
@@ -281,9 +281,10 @@ nplot <- function(...) UseMethod("nplot")
 #' @rdname nplot
 nplot.igraph <- function(
   x,
-  layout      = igraph::layout_nicely(x),
-  vertex.size = igraph::degree(x, mode="in"),
+  layout       = igraph::layout_nicely(x),
+  vertex.size  = igraph::degree(x, mode="in"),
   vertex.color = set_colors(x),
+  edge.width   = igraph::edge_attr(x, "weight"),
   ...
   ) {
 
@@ -331,7 +332,7 @@ nplot.default <- function(
   vertex.color            = viridis::viridis(1),
   vertex.size.range       = c(.01, .03),
   vertex.frame.color      = grDevices::adjustcolor(vertex.color, red.f = .75, green.f = .75, blue.f = .75),
-  vertex.shape.degree     = 0,
+  vertex.rot              = 0,
   vertex.frame.prop       = .2,
   vertex.label            = NULL,
   vertex.label.fontsize   = NULL,
@@ -453,7 +454,7 @@ nplot.default <- function(
     grob.edge[[e]] <- grob_edge(netenv, e)
 
   # Agregated grob -------------------------------------------------------------
-  do.call(
+  ans <- do.call(
     grid::gTree,
     list(
       children = do.call(grid::gList, c(grob.edge, grob.vertex)),
@@ -469,6 +470,18 @@ nplot.default <- function(
       .bg.col  = bg.col
     )
   )
+
+  # Changing the plotting order
+  ans$childrenOrder <- with(
+    ans,
+    c(
+      childrenOrder[grepl("^edge[0-9]+[-][0-9]+$", childrenOrder)],
+      childrenOrder[grepl("^vertex[.][0-9]+$", childrenOrder)],
+      childrenOrder[grepl("^vertex-label[.][0-9]+$", childrenOrder)]
+    ))
+
+
+  ans
 
 
 }
@@ -540,7 +553,8 @@ grob_vertex <- function(netenv, v) {
       x = netenv$layout[v, 1],
       y = netenv$layout[v, 2],
       n = netenv$vertex.nsides[v],
-      r = netenv$vertex.size[v]*(1 - netenv$vertex.frame.prop[v])
+      r = netenv$vertex.size[v]*(1 - netenv$vertex.frame.prop[v]),
+      d = netenv$vertex.rot[v]
     )
 
   # Frame coordinates
@@ -548,7 +562,8 @@ grob_vertex <- function(netenv, v) {
       x = netenv$layout[v, 1],
       y = netenv$layout[v, 2],
       n = netenv$vertex.nsides[v],
-      r = netenv$vertex.size[v]
+      r = netenv$vertex.size[v],
+      d = netenv$vertex.rot[v]
       )
 
   # Returning
@@ -706,11 +721,11 @@ nplot_base <- function(
   layout              = igraph::layout_nicely(x),
   vertex.size         = igraph::degree(x, mode="in"),
   bg.col              = "lightgray",
-  vertex.shape        = 50,
+  vertex.nsides       = 50,
   vertex.color        = NULL,
   vertex.size.range   = c(.01, .03),
   vertex.frame.color  = NULL,
-  vertex.shape.degree = 0,
+  vertex.rot          = 0,
   vertex.frame.prop   = .1,
   edge.width          = NULL,
   edge.width.range    = c(1, 2),
@@ -849,11 +864,11 @@ nplot_base <- function(
   if (!length(vertex.frame.color))
     vertex.frame.color <- adjustcolor(vertex.color, red.f = .75, blue.f = .75, green.f = .75)
 
-  if (length(vertex.shape) == 1)
-    vertex.shape <- rep(vertex.shape, nrow(layout))
+  if (length(vertex.nsides) == 1)
+    vertex.nsides <- rep(vertex.nsides, nrow(layout))
 
-  if (length(vertex.shape.degree) == 1)
-    vertex.shape.degree <- rep(vertex.shape.degree, nrow(layout))
+  if (length(vertex.rot) == 1)
+    vertex.rot <- rep(vertex.rot, nrow(layout))
 
   if (length(vertex.frame.prop) == 1)
     vertex.frame.prop <- rep(vertex.frame.prop, nrow(layout))
@@ -915,14 +930,14 @@ nplot_base <- function(
       # Computing coordinates
       vertex.coords[[i]] <- polygons::npolygon(
         layout[i,1], layout[i,2],
-        n = vertex.shape[i],
+        n = vertex.nsides[i],
         r = vertex.size[i]*vertex.frame.prop[i],
-        vertex.shape.degree[i]
+        vertex.rot[i]
       )
       vertex.frame.coords[[i]] <- polygons::piechart(
         1,
         origin = layout[i,],
-        edges  = vertex.shape[i],
+        edges  = vertex.nsides[i],
         radius = vertex.size[i],
         doughnut = vertex.size[i]*vertex.frame.prop[i],
         rescale = FALSE,

@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">netplot</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.9000</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.0.9000</span>
       </span>
     </div>
 
@@ -128,18 +128,31 @@ l &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentat
 
 <span class="kw">plot</span>(UKfaculty, <span class="dt">layout =</span> l) <span class="co"># ala igraph</span></code></pre></div>
 <p><img src="reference/figures/README-example-1.png" width="70%"></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/netplot/topics/nplot">nplot</a></span>(UKfaculty, <span class="dt">layout =</span> l) <span class="co"># ala netplot</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="reference/nplot.html">nplot</a></span>(UKfaculty, <span class="dt">layout =</span> l) <span class="co"># ala netplot</span></code></pre></div>
 <p><img src="reference/figures/README-example-2.png" width="70%"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sna<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/sna/topics/gplot">gplot</a></span>(intergraph<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/intergraph/topics/asNetwork">asNetwork</a></span>(UKfaculty), <span class="dt">coord=</span>l)</code></pre></div>
 <p><img src="reference/figures/README-example-3.png" width="70%"></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="http://www.rdocumentation.org/packages/netplot/topics/nplot">nplot</a></span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Random names</span>
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+nam &lt;-<span class="st"> </span><span class="kw">sample</span>(babynames<span class="op">::</span>babynames<span class="op">$</span>name, <span class="kw"><a href="http://www.rdocumentation.org/packages/igraph/topics/gorder">vcount</a></span>(UKfaculty))
+
+ans &lt;-<span class="st"> </span><span class="kw"><a href="reference/nplot.html">nplot</a></span>(
   UKfaculty,
-  <span class="dt">bg.col =</span> <span class="st">"white"</span>,
-  <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">01</span>, .<span class="dv">075</span>, <span class="dv">5</span>), 
-  <span class="dt">layout =</span> l,
-  <span class="dt">edge.curvature =</span> .<span class="dv">5</span>,
-  <span class="dt">edge.color.alpha =</span> <span class="kw">c</span>(<span class="dv">0</span>, .<span class="dv">5</span>), <span class="dt">edge.arrow.size =</span> <span class="dv">0</span>
-  )</code></pre></div>
+  <span class="dt">layout                =</span> l,
+  <span class="dt">vertex.color          =</span> viridis<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/viridis/topics/reexports">plasma</a></span>(<span class="dv">5</span>)[<span class="kw"><a href="http://www.rdocumentation.org/packages/igraph/topics/V">V</a></span>(UKfaculty)<span class="op">$</span>Group <span class="op">+</span><span class="st"> </span><span class="dv">1</span>],
+  <span class="dt">vertex.label          =</span> nam,
+  <span class="dt">vertex.size.range     =</span> <span class="kw">c</span>(.<span class="dv">01</span>, .<span class="dv">04</span>, <span class="dv">4</span>),
+  <span class="dt">vertex.label.col      =</span>  <span class="st">"black"</span>,
+  <span class="dt">vertex.label.fontface =</span> <span class="st">"bold"</span>,
+  <span class="dt">bg.col                =</span> <span class="st">"transparent"</span>,
+  <span class="dt">vertex.label.show     =</span> .<span class="dv">5</span>,
+  <span class="dt">vertex.label.range    =</span> <span class="kw">c</span>(<span class="dv">10</span>, <span class="dv">25</span>),
+  <span class="dt">edge.width.range      =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">5</span>)
+  )
+
+
+<span class="co"># Plot it!</span>
+ans</code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-1-1.png" width="70%"></p>
 </div>
 </div>

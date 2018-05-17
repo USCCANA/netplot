@@ -6,8 +6,8 @@
 \usage{
 nplot_base(x, layout = igraph::layout_nicely(x),
   vertex.size = igraph::degree(x, mode = "in"), bg.col = "lightgray",
-  vertex.shape = 50, vertex.color = NULL, vertex.size.range = c(0.01,
-  0.03), vertex.frame.color = NULL, vertex.shape.degree = 0,
+  vertex.nsides = 50, vertex.color = NULL, vertex.size.range = c(0.01,
+  0.03), vertex.frame.color = NULL, vertex.rot = 0,
   vertex.frame.prop = 0.1, edge.width = NULL, edge.width.range = c(1, 2),
   edge.arrow.size = NULL, edge.color.mix = 0.5, edge.color.alpha = c(0.1,
   0.5), edge.curvature = pi/3, edge.line.lty = "solid",
@@ -24,7 +24,7 @@ nplot_base(x, layout = igraph::layout_nicely(x),
 
 \item{bg.col}{Color of the background.}
 
-\item{vertex.shape}{Numeric vector of length \code{vcount(x)}. Number of sizes of
+\item{vertex.nsides}{Numeric vector of length \code{vcount(x)}. Number of sizes of
 the vertex. E.g. three is a triangle, and 100 approximates a circle.}
 
 \item{vertex.color}{Vector of length \code{vcount(x)}. Vertex colors.}
@@ -33,7 +33,7 @@ the vertex. E.g. three is a triangle, and 100 approximates a circle.}
 
 \item{vertex.frame.color}{Vector of length \code{vcount(x)}.}
 
-\item{vertex.shape.degree}{Vector of length \code{vcount(x)}. Passed to \link[polygons:npolygon]{polygons::npolygon},
+\item{vertex.rot}{Vector of length \code{vcount(x)}. Passed to \link[polygons:npolygon]{polygons::npolygon},
 elevation degree from which the polygon is drawn.}
 
 \item{vertex.frame.prop}{Vector of length \code{vcount(x)}. What proportion of the
