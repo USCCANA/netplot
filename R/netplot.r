@@ -111,7 +111,7 @@ arrow_fancy <- function(x, alpha = 0, l=.25, a=pi/6, b = pi/1.5) {
 #' @details
 #' This function is to be called after [plot.new], as it takes the parameter `usr`
 #' from the
-rescale_node <- function(size, rel=c(.01, .05, 1)) {
+rescale_size <- function(size, rel=c(.01, .05, 1)) {
 
   # Checking the rel size
   if (length(rel) == 2)
@@ -121,7 +121,6 @@ rescale_node <- function(size, rel=c(.01, .05, 1)) {
   } else if (length(rel) < 2) {
     stop("`rel` must be at least of length 2 and at most of length 3.")
   }
-
 
   # Creating curvature
   size <- size^rel[3]
@@ -129,48 +128,14 @@ rescale_node <- function(size, rel=c(.01, .05, 1)) {
   # Rescaling to be between range[1], range[2]
   sran <- range(size, na.rm=TRUE)
 
-  if ((sran[2] - sran[1]) > 1e-10)
+  if ((sran[2] - sran[1]) > 1e-5)
     size <- (size - sran[1])/(sran[2] - sran[1]) # 0-1
   else
     size <- size/sran[1]
 
-  size <- size * (rel[2] - rel[1]) + rel[1]
-
-  # Getting coords
-  # usr <- graphics::par()$usr[1:2]
-  # size * (usr[2] - usr[1])/2
-  size
+  size * (rel[2] - rel[1]) + rel[1]
 
 }
-
-#' Function to rescale the edge-width.
-#' @param rel Vector of length 2 with the min and max width.
-#' @param width Numeric vector. width of the edges.
-#' @export
-rescale_edge <- function(width, rel=c(1, 3, 1)) {
-
-  # Checking the rel size
-  if (length(rel) == 2)
-    rel <- c(rel, 1)
-  else if (length(rel) > 3) {
-    warning("`rel` has more than 3 elements. Only the first 3 will be used.")
-  } else if (length(rel) < 2) {
-    stop("`rel` must be at least of length 2 and at most of length 3.")
-  }
-
-  # Creating curvature
-  width <- width^rel[3]
-
-  ran   <- range(width, na.rm = TRUE)
-  if (ran[1] != ran[2])
-    width <- (width - ran[1])/(ran[2] - ran[1] + 1e-10)
-  else
-    width <- width/ran[1]
-
-  width*(rel[2] - rel[1]) + rel[1]
-
-}
-
 
 #' Adjust coordinates to fit aspect ratio of the device
 #' @param coords Two column numeric matrix. Vertices coordinates.
@@ -219,7 +184,7 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' @param bg.col Color of the background.
 #' @param layout Numeric two-column matrix with the graph layout.
 #' @param vertex.size Numeric vector of length `vcount(x)`. Absolute size of the vertex.
-#' @param vertex.shape Numeric vector of length `vcount(x)`. Number of sizes of
+#' @param vertex.shape,vertex.nsides Numeric vector of length `vcount(x)`. Number of sizes of
 #' the vertex. E.g. three is a triangle, and 100 approximates a circle.
 #' @param vertex.color Vector of length `vcount(x)`. Vertex colors.
 #' @param vertex.size.range Vector of length `vcount(x)`.
@@ -228,6 +193,15 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' vertex does the frame occupy (values between 0 and 1).
 #' @param vertex.shape.degree Vector of length `vcount(x)`. Passed to [polygons::npolygon],
 #' elevation degree from which the polygon is drawn.
+#' @param vertex.label Character vector of length `vcount(x)`. Labels.
+#' @param vertex.label.fontsize Numeric vector.
+#' @param vertex.label.color Vector of colors of length `vcount(x)`.
+#' @param vertex.label.fontfamily Character vector of length `vcount(x)`.
+#' @param vertex.label.fontface See [grid::gpar]
+#' @param vertex.label.show Numeric scalar. Proportion of labels to show as the
+#' top ranking according to `vertex.size`.
+#' @param vertex.label.range Numeric vector of size 2 or 3. Relative scale of
+#' `vertex.label.fontsize` in points (see [grid::gpar]).
 #' @param edge.width Vector of length `ecount(x)`.
 #' @param edge.width.range Vector of length `ecount(x)`.
 #' @param edge.arrow.size Vector of length `ecount(x)`.
@@ -300,25 +274,33 @@ npolygon <- function (x = 0, y = 0, n = 6L, r = 1, d = 2 * pi/(n)/2) {
 
 
 #' @export
-nplot2 <- function(...) UseMethod("nplot2")
+#' @rdname nplot
+nplot <- function(...) UseMethod("nplot")
 
 #' @export
-nplot2.igraph <- function(
+#' @rdname nplot
+nplot.igraph <- function(
   x,
-  layout = igraph::layout_nicely(x),
+  layout      = igraph::layout_nicely(x),
+  vertex.size = igraph::degree(x, mode="in"),
+  vertex.color = set_colors(x),
   ...
   ) {
 
-  nplot2.default(
-    edgelist = igraph::as_edgelist(x),
-    layout   = layout,
+  nplot.default(
+    edgelist    = igraph::as_edgelist(x),
+    layout      = layout,
+    vertex.size = vertex.size,
+    vertex.color = vertex.color,
     ...
   )
 
 }
 
 #' @export
-nplot2.default <- function(
+#' @rdname nplot
+#' @param edgelist An edgelist.
+nplot.default <- function(
   edgelist,
   layout,
   vertex.size             = 1,
@@ -335,6 +317,7 @@ nplot2.default <- function(
   vertex.label.fontfamily = "HersheySans",
   vertex.label.fontface   = "bold",
   vertex.label.show       = .3,
+  vertex.label.range      = c(5, 15),
   edge.width              = 1,
   edge.width.range        = c(1, 2),
   edge.arrow.size         = NULL,
@@ -383,13 +366,13 @@ nplot2.default <- function(
   netenv$layout <- fit_coords_to_dev(netenv$layout)
 
   # Rescaling size
-  netenv$vertex.size <- rescale_node(
+  netenv$vertex.size <- rescale_size(
     netenv$vertex.size,
     rel = netenv$vertex.size.range
     )
 
   # Rescaling edges
-  netenv$edge.width <- rescale_edge(
+  netenv$edge.width <- rescale_size(
     netenv$edge.width/max(netenv$edge.width, na.rm=TRUE),
     rel = netenv$edge.width.range
     )
@@ -400,7 +383,10 @@ nplot2.default <- function(
 
   # Rescaling text
   if (!length(netenv$vertex.label.fontsize))
-    netenv$vertex.label.fontsize <- netenv$vertex.size
+    netenv$vertex.label.fontsize <- rescale_size(
+      netenv$vertex.size,
+      rel = netenv$vertex.label.range
+      )
 
   # Computing label threshold
   netenv$label_threshold <- stats::quantile(
@@ -471,6 +457,10 @@ nplot2.default <- function(
 
 }
 
+#' @rdname nplot
+#' @export
+#' @param .new Logical scalar. When `TRUE` calls [grid::grid.newpage].
+#' @param y,... Ignored
 print.netplot <- function(x, y = NULL, .new=TRUE, ...) {
 
   if (.new) {
@@ -518,8 +508,9 @@ locate_vertex <- function(x) {
 #' @param netenv An object of class network environment.
 #' @param v,e Integer scalars. vertex or edge index.
 #'
-#' @return
-# Generating coordinates
+#' @return A grob
+#' Generating coordinates
+#' @noRd
 grob_vertex <- function(netenv, v) {
 
   # Computing coordinates
@@ -563,10 +554,7 @@ grob_vertex <- function(netenv, v) {
           x     = netenv$layout[v, 1],
           y     = netenv$layout[v, 2] + netenv$vertex.size[v]*1.1,
           gp    = grid::gpar(
-            fontsize   = as.double(grid::convertWidth(
-              grid::unit(netenv$vertex.label.fontsize[v]*20, "cm"),
-              "points"
-              )),
+            fontsize   = netenv$vertex.label.fontsize[v],
             col        = netenv$vertex.label.color[v],
             fontfamily = netenv$vertex.label.fontfamily[v],
             fontface   = netenv$vertex.label.fontface[v]
@@ -659,26 +647,28 @@ grob_edge <- function(netenv, e) {
 
 }
 
-#' Look at `chull` from `grDevices`
-#' @noRd
+# Look at `chull` from `grDevices`
 
-#
-# coords_calc_edge <- function(netenv, e) {
-#
-#
-#
-# }
-#
-# coords_calc_arrow <- function(netenv, e) {
-#
-#
-#
-# }
-
-
-#' @rdname nplot
+#' Create a vector of colors for the vertices
+#' @param x A graph.
 #' @export
-nplot <- function(
+set_colors <- function(x) UseMethod("set_colors")
+
+#' @rdname set_colors
+#' @export
+set_colors.igraph <- function(x) {
+
+  deg <- igraph::degree(x, mode = "in")
+  n   <- length(table(deg))
+
+  viridis::viridis(n)[as.factor(deg)]
+
+}
+
+#' `nplot` using base graphics
+#' @inheritParams nplot
+#' @export
+nplot_base <- function(
   x,
   layout              = igraph::layout_nicely(x),
   vertex.size         = igraph::degree(x, mode="in"),
@@ -741,7 +731,7 @@ nplot <- function(
   }
 
   # Rescaling size
-  vertex.size <- rescale_node(vertex.size, rel = vertex.size.range)
+  vertex.size <- rescale_size(vertex.size, rel = vertex.size.range)
 
   # Computing shapes -----------------------------------------------------------
   E <- igraph::as_edgelist(x, names = FALSE)
@@ -756,7 +746,7 @@ nplot <- function(
     edge.width <- rep(1.0, igraph::ecount(x))
 
   # Rescaling edges
-  edge.width <- rescale_edge(edge.width/max(edge.width, na.rm=TRUE), rel = edge.width.range)
+  edge.width <- rescale_size(edge.width/max(edge.width, na.rm=TRUE), rel = edge.width.range)
 
   if (!length(edge.arrow.size))
     edge.arrow.size <- vertex.size[E[,1]]/1.5

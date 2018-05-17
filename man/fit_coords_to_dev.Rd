@@ -4,7 +4,7 @@
 \alias{fit_coords_to_dev}
 \title{Adjust coordinates to fit aspect ratio of the device}
 \usage{
-fit_coords_to_dev(coords, adj = graphics::par("pin")[1:2])
+fit_coords_to_dev(coords, adj = grDevices::dev.size())
 }
 \arguments{
 \item{coords}{Two column numeric matrix. Vertices coordinates.}
