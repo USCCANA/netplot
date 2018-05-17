@@ -299,6 +299,28 @@ nplot.igraph <- function(
 
 #' @export
 #' @rdname nplot
+#' @importFrom network as.edgelist
+#' @importFrom sna gplot.layout.kamadakawai
+nplot.network <- function(
+  x,
+  layout      = sna::gplot.layout.kamadakawai(x, NULL),
+  vertex.size = sna::degree(x, cmode="indegree"),
+  vertex.color = set_colors(x),
+  ...
+) {
+
+  nplot.default(
+    edgelist    = network::as.edgelist(x),
+    layout      = layout,
+    vertex.size = vertex.size,
+    vertex.color = vertex.color,
+    ...
+  )
+
+}
+
+#' @export
+#' @rdname nplot
 #' @param edgelist An edgelist.
 nplot.default <- function(
   edgelist,
@@ -308,7 +330,7 @@ nplot.default <- function(
   vertex.nsides           = 50,
   vertex.color            = viridis::viridis(1),
   vertex.size.range       = c(.01, .03),
-  vertex.frame.color      = grDevices::adjustcolor(vertex.color, red.f = 1.5, green.f = 1.5, blue.f = 1.5),
+  vertex.frame.color      = grDevices::adjustcolor(vertex.color, red.f = .75, green.f = .75, blue.f = .75),
   vertex.shape.degree     = 0,
   vertex.frame.prop       = .2,
   vertex.label            = NULL,
@@ -355,7 +377,7 @@ nplot.default <- function(
       netenv[[p]] <- .rep(netenv[[p]], netenv$N)
 
   # Checking defaults for edges
-  for (p in ls(patter = "^edge", envir = netenv))
+  for (p in ls(pattern = "^edge", envir = netenv))
     if (length(netenv[[p]]) > 0 && length(netenv[[p]]) < netenv$M)
       netenv[[p]] <- .rep(netenv[[p]], netenv$M)
 
@@ -431,7 +453,7 @@ nplot.default <- function(
     grob.edge[[e]] <- grob_edge(netenv, e)
 
   # Agregated grob -------------------------------------------------------------
-  netenv$grob <- do.call(
+  do.call(
     grid::gTree,
     list(
       children = do.call(grid::gList, c(grob.edge, grob.vertex)),
@@ -439,19 +461,13 @@ nplot.default <- function(
       vp       = grid::vpTree(
         parent   = grid::viewport(layout = lo, name = "frame-vp"),
         children = grid::vpList(vp_graph)
-      )
-    )
-  )
-
-
-  structure(
-    list(
-      layout = netenv$layout,
-      xlim   = netenv$xlim,
-      ylim   = netenv$ylim,
-      grob   = netenv$grob
       ),
-    class = "netplot"
+      cl       = "netplot",
+      .xlim    = netenv$xlim,
+      .ylim    = netenv$ylim,
+      .layout  = netenv$layout,
+      .bg.col  = bg.col
+    )
   )
 
 
@@ -467,7 +483,13 @@ print.netplot <- function(x, y = NULL, .new=TRUE, ...) {
     grid::grid.newpage()
   }
 
-  grid::grid.draw(x$grob)
+  if (x$.bg.col != "transparent")
+    grid::grid.rect(gp = grid::gpar(
+      fill = x$.bg.col,
+      col  = grDevices::adjustcolor(x$.bg.col, red.f = .75, green.f = .75, blue.f = .75)
+    ), name = "background")
+
+  grid::grid.draw(x)
 
   # Returning
   invisible(x)
@@ -535,8 +557,8 @@ grob_vertex <- function(netenv, v) {
       y    = c(framecoords[,2], coords[,2]),
       id.lengths = c(nrow(coords), nrow(framecoords)),
       gp   = grid::gpar(
-        fill = c(netenv$vertex.color[v], netenv$vertex.frame.color[v]),
-        col  = c(netenv$vertex.color[v], netenv$vertex.frame.color[v])
+        fill = c(netenv$vertex.frame.color[v],netenv$vertex.color[v]),
+        col  = c(netenv$vertex.frame.color[v],netenv$vertex.color[v])
       ),
       default.units = "native",
       name = paste0("vertex.", v)
@@ -589,7 +611,7 @@ grob_edge <- function(netenv, e) {
   )
 
   # Computing colors using colorRamp2
-  col <- polygons::colorRamp2(c(netenv$vertex.color[i], netenv$vertex.color[j]))(.5)
+  col <- polygons::colorRamp2(c(netenv$vertex.color[i], netenv$vertex.color[j]))(netenv$edge.color.mix[e])
   col <- rgb(col, maxColorValue = 255)
 
   col <- polygons::colorRamp2(
@@ -609,10 +631,10 @@ grob_edge <- function(netenv, e) {
     id.lengths = rep(2, nbreaks),
     default.units = "native",
     gp         = grid::gpar(
-      col = c(col),
-      lty = rep(netenv$edge.line.lty[e], nbreaks),
-      lwd = rep(netenv$edge.width[e], nbreaks),
-      lineend = rep(1, nbreaks)
+      col = col,
+      lty = netenv$edge.line.lty[e],
+      lwd = netenv$edge.width[e],
+      lineend = "butt"
     ),
     name = "line"
     )
@@ -659,6 +681,17 @@ set_colors <- function(x) UseMethod("set_colors")
 set_colors.igraph <- function(x) {
 
   deg <- igraph::degree(x, mode = "in")
+  n   <- length(table(deg))
+
+  viridis::viridis(n)[as.factor(deg)]
+
+}
+
+#' @rdname set_colors
+#' @export
+set_colors.network <- function(x) {
+
+  deg <- sna::degree(x, cmode = "indegree")
   n   <- length(table(deg))
 
   viridis::viridis(n)[as.factor(deg)]
@@ -793,7 +826,7 @@ nplot_base <- function(
 
   }
 
-  # Edges
+  # Edges ----------------------------------------------------------------------
   if (!length(edge.color.mix))
     edge.color.mix <- rep(.5, length(edges.coords))
   else if (length(edge.color.mix) == 1)
@@ -809,7 +842,7 @@ nplot_base <- function(
   else if (length(edge.color.alpha) <= 2)
     edge.color.alpha <- matrix(edge.color.alpha, nrow= length(edges.coords), ncol=2, byrow = TRUE)
 
-  # Nodes
+  # Nodes ----------------------------------------------------------------------
   if (length(vertex.color) == 1)
     vertex.color <- rep(vertex.color, nrow(layout))
 

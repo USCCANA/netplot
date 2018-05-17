@@ -2,7 +2,9 @@
 % Please edit documentation in R/netplot.r
 \name{nplot}
 \alias{nplot}
+\alias{nplot}
 \alias{nplot.igraph}
+\alias{nplot.network}
 \alias{nplot.default}
 \alias{print.netplot}
 \title{Plot a network}
@@ -13,11 +15,15 @@ nplot(...)
   vertex.size = igraph::degree(x, mode = "in"),
   vertex.color = set_colors(x), ...)
 
+\method{nplot}{network}(x, layout = sna::gplot.layout.kamadakawai(x, NULL),
+  vertex.size = sna::degree(x, cmode = "indegree"),
+  vertex.color = set_colors(x), ...)
+
 \method{nplot}{default}(edgelist, layout, vertex.size = 1,
   bg.col = "lightgray", vertex.nsides = 50,
   vertex.color = viridis::viridis(1), vertex.size.range = c(0.01, 0.03),
-  vertex.frame.color = grDevices::adjustcolor(vertex.color, red.f = 1.5,
-  green.f = 1.5, blue.f = 1.5), vertex.shape.degree = 0,
+  vertex.frame.color = grDevices::adjustcolor(vertex.color, red.f = 0.75,
+  green.f = 0.75, blue.f = 0.75), vertex.shape.degree = 0,
   vertex.frame.prop = 0.2, vertex.label = NULL,
   vertex.label.fontsize = NULL, vertex.label.color = "black",
   vertex.label.fontfamily = "HersheySans", vertex.label.fontface = "bold",

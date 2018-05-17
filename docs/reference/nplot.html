@@ -18,13 +18,22 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Plot a network — nplot" />
+
+<meta property="og:description" content="Plot a network" />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +56,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">netplot</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">netplot</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.9000</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -82,6 +95,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -89,28 +103,52 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Plot a network</h1>
+    <small class="dont-index">Source: <a href='https://github.com/USCCANA/netplot/blob/master/R/netplot.r'><code>R/netplot.r</code></a></small>
+    <div class="hidden name"><code>nplot.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Plot a network</p>
     
+    </div>
 
-    <pre class="usage"><span class='fu'>nplot</span>(<span class='no'>x</span>, <span class='kw'>layout</span> <span class='kw'>=</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/igraph/topics/layout_nicely'>layout_nicely</a></span>(<span class='no'>x</span>), <span class='kw'>vertex.size</span> <span class='kw'>=</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/igraph/topics/degree'>degree</a></span>(<span class='no'>x</span>,
-  <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"in"</span>), <span class='kw'>bg.col</span> <span class='kw'>=</span> <span class='st'>"lightgray"</span>, <span class='kw'>vertex.shape</span> <span class='kw'>=</span> <span class='fl'>50</span>,
-  <span class='kw'>vertex.color</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>vertex.size.range</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.01</span>, <span class='fl'>0.03</span>),
-  <span class='kw'>vertex.frame.color</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>vertex.shape.degree</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>vertex.frame.prop</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>edge.width</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>edge.width.range</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>),
-  <span class='kw'>edge.arrow.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>edge.color.mix</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>edge.color.alpha</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.1</span>,
-  <span class='fl'>0.5</span>), <span class='kw'>edge.curvature</span> <span class='kw'>=</span> <span class='no'>pi</span>/<span class='fl'>3</span>, <span class='kw'>edge.line.lty</span> <span class='kw'>=</span> <span class='st'>"solid"</span>,
-  <span class='kw'>edge.line.breaks</span> <span class='kw'>=</span> <span class='fl'>15</span>, <span class='kw'>sample.edges</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>skip.vertices</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>skip.edges</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>skip.arrows</span> <span class='kw'>=</span> <span class='no'>skip.edges</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>zero.margins</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>nplot</span>(<span class='no'>...</span>)
+
+<span class='co'># S3 method for igraph</span>
+<span class='fu'>nplot</span>(<span class='no'>x</span>, <span class='kw'>layout</span> <span class='kw'>=</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/igraph/topics/layout_nicely'>layout_nicely</a></span>(<span class='no'>x</span>),
+  <span class='kw'>vertex.size</span> <span class='kw'>=</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/igraph/topics/degree'>degree</a></span>(<span class='no'>x</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"in"</span>),
+  <span class='kw'>vertex.color</span> <span class='kw'>=</span> <span class='fu'><a href='set_colors.html'>set_colors</a></span>(<span class='no'>x</span>), <span class='no'>...</span>)
+
+<span class='co'># S3 method for network</span>
+<span class='fu'>nplot</span>(<span class='no'>x</span>, <span class='kw'>layout</span> <span class='kw'>=</span> <span class='kw pkg'>sna</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/sna/topics/gplot.layout'>gplot.layout.kamadakawai</a></span>(<span class='no'>x</span>, <span class='kw'>NULL</span>),
+  <span class='kw'>vertex.size</span> <span class='kw'>=</span> <span class='kw pkg'>sna</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/sna/topics/degree'>degree</a></span>(<span class='no'>x</span>, <span class='kw'>cmode</span> <span class='kw'>=</span> <span class='st'>"indegree"</span>),
+  <span class='kw'>vertex.color</span> <span class='kw'>=</span> <span class='fu'><a href='set_colors.html'>set_colors</a></span>(<span class='no'>x</span>), <span class='no'>...</span>)
+
+<span class='co'># S3 method for default</span>
+<span class='fu'>nplot</span>(<span class='no'>edgelist</span>, <span class='no'>layout</span>, <span class='kw'>vertex.size</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>bg.col</span> <span class='kw'>=</span> <span class='st'>"lightgray"</span>, <span class='kw'>vertex.nsides</span> <span class='kw'>=</span> <span class='fl'>50</span>,
+  <span class='kw'>vertex.color</span> <span class='kw'>=</span> <span class='kw pkg'>viridis</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/viridis/topics/reexports'>viridis</a></span>(<span class='fl'>1</span>), <span class='kw'>vertex.size.range</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.01</span>, <span class='fl'>0.03</span>),
+  <span class='kw'>vertex.frame.color</span> <span class='kw'>=</span> <span class='kw pkg'>grDevices</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/grDevices/topics/adjustcolor'>adjustcolor</a></span>(<span class='no'>vertex.color</span>, <span class='kw'>red.f</span> <span class='kw'>=</span> <span class='fl'>0.75</span>,
+  <span class='kw'>green.f</span> <span class='kw'>=</span> <span class='fl'>0.75</span>, <span class='kw'>blue.f</span> <span class='kw'>=</span> <span class='fl'>0.75</span>), <span class='kw'>vertex.shape.degree</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>vertex.frame.prop</span> <span class='kw'>=</span> <span class='fl'>0.2</span>, <span class='kw'>vertex.label</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>vertex.label.fontsize</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>vertex.label.color</span> <span class='kw'>=</span> <span class='st'>"black"</span>,
+  <span class='kw'>vertex.label.fontfamily</span> <span class='kw'>=</span> <span class='st'>"HersheySans"</span>, <span class='kw'>vertex.label.fontface</span> <span class='kw'>=</span> <span class='st'>"bold"</span>,
+  <span class='kw'>vertex.label.show</span> <span class='kw'>=</span> <span class='fl'>0.3</span>, <span class='kw'>vertex.label.range</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>5</span>, <span class='fl'>15</span>), <span class='kw'>edge.width</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>edge.width.range</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>), <span class='kw'>edge.arrow.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>edge.color.mix</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>edge.color.alpha</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.1</span>, <span class='fl'>0.5</span>),
+  <span class='kw'>edge.curvature</span> <span class='kw'>=</span> <span class='no'>pi</span>/<span class='fl'>3</span>, <span class='kw'>edge.line.lty</span> <span class='kw'>=</span> <span class='st'>"solid"</span>, <span class='kw'>edge.line.breaks</span> <span class='kw'>=</span> <span class='fl'>15</span>,
+  <span class='kw'>sample.edges</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>skip.vertices</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>skip.edges</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>skip.arrows</span> <span class='kw'>=</span> <span class='no'>skip.edges</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>zero.margins</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for netplot</span>
+<span class='fu'>print</span>(<span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.new</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -126,17 +164,16 @@
       <td><p>Numeric vector of length <code>vcount(x)</code>. Absolute size of the vertex.</p></td>
     </tr>
     <tr>
-      <th>bg.col</th>
-      <td><p>Color of the background.</p></td>
-    </tr>
-    <tr>
-      <th>vertex.shape</th>
-      <td><p>Numeric vector of length <code>vcount(x)</code>. Number of sizes of
-the vertex. E.g. three is a triangle, and 100 approximates a circle.</p></td>
-    </tr>
-    <tr>
       <th>vertex.color</th>
       <td><p>Vector of length <code>vcount(x)</code>. Vertex colors.</p></td>
+    </tr>
+    <tr>
+      <th>edgelist</th>
+      <td><p>An edgelist.</p></td>
+    </tr>
+    <tr>
+      <th>bg.col</th>
+      <td><p>Color of the background.</p></td>
     </tr>
     <tr>
       <th>vertex.size.range</th>
@@ -155,6 +192,36 @@ elevation degree from which the polygon is drawn.</p></td>
       <th>vertex.frame.prop</th>
       <td><p>Vector of length <code>vcount(x)</code>. What proportion of the
 vertex does the frame occupy (values between 0 and 1).</p></td>
+    </tr>
+    <tr>
+      <th>vertex.label</th>
+      <td><p>Character vector of length <code>vcount(x)</code>. Labels.</p></td>
+    </tr>
+    <tr>
+      <th>vertex.label.fontsize</th>
+      <td><p>Numeric vector.</p></td>
+    </tr>
+    <tr>
+      <th>vertex.label.color</th>
+      <td><p>Vector of colors of length <code>vcount(x)</code>.</p></td>
+    </tr>
+    <tr>
+      <th>vertex.label.fontfamily</th>
+      <td><p>Character vector of length <code>vcount(x)</code>.</p></td>
+    </tr>
+    <tr>
+      <th>vertex.label.fontface</th>
+      <td><p>See <a href='http://www.rdocumentation.org/packages/grid/topics/gpar'>grid::gpar</a></p></td>
+    </tr>
+    <tr>
+      <th>vertex.label.show</th>
+      <td><p>Numeric scalar. Proportion of labels to show as the
+top ranking according to <code>vertex.size</code>.</p></td>
+    </tr>
+    <tr>
+      <th>vertex.label.range</th>
+      <td><p>Numeric vector of size 2 or 3. Relative scale of
+<code>vertex.label.fontsize</code> in points (see <a href='http://www.rdocumentation.org/packages/grid/topics/gpar'>grid::gpar</a>).</p></td>
     </tr>
     <tr>
       <th>edge.width</th>
@@ -211,6 +278,19 @@ is not plotted.</p></td>
       <th>zero.margins</th>
       <td><p>Logical scalar.</p></td>
     </tr>
+    <tr>
+      <th>y, ...</th>
+      <td><p>Ignored</p></td>
+    </tr>
+    <tr>
+      <th>.new</th>
+      <td><p>Logical scalar. When <code>TRUE</code> calls <a href='http://www.rdocumentation.org/packages/grid/topics/grid.newpage'>grid::grid.newpage</a>.</p></td>
+    </tr>
+    <tr>
+      <th>vertex.shape, vertex.nsides</th>
+      <td><p>Numeric vector of length <code>vcount(x)</code>. Number of sizes of
+the vertex. E.g. three is a triangle, and 100 approximates a circle.</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -228,7 +308,7 @@ with 0.5.</p>
 <span class='fu'>set.seed</span>(<span class='fl'>1</span>)
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/igraph/topics/sample_smallworld'>sample_smallworld</a></span>(<span class='fl'>1</span>, <span class='fl'>200</span>, <span class='fl'>5</span>, <span class='fl'>0.03</span>)
 
-<span class='fu'>plot</span>(<span class='no'>x</span>) <span class='co'># ala igraph</span></div><div class='img'><img src='nplot-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='fu'>nplot</span>(<span class='no'>x</span>) <span class='co'># ala netplot</span></div><div class='img'><img src='nplot-2.png' alt='' width='700' height='432.632880098887' /></div></pre>
+<span class='fu'>plot</span>(<span class='no'>x</span>) <span class='co'># ala igraph</span></div><div class='img'><img src='nplot-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>nplot</span>(<span class='no'>x</span>) <span class='co'># ala netplot</span></div><div class='img'><img src='nplot-2.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -249,11 +329,14 @@ with 0.5.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

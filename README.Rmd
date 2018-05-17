@@ -32,6 +32,8 @@ Some features:
 5.  Nicer vertex frame color.
 6.  Better use of space filling the plotting device.
 
+The package uses the `grid` plotting system (just like `ggplot2`).
+
 ## Installation
 
 <!-- You can install the released version of netplot from [CRAN](https://CRAN.R-project.org) with: -->

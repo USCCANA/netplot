@@ -35,24 +35,45 @@ library(igraph)
 data("UKfaculty", package = "igraphdata")
 
 set.seed(225)
-l <- layout_with_fr(UKfaculty)
+l_ukf <- layout_with_fr(UKfaculty)
 
-oldpar <- par(mfrow = c(2,2))
-plot(UKfaculty, layout = l)
-sna::gplot(as.matrix(as_adj(UKfaculty)), coord = l)
-nplot(UKfaculty, layout = l)
-par(oldpar)
+plot(UKfaculty, layout = l_ukf)
+sna::gplot(as.matrix(as_adj(UKfaculty)), coord = l_ukf)
+nplot(UKfaculty, layout = l_ukf)
 ```
+
+
+# Multiple plots
+
+To arrange multiple plots in the same page we can use the `grid.arrange` function from the `gridExtra` package
+
+```{r}
+x_igraph  <- sample_smallworld(1, 20, 4, .05)
+x_network <- intergraph::asNetwork(x_igraph)
+
+l <- layout_nicely(x_igraph)
+
+# Putting two plots in the same page (one using igraph and the other network)
+gridExtra::grid.arrange(
+  nplot(x_igraph, layout = l),
+  nplot(x_network, layout = l), ncol=2, nrow=1
+)
+```
+
 
 # Nodes
 
 ```{r node-scaling, fig.width=7, fig.height=7, fig.cap="Modifying `vertex.size.range`: Each figure shows a different parameter for the vertex size range. From left to right, and top down: (a) Has all vertices with the same scale of 2.5%, (b) "}
-oldpar <- par(mfrow=c(2,2))
-nplot(UKfaculty, layout = l, vertex.size.range = c(.025, .025))
-nplot(UKfaculty, layout = l, vertex.size.range = c(.01, .025))
-nplot(UKfaculty, layout = l, vertex.size.range = c(.01, .025, 4))
-nplot(UKfaculty, layout = l, vertex.size.range = c(.02, .05, 4))
-par(oldpar)
+
+gridExtra::grid.arrange(
+  nplot(UKfaculty, layout = l_ukf, vertex.size.range = c(.025, .025)),
+  nplot(UKfaculty, layout = l_ukf, vertex.size.range = c(.01, .025)),
+  nplot(UKfaculty, layout = l_ukf, vertex.size.range = c(.01, .025, 4)),
+  nplot(UKfaculty, layout = l_ukf, vertex.size.range = c(.02, .05, 4)),
+  ncol=2, nrow=2
+)
+
+
 ```
 
 ```{r node-shapes, fig.width=4, fig.height=4, fig.cap="Number of sides for node drawing."}
@@ -72,26 +93,39 @@ l <- layout_with_fr(x)
 
 
 ```{r edge-color, fig.width=7, fig.height=3, fig.cap="Modifying `edge.color.mix`: Each figure shows a different parameter for the edge color mixer. From left to right, (a) colors the edges as alter, (b) mixes ego and alter's colors, and (c) only uses ego"}
-oldpar <- par(mfrow = c(1,3))
-nplot(x, layout = l, edge.color.mix = 1, vertex.size.range = c(.05,.1))
-nplot(x, layout = l, edge.color.mix = .5, vertex.size.range = c(.05,.1))
-nplot(x, layout = l, edge.color.mix = 0, vertex.size.range = c(.05,.1))
-par(oldpar)
+
+gridExtra::grid.arrange(
+  nplot(x, layout = l, edge.color.mix = 1, vertex.size.range = c(.05,.1)),
+  nplot(x, layout = l, edge.color.mix = .5, vertex.size.range = c(.05,.1)),
+  nplot(x, layout = l, edge.color.mix = 0, vertex.size.range = c(.05,.1)),
+  ncol=3, nrow=1
+)
+
 ```
 
 ```{r edge-curvature, fig.width=7, fig.height=3, fig.cap="Modifying `edge.curvature`: Each figure shows a different parameter for the edge curvature. From left to right, (a) straight edges, (b) the edge between ego and alter is an arc that measures $\\pi/2$ radians (90 degree), and (c) the edge as an arc between ego and alter that measures $\\pi$ radians (180 degrees)."}
-oldpar <- par(mfrow = c(1,3))
-nplot(x, layout = l, edge.curvature = 0, vertex.size.range = c(.05,.1))
-nplot(x, layout = l, edge.curvature = pi/2, vertex.size.range = c(.05,.1))
-nplot(x, layout = l, edge.curvature = pi, vertex.size.range = c(.05,.1))
-par(oldpar)
+gridExtra::grid.arrange(
+  nplot(x, layout = l, edge.curvature = 0, vertex.size.range = c(.05,.1)),
+  nplot(x, layout = l, edge.curvature = pi/2, vertex.size.range = c(.05,.1)),
+  nplot(x, layout = l, edge.curvature = pi, vertex.size.range = c(.05,.1)),
+  ncol = 3, nrow=1
+)
 ```
 
 ```{r edge-line-type, fig.width=6, fig.height=6, fig.cap="Changing the number of breaks in the edge (arc) and the type of line to be drawn."}
-oldpar <- par(mfrow = c(2,2))
-nplot(x, layout = l, edge.line.breaks=3)
-nplot(x, layout = l, edge.line.lty = 2, edge.line.breaks=10)
-nplot(x, layout = l, edge.line.lty = 3, edge.line.breaks=10)
-nplot(x, layout = l, edge.line.lty = 4, edge.line.breaks=10)
-par(oldpar)
+gridExtra::grid.arrange(
+  nplot(x, layout = l, edge.line.breaks=3),
+  nplot(x, layout = l, edge.line.lty = 2, edge.line.breaks=10),
+  nplot(x, layout = l, edge.line.lty = 3, edge.line.breaks=10),
+  nplot(x, layout = l, edge.line.lty = 4, edge.line.breaks=10),
+  nrow=2, ncol=2
+)
 ```
+
+# Node labels
+
+```{r}
+data(UKfaculty, package = "igraphdata")
+# fakenames <- sample
+```
+

@@ -17,12 +17,15 @@ Imports:
     graphics,
     grDevices,
     igraph,
-    polygons
+    polygons,
+    gridExtra,
+    network,
+    sna
 Suggests: 
     knitr,
     rmarkdown,
-    sna,
-    igraphdata
+    igraphdata,
+    intergraph
 VignetteBuilder: knitr 
 URL: https://github.com/USCCANA/netplot
 BugReports: https://github.com/USCCANA/netplot/issues

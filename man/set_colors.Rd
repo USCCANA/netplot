@@ -3,11 +3,14 @@
 \name{set_colors}
 \alias{set_colors}
 \alias{set_colors.igraph}
+\alias{set_colors.network}
 \title{Create a vector of colors for the vertices}
 \usage{
 set_colors(x)
 
 \method{set_colors}{igraph}(x)
+
+\method{set_colors}{network}(x)
 }
 \arguments{
 \item{x}{A graph.}
