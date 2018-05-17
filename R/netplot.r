@@ -289,7 +289,7 @@ nplot.igraph <- function(
   ) {
 
   nplot.default(
-    edgelist    = igraph::as_edgelist(x),
+    edgelist    = igraph::as_edgelist(x, names = FALSE),
     layout      = layout,
     vertex.size = vertex.size,
     vertex.color = vertex.color,
