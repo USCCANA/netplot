@@ -3,7 +3,7 @@
 netplot
 =======
 
-[![Travis build status](https://travis-ci.org/USCCANA/netplot.svg?branch=master)](https://travis-ci.org/USCCANA/netplot) [![Build status](https://ci.appveyor.com/api/projects/status/3k2m3oq6o99qcs0r?svg=true)](https://ci.appveyor.com/project/gvegayon/netplot)
+[![Travis build status](https://travis-ci.org/USCCANA/netplot.svg?branch=master)](https://travis-ci.org/USCCANA/netplot) [![Build status](https://ci.appveyor.com/api/projects/status/3k2m3oq6o99qcs0r?svg=true)](https://ci.appveyor.com/project/gvegayon/netplot) [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 
 An alternative graph visualization engine that puts an emphasis on aesthetics at the same time of providing default parameters that provide visualizations that are out-of-the-box nice.
 
