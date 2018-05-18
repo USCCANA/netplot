@@ -55,19 +55,21 @@ l <- layout_with_fr(UKfaculty)
 plot(UKfaculty, layout = l) # ala igraph
 ```
 
-<img src="man/figures/README-example-1.png" width="70%" />
+<img src="man/figures/README-example-1.png" width="85%" />
 
 ``` r
 nplot(UKfaculty, layout = l) # ala netplot
 ```
 
-<img src="man/figures/README-example-2.png" width="70%" />
+<img src="man/figures/README-example-2.png" width="85%" />
 
 ``` r
 sna::gplot(intergraph::asNetwork(UKfaculty), coord=l)
 ```
 
-<img src="man/figures/README-example-3.png" width="70%" />
+<img src="man/figures/README-example-3.png" width="85%" />
+
+### UKfaculty
 
 ``` r
 # Random names
@@ -93,4 +95,52 @@ ans <- nplot(
 ans
 ```
 
-<img src="man/figures/README-unnamed-chunk-1-1.png" width="70%" />
+<img src="man/figures/README-unnamed-chunk-1-1.png" width="85%" />
+
+### USairports
+
+``` r
+# Loading the data
+data(USairports, package="igraphdata")
+
+# Generating a layout naively
+layout   <- V(USairports)$Position
+layout   <- do.call(rbind, lapply(layout, function(x) strsplit(x, " ")[[1]]))
+layout[] <- stringr::str_remove(layout, "^[a-zA-Z]+")
+layout   <- matrix(as.numeric(layout[]), ncol=2)
+
+# Some missingness
+layout[which(!complete.cases(layout)), ] <- apply(layout, 2, mean, na.rm=TRUE)
+
+# Have to rotate it (it doesn't matter the origin)
+layout <- netplot:::rotate(layout, c(0,0), pi/2)
+
+# Simplifying the network
+net <- simplify(USairports, edge.attr.comb = list(
+  weight = "sum",
+  name   = "concat",
+  Passengers = "sum",
+  "ignore"
+))
+
+# Getting a pretty color
+
+f <- 1.5
+col <- adjustcolor(
+  viridis::plasma(10, direction = -1, alpha = .5)[1],
+  red.f = f, blue.f = f, green.f = f
+  )
+
+nplot(
+  net,
+  layout            = layout,
+  edge.width        = E(net)$Passengers,
+  edge.color        = col,
+  skip.vertex       = TRUE,
+  vertex.size.range = c(0,0),
+  edge.width.range  = c(.75, 4, 4),
+  bg.col            = "black"
+  )
+```
+
+<img src="man/figures/README-unnamed-chunk-2-1.png" width="85%" />

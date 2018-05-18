@@ -24,7 +24,7 @@ arc <- function(
   elevation <- atan2(p1[2]-p0[2], p1[1] - p0[1])
 
   # Constants
-  d <- stats::dist(rbind(p0, p1))
+  d <- sqrt(sum((p0 - p1)^2))
 
   # If overlapping, then fix the radius to be the average
   if ((d - sum(radii)) < 0) {
@@ -59,7 +59,7 @@ arc <- function(
 
 
   # Rotation and return
-  ans <- polygons::rotate(ans, p0, elevation)
+  ans <- rotate(ans, p0, elevation)
 
   # Separating the segments
   ans <- cbind(
@@ -85,20 +85,19 @@ arc <- function(
 arrow_fancy <- function(x, alpha = 0, l=.25, a=pi/6, b = pi/1.5) {
 
 
-  p_top   <- c(x[1], x[2])
-  p_left  <- p_top + c(-cos(a), sin(a))*l
+  p_left  <- x + c(-cos(a), sin(a))*l
 
   base <- l*sin(a)
   base2 <- base * cos(pi - b)/sin(pi - b)
   p_mid   <- p_left + c(base2, -base)
 
-  p_right <- p_top - c(cos(a), sin(a))*l
+  p_right <- x - c(cos(a), sin(a))*l
 
-  ans <- rbind(p_top, p_left, p_mid, p_right)
+  ans <- rbind(x, p_left, p_mid, p_right)
 
   # Rotation
 
-  polygons::rotate(ans, p_top, alpha = alpha)
+  rotate(ans, x, alpha = alpha)
 
 
 }
@@ -217,7 +216,7 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' @param edge.line.breaks Vector of length `ecount(x)`. Number of vertices to
 #' draw (approximate) the arc (edge).
 #' @param sample.edges Numeric scalar between 0 and 1. Proportion of edges to sample.
-#' @param skip.vertices,skip.edges,skip.arrows Logical scalar. When `TRUE` the object
+#' @param skip.vertex,skip.edges,skip.arrows Logical scalar. When `TRUE` the object
 #' is not plotted.
 #' @param add Logical scalar.
 #' @param zero.margins Logical scalar.
@@ -284,15 +283,21 @@ nplot.igraph <- function(
   layout       = igraph::layout_nicely(x),
   vertex.size  = igraph::degree(x, mode="in"),
   vertex.color = set_colors(x),
+  vertex.label = igraph::vertex_attr(x, "name"),
   edge.width   = igraph::edge_attr(x, "weight"),
   ...
   ) {
 
+  if (!length(edge.width))
+    edge.width <- 1L
+
   nplot.default(
-    edgelist    = igraph::as_edgelist(x, names = FALSE),
-    layout      = layout,
-    vertex.size = vertex.size,
+    edgelist     = igraph::as_edgelist(x, names = FALSE),
+    layout       = layout,
+    vertex.size  = vertex.size,
     vertex.color = vertex.color,
+    vertex.label = vertex.label,
+    edge.width   = edge.width,
     ...
   )
 
@@ -304,8 +309,8 @@ nplot.igraph <- function(
 #' @importFrom sna gplot.layout.kamadakawai
 nplot.network <- function(
   x,
-  layout      = sna::gplot.layout.kamadakawai(x, NULL),
-  vertex.size = sna::degree(x, cmode="indegree"),
+  layout       = sna::gplot.layout.kamadakawai(x, NULL),
+  vertex.size  = sna::degree(x, cmode="indegree"),
   vertex.color = set_colors(x),
   ...
 ) {
@@ -344,13 +349,14 @@ nplot.default <- function(
   edge.width              = 1,
   edge.width.range        = c(1, 2),
   edge.arrow.size         = NULL,
+  edge.color              = NULL,
   edge.color.mix          = .5,
   edge.color.alpha        = c(.1, .5),
   edge.curvature          = pi/3,
   edge.line.lty           = "solid",
   edge.line.breaks        = 15,
   sample.edges            = 1,
-  skip.vertices           = FALSE,
+  skip.vertex           = FALSE,
   skip.edges              = FALSE,
   skip.arrows             = skip.edges,
   add                     = FALSE,
@@ -446,12 +452,14 @@ nplot.default <- function(
 
   # Generating grobs -----------------------------------------------------------
   grob.vertex <- vector("list", netenv$N)
-  for (v in 1:netenv$N)
-    grob.vertex[[v]] <- grob_vertex(netenv, v)
+  if (!netenv$skip.vertex)
+    for (v in 1:netenv$N)
+      grob.vertex[[v]] <- grob_vertex(netenv, v)
 
   grob.edge <- vector("list", netenv$M)
-  for (e in 1:netenv$M)
-    grob.edge[[e]] <- grob_edge(netenv, e)
+  if (!netenv$skip.edges)
+    for (e in 1:netenv$M)
+      grob.edge[[e]] <- grob_edge(netenv, e)
 
   # Agregated grob -------------------------------------------------------------
   ans <- do.call(
@@ -626,8 +634,17 @@ grob_edge <- function(netenv, e) {
   )
 
   # Computing colors using colorRamp2
-  col <- polygons::colorRamp2(c(netenv$vertex.color[i], netenv$vertex.color[j]))(netenv$edge.color.mix[e])
-  col <- rgb(col, maxColorValue = 255)
+  if (!length(netenv$edge.color) | (length(netenv$edge.color) && is.na(netenv$edge.color[e]))) {
+
+    col <- polygons::colorRamp2(
+      c(netenv$vertex.color[i], netenv$vertex.color[j])
+      )(netenv$edge.color.mix[e])
+
+    col <- rgb(col, maxColorValue = 255)
+
+  } else {
+    col <- netenv$edge.color[e]
+  }
 
   col <- polygons::colorRamp2(
     c(
@@ -637,6 +654,7 @@ grob_edge <- function(netenv, e) {
 
   col <- col(seq(0,1, length.out = nbreaks))
   col <- grDevices::rgb(col, alpha = col[,4], maxColorValue = 255)
+
 
 
   # Generating grob
@@ -730,13 +748,14 @@ nplot_base <- function(
   edge.width          = NULL,
   edge.width.range    = c(1, 2),
   edge.arrow.size     = NULL,
+  edge.color          = NULL,
   edge.color.mix      = .5,
   edge.color.alpha    = c(.1, .5),
   edge.curvature      = pi/3,
   edge.line.lty       = "solid",
   edge.line.breaks    = 15,
   sample.edges        = 1,
-  skip.vertices       = FALSE,
+  skip.vertex       = FALSE,
   skip.edges          = FALSE,
   skip.arrows         = skip.edges,
   add                 = FALSE,
@@ -925,7 +944,7 @@ nplot_base <- function(
   vertex.coords <- vector("list", nrow(layout))
   vertex.frame.coords <- vector("list", nrow(layout))
 
-  if (!skip.vertices)
+  if (!skip.vertex)
     for (i in 1:nrow(layout)) {
       # Computing coordinates
       vertex.coords[[i]] <- polygons::npolygon(

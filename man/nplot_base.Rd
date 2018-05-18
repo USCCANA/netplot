@@ -9,11 +9,11 @@ nplot_base(x, layout = igraph::layout_nicely(x),
   vertex.nsides = 50, vertex.color = NULL, vertex.size.range = c(0.01,
   0.03), vertex.frame.color = NULL, vertex.rot = 0,
   vertex.frame.prop = 0.1, edge.width = NULL, edge.width.range = c(1, 2),
-  edge.arrow.size = NULL, edge.color.mix = 0.5, edge.color.alpha = c(0.1,
-  0.5), edge.curvature = pi/3, edge.line.lty = "solid",
-  edge.line.breaks = 15, sample.edges = 1, skip.vertices = FALSE,
-  skip.edges = FALSE, skip.arrows = skip.edges, add = FALSE,
-  zero.margins = TRUE)
+  edge.arrow.size = NULL, edge.color = NULL, edge.color.mix = 0.5,
+  edge.color.alpha = c(0.1, 0.5), edge.curvature = pi/3,
+  edge.line.lty = "solid", edge.line.breaks = 15, sample.edges = 1,
+  skip.vertex = FALSE, skip.edges = FALSE, skip.arrows = skip.edges,
+  add = FALSE, zero.margins = TRUE)
 }
 \arguments{
 \item{x}{An \code{igraph} object.}
@@ -63,7 +63,7 @@ draw (approximate) the arc (edge).}
 
 \item{sample.edges}{Numeric scalar between 0 and 1. Proportion of edges to sample.}
 
-\item{skip.vertices}{Logical scalar. When \code{TRUE} the object
+\item{skip.vertex}{Logical scalar. When \code{TRUE} the object
 is not plotted.}
 
 \item{skip.edges}{Logical scalar. When \code{TRUE} the object

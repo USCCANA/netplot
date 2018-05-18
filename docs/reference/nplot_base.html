@@ -122,11 +122,11 @@
   <span class='kw'>vertex.nsides</span> <span class='kw'>=</span> <span class='fl'>50</span>, <span class='kw'>vertex.color</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>vertex.size.range</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.01</span>,
   <span class='fl'>0.03</span>), <span class='kw'>vertex.frame.color</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>vertex.rot</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>vertex.frame.prop</span> <span class='kw'>=</span> <span class='fl'>0.1</span>, <span class='kw'>edge.width</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>edge.width.range</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>2</span>),
-  <span class='kw'>edge.arrow.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>edge.color.mix</span> <span class='kw'>=</span> <span class='fl'>0.5</span>, <span class='kw'>edge.color.alpha</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.1</span>,
-  <span class='fl'>0.5</span>), <span class='kw'>edge.curvature</span> <span class='kw'>=</span> <span class='no'>pi</span>/<span class='fl'>3</span>, <span class='kw'>edge.line.lty</span> <span class='kw'>=</span> <span class='st'>"solid"</span>,
-  <span class='kw'>edge.line.breaks</span> <span class='kw'>=</span> <span class='fl'>15</span>, <span class='kw'>sample.edges</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>skip.vertices</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>skip.edges</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>skip.arrows</span> <span class='kw'>=</span> <span class='no'>skip.edges</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>zero.margins</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+  <span class='kw'>edge.arrow.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>edge.color</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>edge.color.mix</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
+  <span class='kw'>edge.color.alpha</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.1</span>, <span class='fl'>0.5</span>), <span class='kw'>edge.curvature</span> <span class='kw'>=</span> <span class='no'>pi</span>/<span class='fl'>3</span>,
+  <span class='kw'>edge.line.lty</span> <span class='kw'>=</span> <span class='st'>"solid"</span>, <span class='kw'>edge.line.breaks</span> <span class='kw'>=</span> <span class='fl'>15</span>, <span class='kw'>sample.edges</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>skip.vertex</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>skip.edges</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>skip.arrows</span> <span class='kw'>=</span> <span class='no'>skip.edges</span>,
+  <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>zero.margins</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -217,7 +217,7 @@ draw (approximate) the arc (edge).</p></td>
       <td><p>Numeric scalar between 0 and 1. Proportion of edges to sample.</p></td>
     </tr>
     <tr>
-      <th>skip.vertices</th>
+      <th>skip.vertex</th>
       <td><p>Logical scalar. When <code>TRUE</code> the object
 is not plotted.</p></td>
     </tr>

@@ -9,7 +9,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "70%"
+  out.width = "85%"
 )
 ```
 # netplot
@@ -64,6 +64,8 @@ sna::gplot(intergraph::asNetwork(UKfaculty), coord=l)
 ```
 
 
+### UKfaculty
+
 ```{r, fig.width=14, fig.height=14}
 # Random names
 set.seed(1)
@@ -87,5 +89,51 @@ ans <- nplot(
 # Plot it!
 ans
 
+```
+
+### USairports
+
+```{r, cache=TRUE}
+# Loading the data
+data(USairports, package="igraphdata")
+
+# Generating a layout naively
+layout   <- V(USairports)$Position
+layout   <- do.call(rbind, lapply(layout, function(x) strsplit(x, " ")[[1]]))
+layout[] <- stringr::str_remove(layout, "^[a-zA-Z]+")
+layout   <- matrix(as.numeric(layout[]), ncol=2)
+
+# Some missingness
+layout[which(!complete.cases(layout)), ] <- apply(layout, 2, mean, na.rm=TRUE)
+
+# Have to rotate it (it doesn't matter the origin)
+layout <- netplot:::rotate(layout, c(0,0), pi/2)
+
+# Simplifying the network
+net <- simplify(USairports, edge.attr.comb = list(
+  weight = "sum",
+  name   = "concat",
+  Passengers = "sum",
+  "ignore"
+))
+
+# Getting a pretty color
+
+f <- 1.5
+col <- adjustcolor(
+  viridis::plasma(10, direction = -1, alpha = .5)[1],
+  red.f = f, blue.f = f, green.f = f
+  )
+
+nplot(
+  net,
+  layout            = layout,
+  edge.width        = E(net)$Passengers,
+  edge.color        = col,
+  skip.vertex       = TRUE,
+  vertex.size.range = c(0,0),
+  edge.width.range  = c(.75, 4, 4),
+  bg.col            = "black"
+  )
 ```
 

@@ -20,7 +20,8 @@ Imports:
     polygons,
     gridExtra,
     network,
-    sna
+    sna,
+    Rcpp
 Suggests: 
     knitr,
     rmarkdown,
@@ -29,3 +30,5 @@ Suggests:
 VignetteBuilder: knitr 
 URL: https://github.com/USCCANA/netplot
 BugReports: https://github.com/USCCANA/netplot/issues
+LinkingTo: 
+    Rcpp, RcppArmadillo

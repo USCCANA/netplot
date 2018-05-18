@@ -12,8 +12,8 @@ nplot(...)
 
 \method{nplot}{igraph}(x, layout = igraph::layout_nicely(x),
   vertex.size = igraph::degree(x, mode = "in"),
-  vertex.color = set_colors(x), edge.width = igraph::edge_attr(x, "weight"),
-  ...)
+  vertex.color = set_colors(x), vertex.label = igraph::vertex_attr(x,
+  "name"), edge.width = igraph::edge_attr(x, "weight"), ...)
 
 \method{nplot}{network}(x, layout = sna::gplot.layout.kamadakawai(x, NULL),
   vertex.size = sna::degree(x, cmode = "indegree"),
@@ -28,10 +28,10 @@ nplot(...)
   vertex.label.color = "black", vertex.label.fontfamily = "HersheySans",
   vertex.label.fontface = "bold", vertex.label.show = 0.3,
   vertex.label.range = c(5, 15), edge.width = 1, edge.width.range = c(1,
-  2), edge.arrow.size = NULL, edge.color.mix = 0.5,
+  2), edge.arrow.size = NULL, edge.color = NULL, edge.color.mix = 0.5,
   edge.color.alpha = c(0.1, 0.5), edge.curvature = pi/3,
   edge.line.lty = "solid", edge.line.breaks = 15, sample.edges = 1,
-  skip.vertices = FALSE, skip.edges = FALSE, skip.arrows = skip.edges,
+  skip.vertex = FALSE, skip.edges = FALSE, skip.arrows = skip.edges,
   add = FALSE, zero.margins = TRUE, ...)
 
 \method{print}{netplot}(x, y = NULL, .new = TRUE, ...)
@@ -44,6 +44,8 @@ nplot(...)
 \item{vertex.size}{Numeric vector of length \code{vcount(x)}. Absolute size of the vertex.}
 
 \item{vertex.color}{Vector of length \code{vcount(x)}. Vertex colors.}
+
+\item{vertex.label}{Character vector of length \code{vcount(x)}. Labels.}
 
 \item{edge.width}{Vector of length \code{ecount(x)}.}
 
@@ -63,8 +65,6 @@ elevation degree from which the polygon is drawn.}
 
 \item{vertex.frame.prop}{Vector of length \code{vcount(x)}. What proportion of the
 vertex does the frame occupy (values between 0 and 1).}
-
-\item{vertex.label}{Character vector of length \code{vcount(x)}. Labels.}
 
 \item{vertex.label.fontsize}{Numeric vector.}
 
@@ -102,7 +102,7 @@ draw (approximate) the arc (edge).}
 
 \item{sample.edges}{Numeric scalar between 0 and 1. Proportion of edges to sample.}
 
-\item{skip.vertices, skip.edges, skip.arrows}{Logical scalar. When \code{TRUE} the object
+\item{skip.vertex, skip.edges, skip.arrows}{Logical scalar. When \code{TRUE} the object
 is not plotted.}
 
 \item{add}{Logical scalar.}

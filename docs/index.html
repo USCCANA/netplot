@@ -132,6 +132,9 @@ l &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentat
 <p><img src="reference/figures/README-example-2.png" width="70%"></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sna<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/sna/topics/gplot">gplot</a></span>(intergraph<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/intergraph/topics/asNetwork">asNetwork</a></span>(UKfaculty), <span class="dt">coord=</span>l)</code></pre></div>
 <p><img src="reference/figures/README-example-3.png" width="70%"></p>
+<div id="ukfaculty" class="section level3">
+<h3 class="hasAnchor">
+<a href="#ukfaculty" class="anchor"></a>UKfaculty</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Random names</span>
 <span class="kw">set.seed</span>(<span class="dv">1</span>)
 nam &lt;-<span class="st"> </span><span class="kw">sample</span>(babynames<span class="op">::</span>babynames<span class="op">$</span>name, <span class="kw"><a href="http://www.rdocumentation.org/packages/igraph/topics/gorder">vcount</a></span>(UKfaculty))
@@ -154,6 +157,53 @@ ans &lt;-<span class="st"> </span><span class="kw"><a href="reference/nplot.html
 <span class="co"># Plot it!</span>
 ans</code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-1-1.png" width="70%"></p>
+</div>
+<div id="usairports" class="section level3">
+<h3 class="hasAnchor">
+<a href="#usairports" class="anchor"></a>USairports</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Loading the data</span>
+<span class="kw">data</span>(USairports, <span class="dt">package=</span><span class="st">"igraphdata"</span>)
+
+<span class="co"># Generating a layout naively</span>
+layout   &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/igraph/topics/V">V</a></span>(USairports)<span class="op">$</span>Position
+layout   &lt;-<span class="st"> </span><span class="kw">do.call</span>(rbind, <span class="kw">lapply</span>(layout, <span class="cf">function</span>(x) <span class="kw">strsplit</span>(x, <span class="st">" "</span>)[[<span class="dv">1</span>]]))
+layout[] &lt;-<span class="st"> </span>stringr<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/stringr/topics/str_remove">str_remove</a></span>(layout, <span class="st">"^[a-zA-Z]+"</span>)
+layout   &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">as.numeric</span>(layout[]), <span class="dt">ncol=</span><span class="dv">2</span>)
+
+<span class="co"># Some missingness</span>
+layout[<span class="kw">which</span>(<span class="op">!</span><span class="kw">complete.cases</span>(layout)), ] &lt;-<span class="st"> </span><span class="kw">apply</span>(layout, <span class="dv">2</span>, mean, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)
+
+<span class="co"># Have to rotate it (it doesn't matter the origin)</span>
+layout &lt;-<span class="st"> </span>netplot<span class="op">:::</span><span class="kw">rotate</span>(layout, <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>), pi<span class="op">/</span><span class="dv">2</span>)
+
+<span class="co"># Simplifying the network</span>
+net &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/igraph/topics/simplify">simplify</a></span>(USairports, <span class="dt">edge.attr.comb =</span> <span class="kw">list</span>(
+  <span class="dt">weight =</span> <span class="st">"sum"</span>,
+  <span class="dt">name   =</span> <span class="st">"concat"</span>,
+  <span class="dt">Passengers =</span> <span class="st">"sum"</span>,
+  <span class="st">"ignore"</span>
+))
+
+<span class="co"># Getting a pretty color</span>
+
+f &lt;-<span class="st"> </span><span class="fl">1.5</span>
+col &lt;-<span class="st"> </span><span class="kw">adjustcolor</span>(
+  viridis<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/viridis/topics/reexports">plasma</a></span>(<span class="dv">10</span>, <span class="dt">direction =</span> <span class="op">-</span><span class="dv">1</span>, <span class="dt">alpha =</span> .<span class="dv">5</span>)[<span class="dv">1</span>],
+  <span class="dt">red.f =</span> f, <span class="dt">blue.f =</span> f, <span class="dt">green.f =</span> f
+  )
+
+<span class="kw"><a href="reference/nplot.html">nplot</a></span>(
+  net,
+  <span class="dt">layout            =</span> layout,
+  <span class="dt">edge.width        =</span> <span class="kw"><a href="http://www.rdocumentation.org/packages/igraph/topics/E">E</a></span>(net)<span class="op">$</span>Passengers,
+  <span class="dt">edge.color        =</span> col,
+  <span class="dt">skip.vertex       =</span> <span class="ot">TRUE</span>,
+  <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),
+  <span class="dt">edge.width.range  =</span> <span class="kw">c</span>(.<span class="dv">75</span>, <span class="dv">4</span>, <span class="dv">4</span>),
+  <span class="dt">bg.col            =</span> <span class="st">"black"</span>
+  )</code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-2-1.png" width="70%"></p>
+</div>
 </div>
 </div>
   </div>
