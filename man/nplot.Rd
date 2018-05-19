@@ -2,6 +2,7 @@
 % Please edit documentation in R/netplot.r
 \name{nplot}
 \alias{nplot}
+\alias{nplot}
 \alias{nplot.igraph}
 \alias{nplot.network}
 \alias{nplot.default}
@@ -17,7 +18,8 @@ nplot(...)
 
 \method{nplot}{network}(x, layout = sna::gplot.layout.kamadakawai(x, NULL),
   vertex.size = sna::degree(x, cmode = "indegree"),
-  vertex.color = set_colors(x), ...)
+  vertex.color = set_colors(x),
+  vertex.label = network::get.vertex.attribute(x, "vertex.names"), ...)
 
 \method{nplot}{default}(edgelist, layout, vertex.size = 1,
   bg.col = "lightgray", vertex.nsides = 50,
@@ -83,6 +85,9 @@ top ranking according to \code{vertex.size}.}
 \item{edge.width.range}{Vector of length \code{ecount(x)}.}
 
 \item{edge.arrow.size}{Vector of length \code{ecount(x)}.}
+
+\item{edge.color}{A vector of length \code{ecount(x)}. Can be \code{NULL} in which case
+the color is picked as a mixture between ego and alters' \code{vertex.color} values.}
 
 \item{edge.color.mix}{Numeric vector of length \code{ecount(x)} with values in
 \code{[0,1]}. 0 means color equal to ego's vertex color, one equals to alter's

@@ -45,6 +45,9 @@ vertex does the frame occupy (values between 0 and 1).}
 
 \item{edge.arrow.size}{Vector of length \code{ecount(x)}.}
 
+\item{edge.color}{A vector of length \code{ecount(x)}. Can be \code{NULL} in which case
+the color is picked as a mixture between ego and alters' \code{vertex.color} values.}
+
 \item{edge.color.mix}{Numeric vector of length \code{ecount(x)} with values in
 \code{[0,1]}. 0 means color equal to ego's vertex color, one equals to alter's
 vertex color.}

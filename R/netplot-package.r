@@ -1,4 +1,4 @@
 
-#' @useDynLib netplot, .registration = TRUE
-#' @importFrom Rcpp sourceCpp
-NULL
+# @useDynLib netplot, .registration = TRUE
+# @importFrom Rcpp sourceCpp
+# NULL

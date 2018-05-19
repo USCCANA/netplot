@@ -201,6 +201,8 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' top ranking according to `vertex.size`.
 #' @param vertex.label.range Numeric vector of size 2 or 3. Relative scale of
 #' `vertex.label.fontsize` in points (see [grid::gpar]).
+#' @param edge.color A vector of length `ecount(x)`. Can be `NULL` in which case
+#' the color is picked as a mixture between ego and alters' `vertex.color` values.
 #' @param edge.width Vector of length `ecount(x)`.
 #' @param edge.width.range Vector of length `ecount(x)`.
 #' @param edge.arrow.size Vector of length `ecount(x)`.
@@ -312,6 +314,7 @@ nplot.network <- function(
   layout       = sna::gplot.layout.kamadakawai(x, NULL),
   vertex.size  = sna::degree(x, cmode="indegree"),
   vertex.color = set_colors(x),
+  vertex.label = network::get.vertex.attribute(x, "vertex.names"),
   ...
 ) {
 
@@ -320,6 +323,7 @@ nplot.network <- function(
     layout      = layout,
     vertex.size = vertex.size,
     vertex.color = vertex.color,
+    vertex.label = vertex.label,
     ...
   )
 
