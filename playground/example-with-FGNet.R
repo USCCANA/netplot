@@ -1,6 +1,8 @@
 # https://bioconductor.org/packages/release/bioc/vignettes/FGNet/inst/doc/FGNet.html
 
 library(FGNet)
+library(netplot)
+library(igraph)
 
 # Getting the data
 data(FEA_tools)
@@ -14,11 +16,12 @@ genesAlz <- rownames(incidMat$metagroupsMatrix)
 genesAlzExpr <- setNames(c(rep(1,50), rep(-1,27)), genesAlz)
 
 # Plotting with igraph
-fNw <- functionalNetwork(incidMatFiltered, geneExpr=genesAlzExpr, keepColors=FALSE, vLabelCex=0.5)
+fNw <- functionalNetwork(incidMat, geneExpr=genesAlzExpr, keepColors=FALSE, vLabelCex=0.5)
 
 # Calling netplot
-
-frameCol <- apply(incidMatFiltered$metagroupsMatrix, 1, which.max)
+# frameCol <- incidMat$metagroupsMatrix
+# frameCol <-
+frameCol <- apply(incidMat$metagroupsMatrix, 1, which.max)
 
 nplot(
   fNw$iGraph$commonClusters,

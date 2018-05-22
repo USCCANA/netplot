@@ -44,7 +44,7 @@ update_par <- function(x, type, element, idx, ...) {
 
   } else if (type == "edge") {
 
-    n    <- x$.N
+    n    <- x$.M
     type <- function(i) sprintf(
       "edge.%i-%i",
       x$.edgelist[idx[i], ][1],
