@@ -93,7 +93,7 @@ ans
 
 ### USairports
 
-```{r, cache=TRUE}
+```{r, cache=FALSE}
 # Loading the data
 data(USairports, package="igraphdata")
 

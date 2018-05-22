@@ -49,7 +49,7 @@ grob_edge <- function(netenv, e) {
     id.lengths = rep(2, nbreaks),
     default.units = "native",
     gp         = grid::gpar(
-      col = col,
+      col = netenv$edge.color,
       lty = netenv$edge.line.lty[e],
       lwd = netenv$edge.width[e],
       lineend = "butt"
@@ -80,7 +80,7 @@ grob_edge <- function(netenv, e) {
         lwd  = netenv$edges.width[e]
       )
     ),
-    name = paste0("edge", i, "-",j)
+    name = paste0("edge.", i, "-",j)
   )
 
   ans

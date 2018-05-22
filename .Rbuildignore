@@ -6,3 +6,4 @@
 ^docs$
 ^\.travis\.yml$
 ^appveyor\.yml$
+^README_cache$

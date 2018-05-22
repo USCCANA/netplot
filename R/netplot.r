@@ -70,6 +70,11 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' drawing segments with a color gradient. In this case setting, for example
 #' `c(.1, .5)` will make the edge start with a transparency of 0.1 and end
 #' with 0.5.
+#' @return An object of class `c("netplot", "gTree", "grob", "gDesc")`. The object
+#' has an additional set of attributes:
+#' * `.xlim, .ylim` vector of size two with the x-asis/y-axis limits.
+#' * `.layout` A numeric matrix of size `vcount(x) * 2` with the vertices positions
+#' * `.edgelist` A numeric matrix, The edgelist.
 #'
 #' @examples
 #' library(igraph)
@@ -146,7 +151,7 @@ nplot.default <- function(
   edgelist,
   layout,
   vertex.size             = 1,
-  bg.col                  = "lightgray",
+  bg.col                  = "transparent",
   vertex.nsides           = 50,
   vertex.color            = viridis::viridis(1),
   vertex.size.range       = c(.01, .03),
@@ -284,38 +289,38 @@ nplot.default <- function(
       vp       = grid::vpTree(
         parent   = grid::viewport(layout = lo, name = "frame-vp"),
         children = grid::vpList(vp_graph)
-      ),
-      # cl       = "netplot",
-      .xlim    = netenv$xlim,
-      .ylim    = netenv$ylim,
-      .layout  = netenv$layout,
-      .bg.col  = bg.col
+      )
     )
   )
 
-  # Adding background
-  ans <- grid::gList(
-    grid::rectGrob(
-      gp = grid::gpar(
-        fill = bg.col,
-        col  = grDevices::adjustcolor(bg.col, red.f = .75, green.f = .75, blue.f = .75)
-        ),
-      name = "background",
-      vp   = grid::viewport(name = "background-vp")
-      ),
-    ans
-    )
-
   # Changing the plotting order
-  ans[[2]]$childrenOrder <- with(
-    ans[[2]],
+  ans$childrenOrder <- with(
+    ans,
     c(
-      childrenOrder[grepl("^background", childrenOrder)],
-      childrenOrder[grepl("^edge[0-9]+[-][0-9]+$", childrenOrder)],
-      childrenOrder[grepl("^vertex[.][0-9]+$", childrenOrder)],
-      childrenOrder[grepl("^vertex-label[.][0-9]+$", childrenOrder)]
+      childrenOrder[grepl("^edge.[0-9]+[-][0-9]+$", childrenOrder)],
+      childrenOrder[grepl("^vertex[.][0-9]+$", childrenOrder)]
     ))
 
+  # Adding background
+  background <- grid::rectGrob(
+    gp = grid::gpar(
+      fill = bg.col,
+      col  = grDevices::adjustcolor(bg.col, red.f = .75, green.f = .75, blue.f = .75)
+    ),
+    name = "background",
+    vp   = grid::viewport(name = "background-vp")
+  )
+
+  ans <- grid::gTree(
+    children  = grid::gList(background, ans),
+    name      = "netplot",
+    .xlim     = netenv$xlim,
+    .ylim     = netenv$ylim,
+    .layout   = netenv$layout,
+    .edgelist = netenv$edgelist,
+    .N        = netenv$N,
+    .M        = netenv$M
+  )
 
 
   class(ans) <- c("netplot", class(ans))
@@ -324,23 +329,41 @@ nplot.default <- function(
 
 }
 
+#' Tracker of last printed (plotted) values of `netplot`
+#' @noRd
+.Last.netplot <- eval({
+
+  env       <- new.env(parent = emptyenv())
+  env$value <- NULL
+
+  list(
+    get = function() {
+      env$value
+    },
+    set = function(x) {
+      env$value <- x
+      invisible()
+    }
+  )
+
+})
+
+
 #' @rdname nplot
 #' @export
-#' @param .new Logical scalar. When `TRUE` calls [grid::grid.newpage].
+#' @param newpage Logical scalar. When `TRUE` calls [grid::grid.newpage].
 #' @param y,... Ignored
-print.netplot <- function(x, y = NULL, .new=TRUE, ...) {
+print.netplot <- function(x, y = NULL, newpage=TRUE, ...) {
 
-  if (.new) {
+  # Drawing
+  if (newpage) {
     grid::grid.newpage()
   }
 
-  # if (x$.bg.col != "transparent")
-  #   grid::grid.rect(gp = grid::gpar(
-  #     fill = x$.bg.col,
-  #     col  = grDevices::adjustcolor(x$.bg.col, red.f = .75, green.f = .75, blue.f = .75)
-  #   ), name = "background")
-
   grid::grid.draw(x)
+
+  # Storing the value
+  .Last.netplot$set(x)
 
   # Returning
   invisible(x)

@@ -1,36 +1,57 @@
 #' Create a vector of colors for the vertices
 #' @param x A graph.
 #' @param type Character. Either `edges` or `vertex`
+#' @param ... Further arguments passed to the corresponding method.
 #' @export
 set_colors <- function(x, type, ...) {
 
   switch (type,
-    edges  = set_edges_colors(x, ...),
-    vertex = set_vertex_colors(x, ...)
+          edges  = set_edges_colors(x, ...),
+          vertex = set_vertex_colors(x, ...)
   )
 }
 
-set_edges_colors <- function(x, ...) {
-  NULL
+#' @rdname set_colors
+#' @param vertex.color Vector of vertices colors.
+#' @export
+set_edges_colors <- function(x, vertex.color, ...) {
+
+  # If no vertex color by default
+  if (missing(vertex.color))
+    vertex.color <- set_vertex_colors(x)
+
+  # Creating the mix
+
 }
 
 #' @rdname set_colors
-#' @param vattr Character. Name of the vertex attribute.
+#' @param vattr Name of the vertex attribute.
 #' @param is_categorical Logical. When `TRUE` sets the colors as categories.
 #' @param color_map A function to generate a palette.
+#' @details
+#'
+#' If no attribute is provided, then by defaul the colors are set accoring to
+#' indegree.
+#'
+#' `x` can be either a graph of class `igraph` or `network`.
+#'
 #' @export
+#' @examples
+#' data(UKfaculty, package="igraphdata")
+#' set_vertex_colors(UKfaculty, Group)
 set_vertex_colors <- function(
   x,
   vattr,
   is_categorical = FALSE,
   color_map      = viridis::viridis
-  ) {
+) {
 
   # Extracting attribute name
   if (!missing(vattr)) {
+    vattr <- substitute(vattr)
     vattr <- get_vertex_attr(x, vattr)
   } else
-    vattr <- calc_degree(x, mode = "in")
+    vattr <- calc_degree(x, mode. = "in")
 
   # What type of attribute?
   if (!is_categorical) {
@@ -61,38 +82,3 @@ set_vertex_colors <- function(
   )
 
 }
-
-# Misc
-
-# Wrappers for different graph methods -----------------------------------------
-
-stop_unsopported_graph <- function(x) {
-  stop("Graph of class `", class(x), "` is not supported.", call. = FALSE)
-}
-
-get_vertex_attr <- function(x, attr.) {
-
-  if (inherits(x, "igraph"))
-    igraph::vertex_attr(x, attr.)
-  else if (inherits(x, "network"))
-    network::get.vertex.attribute(x, attr.)
-  else
-    stop_unsopported_graph(x)
-
-}
-
-calc_degree <- function(x, mode. = "in") {
-  if (inherits(x, "igraph"))
-    igraph::degree(x, mode = mode.)
-  else if (inherits(x, "network"))
-    sna::degree(x, cmode = match.arg(
-      mode., c("indegree", "outdegree", "freeman")
-      ))
-  else
-    stop_unsopported_graph(x)
-
-}
-
-
-
-

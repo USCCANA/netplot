@@ -2,7 +2,6 @@
 % Please edit documentation in R/netplot.r
 \name{nplot}
 \alias{nplot}
-\alias{nplot}
 \alias{nplot.igraph}
 \alias{nplot.network}
 \alias{nplot.default}
@@ -22,7 +21,7 @@ nplot(...)
   vertex.label = network::get.vertex.attribute(x, "vertex.names"), ...)
 
 \method{nplot}{default}(edgelist, layout, vertex.size = 1,
-  bg.col = "lightgray", vertex.nsides = 50,
+  bg.col = "transparent", vertex.nsides = 50,
   vertex.color = viridis::viridis(1), vertex.size.range = c(0.01, 0.03),
   vertex.frame.color = grDevices::adjustcolor(vertex.color, red.f = 0.75,
   green.f = 0.75, blue.f = 0.75), vertex.rot = 0, vertex.frame.prop = 0.2,
@@ -36,7 +35,7 @@ nplot(...)
   skip.vertex = FALSE, skip.edges = FALSE, skip.arrows = skip.edges,
   add = FALSE, zero.margins = TRUE, ...)
 
-\method{print}{netplot}(x, y = NULL, .new = TRUE, ...)
+\method{print}{netplot}(x, y = NULL, newpage = TRUE, ...)
 }
 \arguments{
 \item{x}{An \code{igraph} object.}
@@ -116,7 +115,16 @@ is not plotted.}
 
 \item{y, ...}{Ignored}
 
-\item{.new}{Logical scalar. When \code{TRUE} calls \link[grid:grid.newpage]{grid::grid.newpage}.}
+\item{newpage}{Logical scalar. When \code{TRUE} calls \link[grid:grid.newpage]{grid::grid.newpage}.}
+}
+\value{
+An object of class \code{c("netplot", "gTree", "grob", "gDesc")}. The object
+has an additional set of attributes:
+\itemize{
+\item \code{.xlim, .ylim} vector of size two with the x-asis/y-axis limits.
+\item \code{.layout} A numeric matrix of size \code{vcount(x) * 2} with the vertices positions
+\item \code{.edgelist} A numeric matrix, The edgelist.
+}
 }
 \description{
 Plot a network

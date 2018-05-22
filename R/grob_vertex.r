@@ -27,14 +27,28 @@ grob_vertex <- function(netenv, v) {
 
   # Returning
   ans <- grid::polygonGrob(
-    x    = c(framecoords[,1], coords[,1]),
-    y    = c(framecoords[,2], coords[,2]),
-    id.lengths = c(nrow(coords), nrow(framecoords)),
+    x    = c(coords[,1]),
+    y    = c(coords[,2]),
     gp   = grid::gpar(
-      fill = c(netenv$vertex.frame.color[v],netenv$vertex.color[v]),
-      col  = c(netenv$vertex.frame.color[v],netenv$vertex.color[v])
+      fill = netenv$vertex.color[v],
+      col  = netenv$vertex.color[v]
     ),
     default.units = "native",
+    name = "core"
+  )
+
+  ans <- grid::grobTree(
+    grid::polygonGrob(
+      x    = framecoords[,1],
+      y    = framecoords[,2],
+      gp   = grid::gpar(
+        fill = netenv$vertex.frame.color[v],
+        col  = netenv$vertex.frame.color[v]
+      ),
+      default.units = "native",
+      name = "frame"
+    ),
+    ans,
     name = paste0("vertex.", v)
   )
 
@@ -43,7 +57,7 @@ grob_vertex <- function(netenv, v) {
 
     # Only if it is big enough
     if (netenv$label_threshold <= netenv$vertex.size[v])
-      ans <- grid::gList(
+      ans <- grid::addGrob(
         ans,
         grid::textGrob(
           label = netenv$vertex.label[v],
@@ -57,7 +71,7 @@ grob_vertex <- function(netenv, v) {
           ),
           vjust         = 0,
           default.units = "native",
-          name = paste0("vertex-label.", v)
+          name = "label"
         )
       )
 
