@@ -28,7 +28,9 @@ Suggests:
     intergraph,
     ggraph,
     gridGraphics,
-    ggplot2
+    ggplot2,
+    gridBase,
+    magrittr
 VignetteBuilder: knitr 
 URL: https://github.com/USCCANA/netplot
 BugReports: https://github.com/USCCANA/netplot/issues

@@ -52,6 +52,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/base-and-grid.html">Mixing netplot with base graphics</a>
+    </li>
+    <li>
       <a href="../articles/examples.html">Graph drawing with netplot</a>
     </li>
   </ul>
@@ -79,7 +82,7 @@
       <h1>Graph drawing with netplot</h1>
                         <h4 class="author">George G. Vega Yon</h4>
             
-            <h4 class="date">2018-05-18</h4>
+            <h4 class="date">2018-05-23</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/USCCANA/netplot/blob/master/vignettes/examples.Rmd"><code>vignettes/examples.Rmd</code></a></small>
       <div class="hidden name"><code>examples.Rmd</code></div>
@@ -102,35 +105,41 @@
 <a href="#introduction" class="anchor"></a>Introduction</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(netplot)
 <span class="kw">library</span>(igraph)
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'igraph'</span>
-<span class="co">#&gt; The following objects are masked from 'package:stats':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     decompose, spectrum</span>
-<span class="co">#&gt; The following object is masked from 'package:base':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     union</span>
+<span class="kw">library</span>(ggraph)
+<span class="kw">library</span>(sna)
 
+<span class="co"># We will use the UKfaculty data from the igraphdata package</span>
 <span class="kw">data</span>(<span class="st">"UKfaculty"</span>, <span class="dt">package =</span> <span class="st">"igraphdata"</span>)
 
+<span class="co"># With a fixed layout</span>
 <span class="kw">set.seed</span>(<span class="dv">225</span>)
-l_ukf &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/igraph/topics/layout_with_fr">layout_with_fr</a></span>(UKfaculty)
+l_ukf &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/igraph/topics/layout_with_fr">layout_with_fr</a></span>(UKfaculty)</code></pre></div>
+<p>Since igraph and statnet do the plotting using base system graphics, we can’t put everything in the same device right away. Fortunately, the <code>gridGraphics</code> R package allows us to reproduce base graphics using the <code>grid</code> system, which, in combination with the function <code><a href="http://www.rdocumentation.org/packages/gridExtra/topics/arrangeGrob">gridExtra::grid.arrange</a></code> will let us put both base and grid graphics in the same page. First me write a func</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Function to map base to grid</span>
+map_base_to_grid &lt;-<span class="st"> </span><span class="cf">function</span>(fun) {
+  gridGraphics<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/gridGraphics/topics/grid.echo">grid.echo</a></span>(fun)
+  grid<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/grid/topics/grid.grab">grid.grab</a></span>()
+}</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Mapping base to grid</span>
+ig &lt;-<span class="st"> </span><span class="kw">map_base_to_grid</span>(<span class="cf">function</span>() <span class="kw">plot</span>(UKfaculty))
+nw &lt;-<span class="st"> </span><span class="kw">map_base_to_grid</span>(<span class="cf">function</span>() <span class="kw"><a href="http://www.rdocumentation.org/packages/sna/topics/gplot">gplot</a></span>(<span class="kw">as.matrix</span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/igraph/topics/as_adjacency_matrix">as_adj</a></span>(UKfaculty)), <span class="dt">coord =</span> l_ukf))
+np &lt;-<span class="st"> </span><span class="kw"><a href="../reference/nplot.html">nplot</a></span>(UKfaculty, <span class="dt">layout =</span> l_ukf)</code></pre></div>
+<p>Here is an example with <a href="https://cran.r-project.org/package=ggraph"><code>ggraph</code></a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># This step is done to set a manual layout</span>
+<span class="kw"><a href="http://www.rdocumentation.org/packages/igraph/topics/V">V</a></span>(UKfaculty)<span class="op">$</span>x &lt;-<span class="st"> </span>l_ukf[,<span class="dv">1</span>]
+<span class="kw"><a href="http://www.rdocumentation.org/packages/igraph/topics/V">V</a></span>(UKfaculty)<span class="op">$</span>y &lt;-<span class="st"> </span>l_ukf[,<span class="dv">2</span>]
 
-<span class="kw">plot</span>(UKfaculty, <span class="dt">layout =</span> l_ukf)</code></pre></div>
+ggraph<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggraph/topics/ggraph">ggraph</a></span>(UKfaculty) <span class="op">+</span>
+<span class="st">  </span>ggraph<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggraph/topics/geom_edge_arc">geom_edge_arc</a></span>(<span class="kw">aes</span>(<span class="dt">alpha =</span> ..index..), <span class="dt">curvature=</span>.<span class="dv">15</span>) <span class="op">+</span>
+<span class="st">  </span>ggraph<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggraph/topics/geom_node_point">geom_node_point</a></span>(<span class="kw">aes</span>(<span class="dt">colour =</span> Group, <span class="dt">size=</span>igraph<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/igraph/topics/degree">degree</a></span>(UKfaculty))) <span class="op">+</span>
+<span class="st">  </span>ggplot2<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggplot2/topics/theme">theme</a></span>(<span class="dt">legend.position=</span><span class="st">"none"</span>)
+<span class="co">#&gt; Using `nicely` as default layout</span>
+
+gg &lt;-<span class="st"> </span>grid<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/grid/topics/grid.grab">grid.grab</a></span>()</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Putting all together</span>
+gridExtra<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/gridExtra/topics/arrangeGrob">grid.arrange</a></span>(ig, nw, gg, np, <span class="dt">nrow=</span><span class="dv">2</span>, <span class="dt">ncol=</span><span class="dv">2</span>)</code></pre></div>
 <div class="figure">
-<img src="examples_files/figure-html/nplot-vs-plot-1.png" alt="Comparision of default `igraph` vs `netplot` default call. `nplot` fills completely the plotting area, and adjusts vertex size, edge width, and edge arrows' size accordingly to the plotting area and plotting device." width="672"><p class="caption">
-Comparision of default <code>igraph</code> vs <code>netplot</code> default call. <code>nplot</code> fills completely the plotting area, and adjusts vertex size, edge width, and edge arrows’ size accordingly to the plotting area and plotting device.
-</p>
-</div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sna<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/sna/topics/gplot">gplot</a></span>(<span class="kw">as.matrix</span>(<span class="kw"><a href="http://www.rdocumentation.org/packages/igraph/topics/as_adjacency_matrix">as_adj</a></span>(UKfaculty)), <span class="dt">coord =</span> l_ukf)</code></pre></div>
-<div class="figure">
-<img src="examples_files/figure-html/nplot-vs-plot-2.png" alt="Comparision of default `igraph` vs `netplot` default call. `nplot` fills completely the plotting area, and adjusts vertex size, edge width, and edge arrows' size accordingly to the plotting area and plotting device." width="672"><p class="caption">
-Comparision of default <code>igraph</code> vs <code>netplot</code> default call. <code>nplot</code> fills completely the plotting area, and adjusts vertex size, edge width, and edge arrows’ size accordingly to the plotting area and plotting device.
-</p>
-</div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/nplot.html">nplot</a></span>(UKfaculty, <span class="dt">layout =</span> l_ukf)</code></pre></div>
-<div class="figure">
-<img src="examples_files/figure-html/nplot-vs-plot-3.png" alt="Comparision of default `igraph` vs `netplot` default call. `nplot` fills completely the plotting area, and adjusts vertex size, edge width, and edge arrows' size accordingly to the plotting area and plotting device." width="672"><p class="caption">
+<img src="examples_files/figure-html/unnamed-chunk-3-1.png" alt="Comparision of default `igraph` vs `netplot` default call. `nplot` fills completely the plotting area, and adjusts vertex size, edge width, and edge arrows' size accordingly to the plotting area and plotting device." width="672"><p class="caption">
 Comparision of default <code>igraph</code> vs <code>netplot</code> default call. <code>nplot</code> fills completely the plotting area, and adjusts vertex size, edge width, and edge arrows’ size accordingly to the plotting area and plotting device.
 </p>
 </div>
@@ -149,7 +158,7 @@ gridExtra<span class="op">::</span><span class="kw"><a href="http://www.rdocumen
   <span class="kw"><a href="../reference/nplot.html">nplot</a></span>(x_igraph, <span class="dt">layout =</span> l),
   <span class="kw"><a href="../reference/nplot.html">nplot</a></span>(x_network, <span class="dt">layout =</span> l), <span class="dt">ncol=</span><span class="dv">2</span>, <span class="dt">nrow=</span><span class="dv">1</span>
 )</code></pre></div>
-<p><img src="examples_files/figure-html/unnamed-chunk-1-1.png" width="700"></p>
+<p><img src="examples_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 </div>
 <div id="nodes" class="section level1">
 <h1 class="hasAnchor">
