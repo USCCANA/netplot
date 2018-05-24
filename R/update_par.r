@@ -33,6 +33,19 @@ check_dots_update_par <- function(x, dots) {
 #' @export
 update_par <- function(x, type, element, idx, ...) {
 
+  # If elements is more than one
+  if (!missing(element) && length(element) > 1) {
+
+    for (e in element)
+      x <- do.call(
+        update_par,
+        c(list(x, type, e, idx), list(...))
+        )
+
+    return(x)
+
+  }
+
   # If no specific ids are provided
   if (type == "vertex") {
 
@@ -88,6 +101,12 @@ update_par <- function(x, type, element, idx, ...) {
 #' @export
 update_edge_par <- function(x, element, idx, ...) {
 
+  if (missing(element))
+    element <- c("line", "arrow")
+
+  if (missing(idx))
+    idx <- seq_len(x$.M)
+
   update_par(x, type = "edge", element = element, idx = idx, ...)
 
 }
@@ -95,6 +114,12 @@ update_edge_par <- function(x, element, idx, ...) {
 #' @rdname update_par
 #' @export
 update_vertex_par <- function(x, element, idx, ...) {
+
+  if (missing(element))
+    element <- c("core", "frame")
+
+  if (missing(idx))
+    idx <- seq_len(x$.N)
 
   update_par(x, type = "vertex", element = element, idx = idx, ...)
 

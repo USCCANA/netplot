@@ -81,6 +81,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/base-and-grid.html">Mixing netplot with base graphics</a>
+    </li>
+    <li>
       <a href="../articles/examples.html">Graph drawing with netplot</a>
     </li>
   </ul>
@@ -122,17 +125,18 @@
 <span class='co'># S3 method for igraph</span>
 <span class='fu'>nplot</span>(<span class='no'>x</span>, <span class='kw'>layout</span> <span class='kw'>=</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/igraph/topics/layout_nicely'>layout_nicely</a></span>(<span class='no'>x</span>),
   <span class='kw'>vertex.size</span> <span class='kw'>=</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/igraph/topics/degree'>degree</a></span>(<span class='no'>x</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"in"</span>),
-  <span class='kw'>vertex.color</span> <span class='kw'>=</span> <span class='fu'><a href='set_colors.html'>set_colors</a></span>(<span class='no'>x</span>), <span class='kw'>vertex.label</span> <span class='kw'>=</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/igraph/topics/vertex_attr'>vertex_attr</a></span>(<span class='no'>x</span>,
+  <span class='kw'>vertex.color</span> <span class='kw'>=</span> <span class='fu'><a href='set_colors.html'>set_vertex_colors</a></span>(<span class='no'>x</span>), <span class='kw'>vertex.label</span> <span class='kw'>=</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/igraph/topics/vertex_attr'>vertex_attr</a></span>(<span class='no'>x</span>,
   <span class='st'>"name"</span>), <span class='kw'>edge.width</span> <span class='kw'>=</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/igraph/topics/edge_attr'>edge_attr</a></span>(<span class='no'>x</span>, <span class='st'>"weight"</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for network</span>
 <span class='fu'>nplot</span>(<span class='no'>x</span>, <span class='kw'>layout</span> <span class='kw'>=</span> <span class='kw pkg'>sna</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/sna/topics/gplot.layout'>gplot.layout.kamadakawai</a></span>(<span class='no'>x</span>, <span class='kw'>NULL</span>),
   <span class='kw'>vertex.size</span> <span class='kw'>=</span> <span class='kw pkg'>sna</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/sna/topics/degree'>degree</a></span>(<span class='no'>x</span>, <span class='kw'>cmode</span> <span class='kw'>=</span> <span class='st'>"indegree"</span>),
-  <span class='kw'>vertex.color</span> <span class='kw'>=</span> <span class='fu'><a href='set_colors.html'>set_colors</a></span>(<span class='no'>x</span>), <span class='no'>...</span>)
+  <span class='kw'>vertex.color</span> <span class='kw'>=</span> <span class='fu'><a href='set_colors.html'>set_vertex_colors</a></span>(<span class='no'>x</span>),
+  <span class='kw'>vertex.label</span> <span class='kw'>=</span> <span class='kw pkg'>network</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/network/topics/attribute.methods'>get.vertex.attribute</a></span>(<span class='no'>x</span>, <span class='st'>"vertex.names"</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for default</span>
 <span class='fu'>nplot</span>(<span class='no'>edgelist</span>, <span class='no'>layout</span>, <span class='kw'>vertex.size</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>bg.col</span> <span class='kw'>=</span> <span class='st'>"lightgray"</span>, <span class='kw'>vertex.nsides</span> <span class='kw'>=</span> <span class='fl'>50</span>,
+  <span class='kw'>bg.col</span> <span class='kw'>=</span> <span class='st'>"transparent"</span>, <span class='kw'>vertex.nsides</span> <span class='kw'>=</span> <span class='fl'>50</span>,
   <span class='kw'>vertex.color</span> <span class='kw'>=</span> <span class='kw pkg'>viridis</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/viridis/topics/reexports'>viridis</a></span>(<span class='fl'>1</span>), <span class='kw'>vertex.size.range</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.01</span>, <span class='fl'>0.03</span>),
   <span class='kw'>vertex.frame.color</span> <span class='kw'>=</span> <span class='kw pkg'>grDevices</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/grDevices/topics/adjustcolor'>adjustcolor</a></span>(<span class='no'>vertex.color</span>, <span class='kw'>red.f</span> <span class='kw'>=</span> <span class='fl'>0.75</span>,
   <span class='kw'>green.f</span> <span class='kw'>=</span> <span class='fl'>0.75</span>, <span class='kw'>blue.f</span> <span class='kw'>=</span> <span class='fl'>0.75</span>), <span class='kw'>vertex.rot</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>vertex.frame.prop</span> <span class='kw'>=</span> <span class='fl'>0.2</span>,
@@ -147,7 +151,7 @@
   <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>zero.margins</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for netplot</span>
-<span class='fu'>print</span>(<span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>.new</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>print</span>(<span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>newpage</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -242,6 +246,11 @@ top ranking according to <code>vertex.size</code>.</p></td>
       <td><p>Vector of length <code>ecount(x)</code>.</p></td>
     </tr>
     <tr>
+      <th>edge.color</th>
+      <td><p>A vector of length <code>ecount(x)</code>. Can be <code>NULL</code> in which case
+the color is picked as a mixture between ego and alters' <code>vertex.color</code> values.</p></td>
+    </tr>
+    <tr>
       <th>edge.color.mix</th>
       <td><p>Numeric vector of length <code>ecount(x)</code> with values in
 <code>[0,1]</code>. 0 means color equal to ego's vertex color, one equals to alter's
@@ -289,10 +298,20 @@ is not plotted.</p></td>
       <td><p>Ignored</p></td>
     </tr>
     <tr>
-      <th>.new</th>
+      <th>newpage</th>
       <td><p>Logical scalar. When <code>TRUE</code> calls <a href='http://www.rdocumentation.org/packages/grid/topics/grid.newpage'>grid::grid.newpage</a>.</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>An object of class <code>c("netplot", "gTree", "grob", "gDesc")</code>. The object
+has an additional set of attributes:</p><ul>
+<li><p><code>.xlim, .ylim</code> vector of size two with the x-asis/y-axis limits.</p></li>
+<li><p><code>.layout</code> A numeric matrix of size <code>vcount(x) * 2</code> with the vertices positions</p></li>
+<li><p><code>.edgelist</code> A numeric matrix, The edgelist.</p></li>
+</ul>
+
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
@@ -304,8 +323,12 @@ with 0.5.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>igraph</span>)
-<span class='fu'>library</span>(<span class='no'>netplot</span>)
+    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>igraph</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘igraph’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:stats’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    decompose, spectrum</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:base’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    union</span></div><div class='input'><span class='fu'>library</span>(<span class='no'>netplot</span>)
 <span class='fu'>set.seed</span>(<span class='fl'>1</span>)
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/igraph/topics/sample_smallworld'>sample_smallworld</a></span>(<span class='fl'>1</span>, <span class='fl'>200</span>, <span class='fl'>5</span>, <span class='fl'>0.03</span>)
 
@@ -316,6 +339,8 @@ with 0.5.</p>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
+      <li><a href="#value">Value</a></li>
+
       <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>

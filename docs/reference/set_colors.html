@@ -81,6 +81,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/base-and-grid.html">Mixing netplot with base graphics</a>
+    </li>
+    <li>
       <a href="../articles/examples.html">Graph drawing with netplot</a>
     </li>
   </ul>
@@ -107,7 +110,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create a vector of colors for the vertices</h1>
-    <small class="dont-index">Source: <a href='https://github.com/USCCANA/netplot/blob/master/R/netplot.r'><code>R/netplot.r</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/USCCANA/netplot/blob/master/R/color_mixer.r'><code>R/color_mixer.r</code></a></small>
     <div class="hidden name"><code>set_colors.Rd</code></div>
     </div>
 
@@ -117,13 +120,12 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>set_colors</span>(<span class='no'>x</span>)
+    <pre class="usage"><span class='fu'>set_colors</span>(<span class='no'>x</span>, <span class='no'>type</span>, <span class='no'>...</span>)
 
-<span class='co'># S3 method for igraph</span>
-<span class='fu'>set_colors</span>(<span class='no'>x</span>)
+<span class='fu'>set_edges_colors</span>(<span class='no'>x</span>, <span class='no'>vertex.color</span>, <span class='no'>...</span>)
 
-<span class='co'># S3 method for network</span>
-<span class='fu'>set_colors</span>(<span class='no'>x</span>)</pre>
+<span class='fu'>set_vertex_colors</span>(<span class='no'>x</span>, <span class='no'>vattr</span>, <span class='kw'>is_categorical</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>color_map</span> <span class='kw'>=</span> <span class='kw pkg'>viridis</span><span class='kw ns'>::</span><span class='no'><a href='http://www.rdocumentation.org/packages/viridis/topics/reexports'>viridis</a></span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -132,15 +134,69 @@
       <th>x</th>
       <td><p>A graph.</p></td>
     </tr>
+    <tr>
+      <th>type</th>
+      <td><p>Character. Either <code>edges</code> or <code>vertex</code></p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Further arguments passed to the corresponding method.</p></td>
+    </tr>
+    <tr>
+      <th>vertex.color</th>
+      <td><p>Vector of vertices colors.</p></td>
+    </tr>
+    <tr>
+      <th>vattr</th>
+      <td><p>Name of the vertex attribute.</p></td>
+    </tr>
+    <tr>
+      <th>is_categorical</th>
+      <td><p>Logical. When <code>TRUE</code> sets the colors as categories.</p></td>
+    </tr>
+    <tr>
+      <th>color_map</th>
+      <td><p>A function to generate a palette.</p></td>
+    </tr>
     </table>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
+    <p>If no attribute is provided, then by defaul the colors are set accoring to
+indegree.</p>
+<p><code>x</code> can be either a graph of class <code>igraph</code> or <code>network</code>.</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>data</span>(<span class='no'>UKfaculty</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"igraphdata"</span>)
+<span class='fu'>set_vertex_colors</span>(<span class='no'>UKfaculty</span>, <span class='no'>Group</span>)</div><div class='output co'>#&gt;  [1] "#35B778" "#440154" "#35B778" "#35B778" "#30688E" "#30688E" "#30688E"
+#&gt;  [8] "#440154" "#35B778" "#30688E" "#440154" "#30688E" "#30688E" "#440154"
+#&gt; [15] "#440154" "#30688E" "#35B778" "#440154" "#440154" "#440154" "#440154"
+#&gt; [22] "#30688E" "#30688E" "#440154" "#440154" "#440154" "#30688E" "#30688E"
+#&gt; [29] "#440154" "#30688E" "#440154" "#440154" "#30688E" "#440154" "#440154"
+#&gt; [36] "#35B778" "#440154" "#35B778" "#440154" "#30688E" "#440154" "#30688E"
+#&gt; [43] "#440154" "#35B778" "#35B778" "#440154" "#30688E" "#440154" "#30688E"
+#&gt; [50] "#FCE624" "#440154" "#440154" "#35B778" "#440154" "#440154" "#440154"
+#&gt; [57] "#440154" "#440154" "#35B778" "#35B778" "#35B778" "#35B778" "#30688E"
+#&gt; [64] "#440154" "#30688E" "#30688E" "#30688E" "#30688E" "#30688E" "#FCE624"
+#&gt; [71] "#30688E" "#30688E" "#35B778" "#35B778" "#35B778" "#30688E" "#30688E"
+#&gt; [78] "#35B778" "#440154" "#440154" "#35B778"
+#&gt; attr(,"color_map")
+#&gt; function (x) 
+#&gt; roundcolor(cbind(palette[[1L]](x), palette[[2L]](x), palette[[3L]](x), 
+#&gt;     if (alpha) palette[[4L]](x))) * 255
+#&gt; &lt;bytecode: 0x7da79c8&gt;
+#&gt; &lt;environment: 0xc51af00&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#details">Details</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

@@ -1,7 +1,9 @@
 Package: netplot
 Title: Beautiful graph drawing
 Version: 0.0.9000
-Authors@R: person("George", "Vega Yon", email = "g.vegayon@gmail.com", role = c("aut", "cre"))
+Authors@R: person("George", "Vega Yon", email = "g.vegayon@gmail.com", role = c("aut", "cre"),
+  comment = c(ORCID = "0000-0002-3171-0844")
+  )
 Description: An alternative graph visualization engine that puts an emphasis on 
   aesthetics at the same time of providing default parameters that provide visualizations
   that are out-of-the-box nice.
