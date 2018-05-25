@@ -80,7 +80,7 @@ grob_edge <- function(netenv, e) {
         lwd  = netenv$edges.width[e]
       )
     ),
-    name = paste0("edge.", i, "-",j)
+    name = netplot_name$make(c(i, j))
   )
 
   ans

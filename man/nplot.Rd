@@ -2,6 +2,7 @@
 % Please edit documentation in R/netplot.r
 \name{nplot}
 \alias{nplot}
+\alias{nplot}
 \alias{nplot.igraph}
 \alias{nplot.network}
 \alias{nplot.default}

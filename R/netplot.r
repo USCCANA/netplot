@@ -313,7 +313,7 @@ nplot.default <- function(
 
   ans <- grid::gTree(
     children  = grid::gList(background, ans),
-    name      = "netplot",
+    name      = netplot_name$new(),
     .xlim     = netenv$xlim,
     .ylim     = netenv$ylim,
     .layout   = netenv$layout,

@@ -39,8 +39,8 @@ library(netplot)
 library(magrittr)
 
 np <- nplot(net, bg.col = "gray70") %>%
-  update_edge_par("line", col = "gray50", alpha = .7) %>%
-  update_vertex_par("frame", fill = "black", col = "black")
+  update_edge_gpar("line", col = "gray50", alpha = .7) %>%
+  update_vertex_gpar("frame", fill = "black", col = "black")
 
 ```
 

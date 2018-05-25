@@ -1,6 +1,6 @@
 
 
-check_dots_update_par <- function(x, dots) {
+check_dots_update_gpar <- function(x, dots) {
 
   # Only works for netplot
   stopifnot(inherits(x, "netplot"))
@@ -31,14 +31,14 @@ check_dots_update_par <- function(x, dots) {
 #'
 #' @return An object of class `netplot` with modified parameters.
 #' @export
-update_par <- function(x, type, element, idx, ...) {
+update_gpar <- function(x, type, element, idx, ...) {
 
   # If elements is more than one
   if (!missing(element) && length(element) > 1) {
 
     for (e in element)
       x <- do.call(
-        update_par,
+        update_gpar,
         c(list(x, type, e, idx), list(...))
         )
 
@@ -46,45 +46,33 @@ update_par <- function(x, type, element, idx, ...) {
 
   }
 
+  # Checking element types
+  netplot_elements$validate(element, type)
+
   # If no specific ids are provided
-  if (type == "vertex") {
+  n <- ifelse(type == "vertex", x$.N, x$.M)
 
-    n    <- x$.N
-    type <- function(i) paste0("vertex.", idx[i])
-
-    if (!(element %in% c("core", "frame", "label")))
-      stop("Invalid type of `element`.", call. = FALSE)
-
-  } else if (type == "edge") {
-
-    n    <- x$.M
-    type <- function(i) sprintf(
-      "edge.%i-%i",
-      x$.edgelist[idx[i], ][1],
-      x$.edgelist[idx[i], ][2]
-      )
-
-    if (!(element %in% c("arrow", "line")))
-      stop("Invalid type of `element`.", call. = FALSE)
-
-  } else
-    stop("The `type` should be either 'vertex' or 'edge'.", call. = FALSE)
-
-
+  # Creating loop sequence
   if (missing(idx))
-    idx <- seq_len(n)
+    seq_len(n)
+
+  idx <- if (type == "vertex")
+    as.list(idx)
+  else
+    lapply(idx, function(e) x$.edgelist[e, ])
+
 
   # Converting
   dots <- lapply(list(...), matrix, nrow = length(idx))
 
   # Basic cheks
-  check_dots_update_par(x, dots)
+  check_dots_update_gpar(x, dots)
 
   # Updating the
   for (i in seq_along(idx))
-    x$children$graph$children[[type(i)]]$children[[element]] <-
+    x$children$graph$children[[netplot_name$make(idx[[i]])]]$children[[element]] <-
       grid::editGrob(
-        grob = x$children$graph$children[[type(i)]]$children[[element]],
+        grob = x$children$graph$children[[netplot_name$make(idx[[i]])]]$children[[element]],
         gp   = do.call(grid::gpar, lapply(dots, "[", i=i, j=))
       )
 
@@ -93,13 +81,13 @@ update_par <- function(x, type, element, idx, ...) {
 
 }
 
-#' @rdname update_par
-#' @description `update_edge_par` and `update_vertex_par` are shorthands for
-#' `update_par(type = "edge", ...)` and `update_par(type = "vertex", ...)`
+#' @rdname update_gpar
+#' @description `update_edge_gpar` and `update_vertex_gpar` are shorthands for
+#' `update_gpar(type = "edge", ...)` and `update_gpar(type = "vertex", ...)`
 #' respectively.
 #'
 #' @export
-update_edge_par <- function(x, element, idx, ...) {
+update_edge_gpar <- function(x, element, idx, ...) {
 
   if (missing(element))
     element <- c("line", "arrow")
@@ -107,13 +95,13 @@ update_edge_par <- function(x, element, idx, ...) {
   if (missing(idx))
     idx <- seq_len(x$.M)
 
-  update_par(x, type = "edge", element = element, idx = idx, ...)
+  update_gpar(x, type = "edge", element = element, idx = idx, ...)
 
 }
 
-#' @rdname update_par
+#' @rdname update_gpar
 #' @export
-update_vertex_par <- function(x, element, idx, ...) {
+update_vertex_gpar <- function(x, element, idx, ...) {
 
   if (missing(element))
     element <- c("core", "frame")
@@ -121,7 +109,7 @@ update_vertex_par <- function(x, element, idx, ...) {
   if (missing(idx))
     idx <- seq_len(x$.N)
 
-  update_par(x, type = "vertex", element = element, idx = idx, ...)
+  update_gpar(x, type = "vertex", element = element, idx = idx, ...)
 
 }
 

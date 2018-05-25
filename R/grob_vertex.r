@@ -49,7 +49,7 @@ grob_vertex <- function(netenv, v) {
       name = "frame"
     ),
     ans,
-    name = paste0("vertex.", v)
+    name = netplot_name$make(v)
   )
 
   # If the users is drawing text

@@ -25,22 +25,42 @@ new_coloring <- function(
 }
 
 
-get_vertex_par <- function(x, par, element = "core") {
+
+
+get_vertex_gpar <- function(x, par, type, element) {
+
+  if (missing(element))
+    element <- c("line", "arrow")
+
+  if (missing(idx))
+    idx <- seq_len(x$.M)
+
+}
+
+get_gpar <- function(x, par, element, type, idx) {
 
   sapply(
-    sprintf("vertex.%i", seq_len(x$.N)), function(i) {
+    sprintf("%.%i", idx),
+    function(i) {
 
       # Getting the component
-      ans <- x$children$graph$children[[i]]
+      v <- x$children$graph$children[[i]]
 
       # If it exists
-      if (length(ans))
-        # And it has the element
-        if (length(ans$children[[element]]))
-          return(ans$children[[element]]$gp[[par]])
+      if (!length(v))
+        return(NA)
 
-      # If void
+      if (!length(v$children[[element]]))
+        return(NA)
+
+      # And it has the element
+      v <- v$children[[element]]$gp[[par]]
+
+      if (length(v))
+        return(v)
+
       NA
+
 
     }
   )
