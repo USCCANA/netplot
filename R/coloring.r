@@ -150,17 +150,17 @@ color_formula <- function(x, col, alpha, env, type, mix = .5, postfix = NULL) {
     env[[paste0("vertex_color_", postfix)]] <- col
     env[[paste0("vertex_alpha_", postfix)]] <- alpha
   } else {
-    env[[paste0("edge_color", postfix)]] <- col
-    env[[paste0("edge_alpha", postfix)]] <- alpha
+    env[["edge_color"]] <- col
+    env[["edge_alpha"]] <- alpha
   }
 
   if (!length(env$mix))
     env$mix <- mix
+  else {
+    env$mix <- mix/(env$mix + mix)
+  }
 
-  list(
-    col   = col,
-    alpha = alpha
-  )
+  invisible()
 }
 
 ego   <- color_formula
