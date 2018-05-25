@@ -22,7 +22,8 @@ Imports:
     polygons,
     gridExtra,
     network,
-    sna
+    sna,
+    stats
 Suggests: 
     knitr,
     rmarkdown,

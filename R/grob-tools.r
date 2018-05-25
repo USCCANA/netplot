@@ -3,7 +3,7 @@
 #' Manages naming convention for netplot grobs
 #' @noRd
 netplot_name <- (function() {
-
+  # grid::gPath("graph", netplot_name$make(idx[[i]]), element)
   # Counter
   index <- 0L
 
@@ -20,6 +20,31 @@ netplot_name <- (function() {
       else
         stop("Invalid type.", call. = FALSE)
 
+    },
+    # Get the path
+    path = function(idx, element = NULL, graph = NULL) {
+
+      # # if no graph, by default the last one
+      # if (!length(graph))
+      #   graph <- netplot_name$last_graph()
+
+      # Getting type
+      type <- switch (length(idx),
+        `1` = "vertex",
+        `2` = "edge",
+        stop("Incorrect number of indices in `idx`.")
+      )
+
+      # Validating elements
+      netplot_validate$elements(element, type)
+
+      do.call(
+        grid::gPath,
+        list(
+          "graph", netplot_name$make(idx),
+          element
+          )
+        )
     },
     # Creates a new graph increasing index to 1
     new = function() {
@@ -39,13 +64,25 @@ netplot_name <- (function() {
 
 #' Validating element types
 #' @noRd
-netplot_elements <- (function() {
+netplot_validate <- (function() {
 
+  # Valid elements
   vertex <- c("core", "frame", "label")
   edge   <- c("arrow", "line")
 
   list(
-    validate = function(elements, type) {
+    # Class
+    is_netplot = function(x) {
+
+      if (!inherits(x, "netplot"))
+        stop("This function is only applicable for 'netplot' class objects.",
+             call. = FALSE)
+
+      invisible()
+
+    },
+    # Elements
+    elements = function(elements, type) {
 
       test <- switch (
         type,
@@ -61,6 +98,45 @@ netplot_elements <- (function() {
 
       invisible()
 
+    },
+    #Type
+    type = function(type, multiple = FALSE) {
+
+      # Missing
+      if (missing(type))
+        stop("Unspecified (missing) `type`. You must provide either {'vertex', 'edge'}",
+             call. = FALSE)
+
+      # More than one?
+      if (!multiple && length(type) != 1)
+        stop("Only one type, vertex or edge, can be specified.", call. = FALSE)
+
+      test <- which(!(type %in% c("vertex", "edge")))
+      if (length(test))
+        stop(
+          "Invalid `type` ('", paste0(type[test], collapse="', '"),"'. ",
+          "`type` should be one of {'vertex', 'edge'}."
+          )
+
+      invisible()
+
+
+    },
+    gpar = function(gpar) {
+
+      if (is.list(gpar))
+        gpar <- names(gpar)
+
+      # Are the par aesthetics registered?
+      test <- which(!(gpar %in% names(grid::get.gpar())))
+      if (length(test))
+        stop("The following parameters are not part of `grid::gpar`: '",
+             paste(gpar[test], collapse="', '"), "'.",
+             "Supported parameters are: '",
+             paste(names(grid::get.gpar()), collapse="', '"),"'.",
+             call. = FALSE)
+
+      invisible()
     }
   )
 

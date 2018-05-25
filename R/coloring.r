@@ -24,49 +24,6 @@ new_coloring <- function(
 
 }
 
-
-
-
-get_vertex_gpar <- function(x, par, type, element) {
-
-  if (missing(element))
-    element <- c("line", "arrow")
-
-  if (missing(idx))
-    idx <- seq_len(x$.M)
-
-}
-
-get_gpar <- function(x, par, element, type, idx) {
-
-  sapply(
-    sprintf("%.%i", idx),
-    function(i) {
-
-      # Getting the component
-      v <- x$children$graph$children[[i]]
-
-      # If it exists
-      if (!length(v))
-        return(NA)
-
-      if (!length(v$children[[element]]))
-        return(NA)
-
-      # And it has the element
-      v <- v$children[[element]]$gp[[par]]
-
-      if (length(v))
-        return(v)
-
-      NA
-
-
-    }
-  )
-
-}
-
 # N <- 20
 # M <- 50
 # X <- new_coloring(
@@ -98,3 +55,45 @@ get_gpar <- function(x, par, element, type, idx) {
 # X
 #
 # netplot_formulas$ego(a)
+
+#' @noRd
+#' @importFrom stats terms
+netplot_edge_formulae <- function(fm) {
+
+  if (!inherits(fm, "formula"))
+    stop("Not a formula", call. = FALSE)
+
+  tm  <- stats::terms(fm)
+  mat <- attr(tm, "factors")
+  nam <- unique(gsub("\\(.+", "", rownames(mat)))
+
+  # 1. Checking no repeated
+  if (length(nam) > nrow(mat))
+    stop("One or more terms are repated.", call. = FALSE)
+
+  # 2. edge only goes alone
+  if (("edge" %in% nam) & length(nam) > 1)
+    stop("`edge` must be used alone.", call. = FALSE)
+
+  # 3. Only one of the
+  if (any(!(nam %in% c("edge", "alter", "ego"))))
+    stop("Invalid term.", call. = FALSE)
+
+  # 4. Checking if it is linear or an interaction
+  if (ncol(mat) == 1)
+    1
+}
+
+ego <- function() {
+
+}
+
+alter <- function() {
+
+}
+
+edge <- function() {
+
+}
+
+netplot_edge_formulae(~ego:alter)

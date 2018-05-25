@@ -12,13 +12,12 @@
 nplot(...)
 
 \method{nplot}{igraph}(x, layout = igraph::layout_nicely(x),
-  vertex.size = igraph::degree(x, mode = "in"),
-  vertex.color = set_vertex_colors(x), vertex.label = igraph::vertex_attr(x,
-  "name"), edge.width = igraph::edge_attr(x, "weight"), ...)
+  vertex.size = igraph::degree(x, mode = "in"), vertex.color = "tomato",
+  vertex.label = igraph::vertex_attr(x, "name"),
+  edge.width = igraph::edge_attr(x, "weight"), ...)
 
 \method{nplot}{network}(x, layout = sna::gplot.layout.kamadakawai(x, NULL),
-  vertex.size = sna::degree(x, cmode = "indegree"),
-  vertex.color = set_vertex_colors(x),
+  vertex.size = sna::degree(x, cmode = "indegree"), vertex.color = "tomato",
   vertex.label = network::get.vertex.attribute(x, "vertex.names"), ...)
 
 \method{nplot}{default}(edgelist, layout, vertex.size = 1,

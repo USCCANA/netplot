@@ -64,8 +64,9 @@ Here is an example with [`ggraph`](https://cran.r-project.org/package=ggraph)
 
 ```{r, fig.width=7, fig.height=5, fig.keep='none'}
 # This step is done to set a manual layout
-V(UKfaculty)$x <- l_ukf[,1]
-V(UKfaculty)$y <- l_ukf[,2]
+# V(UKfaculty)$x <- l_ukf[,1]
+# V(UKfaculty)$y <- l_ukf[,2]
+# graph_attr(UKfaculty, "node.positions") <- l_ukf
 
 ggraph::ggraph(UKfaculty) +
   ggraph::geom_edge_arc(aes(alpha = ..index..), curvature=.15) +

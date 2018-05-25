@@ -1,33 +1,78 @@
-#' Create a vector of colors for the vertices
+#' Create a vector of colors for vertices and edges
+#'
+#' Using `vertex`/`edge` attributes, these functions return vectors of colors
+#' that can be used either during the creation of the [nplot] object, or
+#' afterwards when changing `gpar` (graphical parameter) values with [set_gpar].
+#'
 #' @param x A graph.
-#' @param type Character. Either `edges` or `vertex`
-#' @param ... Further arguments passed to the corresponding method.
+#' @param dat A vector of data to generate the color from.
+#' @param vattr,eattr Character. Names of either vertex or edge variables to be
+#' used for generating the colors.
+#' @param categorical Logical. When `TRUE` sets the colors as categories.
+#' @param color_map A function to generate a palette.
+#' @param ... Further arguments passed to `make_colors`.
+#' @examples
+#'
+#' data(UKfaculty, package="igraphdata")
+#' col <- make_vertex_colors(UKfaculty, "Group")
+#'
+#' library(magrittr)
+#'
+#' nplot(UKfaculty) %>%
+#'   set_vertex_gpar("core", fill = col, col=col) %>%
+#'   set_vertex_gpar("frame", fill = col, col=col, alpha=.7) %>%
+#'   set_edge_gpar(col="gray50", fill="gray50", alpha=.5)
+#'
 #' @export
-set_colors <- function(x, type, ...) {
+make_colors <- function(
+  dat,
+  categorical = FALSE,
+  color_map = viridis::viridis
+  ) {
 
-  switch (type,
-          edges  = set_edges_colors(x, ...),
-          vertex = set_vertex_colors(x, ...)
+  # What type of attribute?
+  if (!categorical) {
+
+    # Is is numeric?
+    if (!is.numeric(dat))
+      stop("The selected variable is not numeric.", call. = FALSE)
+
+    # Moving to 0-1 scale
+    dat     <- (dat - min(dat))/(diff(range(dat, na.rm = TRUE)) + 1e-15)
+    color_map <- grDevices::colorRamp(color_map(20))
+    color     <- grDevices::rgb(color_map(dat), maxColorValue = 255)
+
+  } else {
+
+    # Turning the data into factor
+    dat <- as.factor(dat)
+
+    # Generating as many colors as needed
+    color_map <- structure(color_map(nlevels(dat)), names= levels(dat))
+    color     <- color_map[as.integer(dat)]
+
+  }
+
+  structure(
+    .Data = color,
+    color_map = color_map
   )
 }
 
-#' @rdname set_colors
-#' @param vertex.color Vector of vertices colors.
+#' @rdname make_colors
 #' @export
-set_edges_colors <- function(x, vertex.color, ...) {
+make_edges_colors <- function(
+  x,
+  eattr,
+  ...
+  ) {
 
-  # If no vertex color by default
-  if (missing(vertex.color))
-    vertex.color <- set_vertex_colors(x)
 
-  # Creating the mix
+  make_colors(dat = get_edge_attr(x, eattr), ...)
 
 }
 
-#' @rdname set_colors
-#' @param vattr Name of the vertex attribute.
-#' @param is_categorical Logical. When `TRUE` sets the colors as categories.
-#' @param color_map A function to generate a palette.
+#' @rdname make_colors
 #' @details
 #'
 #' If no attribute is provided, then by defaul the colors are set accoring to
@@ -36,49 +81,17 @@ set_edges_colors <- function(x, vertex.color, ...) {
 #' `x` can be either a graph of class `igraph` or `network`.
 #'
 #' @export
-#' @examples
-#' data(UKfaculty, package="igraphdata")
-#' set_vertex_colors(UKfaculty, Group)
-set_vertex_colors <- function(
+make_vertex_colors <- function(
   x,
   vattr,
-  is_categorical = FALSE,
-  color_map      = viridis::viridis
+  ...
 ) {
 
-  # Extracting attribute name
   if (!missing(vattr)) {
-    vattr <- substitute(vattr)
     vattr <- get_vertex_attr(x, vattr)
   } else
     vattr <- calc_degree(x, mode. = "in")
 
-  # What type of attribute?
-  if (!is_categorical) {
-
-    # Is is numeric?
-    if (!is.numeric(vattr))
-      stop("The selected variable is not numeric.", call. = FALSE)
-
-    # Moving to 0-1 scale
-    vattr     <- (vattr - min(vattr))/(diff(range(vattr, na.rm = TRUE)) + 1e-15)
-    color_map <- grDevices::colorRamp(color_map(20))
-    color     <- grDevices::rgb(color_map(vattr), maxColorValue = 255)
-
-  } else {
-
-    # Turning the data into factor
-    vattr <- as.factor(vattr)
-
-    # Generating as many colors as needed
-    color_map <- structure(color_map(nlevels(vattr)), names= levels(vattr))
-    color     <- color_map[as.integer(vattr)]
-
-  }
-
-  structure(
-    .Data = color,
-    color_map = color_map
-  )
+  make_colors(dat = vattr, ...)
 
 }

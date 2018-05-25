@@ -99,7 +99,7 @@ nplot.igraph <- function(
   x,
   layout       = igraph::layout_nicely(x),
   vertex.size  = igraph::degree(x, mode="in"),
-  vertex.color = set_vertex_colors(x),
+  vertex.color = "tomato",
   vertex.label = igraph::vertex_attr(x, "name"),
   edge.width   = igraph::edge_attr(x, "weight"),
   ...
@@ -128,7 +128,7 @@ nplot.network <- function(
   x,
   layout       = sna::gplot.layout.kamadakawai(x, NULL),
   vertex.size  = sna::degree(x, cmode="indegree"),
-  vertex.color = set_vertex_colors(x),
+  vertex.color = "tomato",
   vertex.label = network::get.vertex.attribute(x, "vertex.names"),
   ...
 ) {
