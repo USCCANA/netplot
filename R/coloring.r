@@ -1,64 +1,78 @@
-new_coloring <- function(
-  vertex_color_i,
-  vertex_color_j,
-  vertex_alpha_i,
-  vertex_alpha_j,
-  mix
+#' Generate functions to create colors for edges
+#' @noRd
+new_edge_coloring <- function(
+  vertex_color_i = NULL,
+  vertex_alpha_i = NULL,
+  vertex_color_j = NULL,
+  vertex_alpha_j = NULL,
+  edge_color = NULL,
+  edge_alpha = NULL,
+  mix = NULL
   ) {
 
-  function(e, i, j, n) {
+  list(
+    vertex = function(e, i, j, n) {
 
-    # Adjusting alpha levels
-    col_i <- grDevices::adjustcolor(vertex_color_i[i], alpha.f = vertex_alpha_i[i])
-    col_j <- grDevices::adjustcolor(vertex_color_i[j], alpha.f = vertex_alpha_j[j])
+      # Adjusting alpha levels
+      col_i <- vertex_color_i[i]
+      col_j <- vertex_color_j[j]
 
-    # Linear combination between i and j
-    mix <- mix[e]
-    mix <- polygons::colorRamp2(c(col_i, col_j))(mix)
+      # Getting alpha levels
+      alpha_i <- vertex_alpha_i[i]
+      alpha_j <- vertex_alpha_j[j]
 
-    # Returning
-    grDevices::rgb(mix, alpha = mix[,4], maxColorValue = 255)
+      # [OPTIONAL] ---------------------------------------------------------------
+      # Linear combination between i and j
+      col_i <- polygons::colorRamp2(x=c(col_i, col_j))(mix[e])
+      col_j <- col_i
+      # --------------------------------------------------------------------------
 
-  }
+      # Applying alpha levels and getting mix
+      col <- polygons::colorRamp2(
+        x = c(
+          grDevices::adjustcolor(col = col_i, alpha.f = alpha_i),
+          grDevices::adjustcolor(col = col_j, alpha.f = alpha_j)
+        )
+      )(seq(0, 1, length.out = n))
+
+      # Returning
+      grDevices::rgb(col, alpha = col[,4], maxColorValue = 255)
+
+    },
+    edge = function(e, i, j, n) {
+
+      # Getting alpha levels
+      alpha_i <- vertex_alpha_i[i]
+      alpha_j <- vertex_alpha_j[j]
+
+      # Edge level params
+      col_ij   <- grDevices::adjustcolor(col = edge_color[e], alpha.f = edge_alpha[e])
+
+      # Applying alpha levels and getting mix
+      col <- polygons::colorRamp2(x=
+        c(
+          grDevices::adjustcolor(col = col_ij, alpha.f = alpha_i),
+          grDevices::adjustcolor(col = col_ij, alpha.f = alpha_j)
+        )
+      )(seq(0, 1, length.out = n))
+
+      # Returning
+      grDevices::rgb(col, alpha = col[,4], maxColorValue = 255)
+
+    }
+  )
+
 
 
 }
 
-# N <- 20
-# M <- 50
-# X <- new_coloring(
-#   viridis::viridis(N),
-#   viridis::viridis(N),
-#   rep(.5, N),
-#   rep(.8, N),
-#   rep(.5, M)
-#   )
-#
-# # Updating to set a path from i to j
-# barplot(1:5, col = X$col(4, 1, 1, 5))
-# body(X$col)[[4]] <- bquote(mix <- seq(0, 1, length.out = n))
-# barplot(1:5, col = X$col(4, 1, 1, 5))
-#
-# exists(as.character(substitute(x)))
-#
-# netplot_formulas <- new.env()
-# netplot_formulas$ego <- function(x, alpha, prop, coloring) {
-#
-#   if (1 && is.character(x))
-#     return(1)
-#
-#   0
-#
-# }
-#
-# body(X$col)[[2]][[3]] <- "blue"
-# X
-#
-# netplot_formulas$ego(a)
 
 #' @noRd
 #' @importFrom stats terms
-netplot_edge_formulae <- function(fm) {
+netplot_edge_formulae <- function(x, fm) {
+
+  # Basic validation
+  netplot_validate$is_netplot(x)
 
   if (!inherits(fm, "formula"))
     stop("Not a formula", call. = FALSE)
@@ -80,20 +94,103 @@ netplot_edge_formulae <- function(fm) {
     stop("Invalid term.", call. = FALSE)
 
   # 4. Checking if it is linear or an interaction
-  if (ncol(mat) == 1)
-    1
+  linear <- ifelse(ncol(mat) == 1, TRUE, FALSE)
+
+  # Applying formulas
+  # Mofiying the likelihood function and the parameters for the mcmc
+  val <- attr(tm, "variables")
+
+  # Space where we will save the parameters
+  par <- list2env(structure(vector("list", 7), names = c(
+    "vertex_color_i",
+    "vertex_alpha_i",
+    "vertex_color_j",
+    "vertex_alpha_j",
+    "edge_color",
+    "edge_alpha"
+  )))
+
+  for (i in 3:length(val))
+    if (!is.call(val[[i]])) {
+      eval(
+        call(as.character(val[[i]]), x = x, env = par)
+      )
+    } else {
+      val[[i]]$x   <- bquote(x)
+      val[[i]]$env <- bquote(par)
+      eval(val[[i]])
+    }
+
 }
 
-ego <- function() {
+color_formula <- function(x, col, alpha, env, type, mix = .5, postfix = NULL) {
 
+  n <- switch(type, vertex = x$.N, edge = x$.M)
+
+  # Checking color
+  col <- if (missing(col))
+    get_vertex_gpar(x, "core", "fill")$fill
+  else if (length(col) == 1)
+    rep(col, x$.N)
+  else if (length(col) != n)
+    stop("`col` has the wrong length (", length(col), "). When passing a ",
+         "vector it should be of length ", n, ".", call. = FALSE)
+
+  # Checking alpha
+  alpha <- if (missing(alpha))
+    rep(.8, n)
+  else if (length(alpha) == 1)
+    rep(alpha, n)
+  else if (length(alpha) != n)
+    stop("`alpha` has the wrong length (", length(alpha), "). When passing a ",
+         "vector it should be of length ", n, ".", call. = FALSE)
+
+  # Assigning values
+  if (type == "vertex") {
+    env[[paste0("vertex_color_", postfix)]] <- col
+    env[[paste0("vertex_alpha_", postfix)]] <- alpha
+  } else {
+    env[[paste0("edge_color", postfix)]] <- col
+    env[[paste0("edge_alpha", postfix)]] <- alpha
+  }
+
+  if (!length(env$mix))
+    env$mix <- mix
+
+  list(
+    col   = col,
+    alpha = alpha
+  )
 }
 
-alter <- function() {
+ego   <- color_formula
+alter <- color_formula
 
+edge <- function(x, col, alpha = .8) {
+
+  # obtain default
+  col <- if (missing(col))
+    get_edge_gpar(x, "line", "col")$col
+  else if (length(col) == 1)
+    rep(col, x$.M)
+  else if (length(col) != x$.M)
+    stop("`col` has the wrong length (", length(col), "). When passing a ",
+         "vector it should be of length ", x$.M, ".", call. = FALSE)
+
+  # Checking alpha
+  alpha <- if (missing(alpha))
+    rep(.8, x$.M)
+  else if (length(alpha) == 1)
+    rep(alpha, x$.M)
+  else if (length(alpha) != x$.M)
+    stop("`alpha` has the wrong length (", length(alpha), "). When passing a ",
+         "vector it should be of length ", x$.M, ".", call. = FALSE)
+
+
+  list(
+    col   = col,
+    alpha = alpha
+  )
 }
 
-edge <- function() {
-
-}
-
-netplot_edge_formulae(~ego:alter)
+# netplot_edge_formulae(~ego:alter)
