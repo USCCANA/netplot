@@ -59,10 +59,16 @@ set_gpar <- function(x, type, element, idx, ...) {
     lapply(idx, function(e) x$.edgelist[e, ])
 
   # Converting
-  dots <- lapply(list(...), matrix, nrow = length(idx))
+  listme <- function(...) {
+    Map(function(...) {list(...)}, ...)
+  }
+
+  n <- ifelse(type == "edge", x$.M, x$.N)
+  dots <- c(list(placeholder=integer(n)), list(...))
+  dots <- do.call(listme, dots)
 
   # Basic cheks
-  netplot_validate$gpar(dots)
+  # netplot_validate$gpar(dots)
 
   # Updating the
   for (i in seq_along(idx)) {
@@ -72,7 +78,7 @@ set_gpar <- function(x, type, element, idx, ...) {
 
     x$children$graph$children[[iname]]$children[[element]] <- grid::editGrob(
         grob = x$children$graph$children[[iname]]$children[[element]],
-        gp    = do.call(grid::gpar, lapply(dots, "[", i=i, j=))
+        gp    = do.call(grid::gpar, dots[[i]][-1])
       )
   }
 
@@ -96,7 +102,17 @@ set_edge_gpar <- function(x, element, idx, ...) {
   if (missing(idx))
     idx <- seq_len(x$.M)
 
-  set_gpar(x, type = "edge", element = element, idx = idx, ...)
+  dots <- list(...)
+  for (d in names(dots))
+    if (inherits(dots[[d]], "formula"))
+      dots[[d]] <- netplot_edge_formulae(x, dots[[d]])
+
+  dots$x       <- x
+  dots$type    <- "edge"
+  dots$element <- element
+  dots$idx     <- idx
+
+  do.call(set_gpar, dots)
 
 }
 

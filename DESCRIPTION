@@ -23,7 +23,8 @@ Imports:
     gridExtra,
     network,
     sna,
-    stats
+    stats,
+    magrittr
 Suggests: 
     knitr,
     rmarkdown,
@@ -32,8 +33,7 @@ Suggests:
     ggraph,
     gridGraphics,
     ggplot2,
-    gridBase,
-    magrittr
+    gridBase
 VignetteBuilder: knitr 
 URL: https://github.com/USCCANA/netplot
 BugReports: https://github.com/USCCANA/netplot/issues

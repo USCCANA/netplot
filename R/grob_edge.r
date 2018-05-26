@@ -18,30 +18,6 @@ grob_edge <- function(netenv, e) {
     n     = nbreaks
   )
 
-  # Computing colors using colorRamp2
-  if (!length(netenv$edge.color) | (length(netenv$edge.color) && is.na(netenv$edge.color[e]))) {
-
-    col <- polygons::colorRamp2(
-      c(netenv$vertex.color[i], netenv$vertex.color[j])
-    )(netenv$edge.color.mix[e])
-
-    col <- rgb(col, maxColorValue = 255)
-
-  } else {
-    col <- netenv$edge.color[e]
-  }
-
-  col <- polygons::colorRamp2(
-    c(
-      adjustcolor(col, alpha.f = netenv$edge.color.alpha[e,1]),
-      adjustcolor(col, alpha.f = netenv$edge.color.alpha[e,2])
-    ), alpha = TRUE)
-
-  col <- col(seq(0,1, length.out = nbreaks))
-  col <- grDevices::rgb(col, alpha = col[,4], maxColorValue = 255)
-
-
-
   # Generating grob
   ans <- grid::polylineGrob(
     x          = coords[,1],
@@ -49,8 +25,6 @@ grob_edge <- function(netenv, e) {
     id.lengths = rep(2, nbreaks),
     default.units = "native",
     gp         = grid::gpar(
-      col = netenv$edge.color,
-      lty = netenv$edge.line.lty[e],
       lwd = netenv$edge.width[e],
       lineend = "butt"
     ),
@@ -75,8 +49,6 @@ grob_edge <- function(netenv, e) {
       default.units = "native",
       name = "arrow",
       gp   = grid::gpar(
-        col  = col[nbreaks],
-        fill = col[nbreaks],
         lwd  = netenv$edges.width[e]
       )
     ),

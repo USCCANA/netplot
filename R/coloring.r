@@ -24,6 +24,7 @@ new_edge_coloring <- function(
       # [OPTIONAL] ---------------------------------------------------------------
       # Linear combination between i and j
       col_i <- polygons::colorRamp2(x=c(col_i, col_j))(mix[e])
+      col_i <- grDevices::rgb(col_i, alpha=col_i[,4], maxColorValue = 255)
       col_j <- col_i
       # --------------------------------------------------------------------------
 
@@ -101,16 +102,9 @@ netplot_edge_formulae <- function(x, fm) {
   val <- attr(tm, "variables")
 
   # Space where we will save the parameters
-  par <- list2env(structure(vector("list", 7), names = c(
-    "vertex_color_i",
-    "vertex_alpha_i",
-    "vertex_color_j",
-    "vertex_alpha_j",
-    "edge_color",
-    "edge_alpha"
-  )))
+  par <- new.env()
 
-  for (i in 3:length(val))
+  for (i in 2:length(val))
     if (!is.call(val[[i]])) {
       eval(
         call(as.character(val[[i]]), x = x, env = par)
@@ -121,9 +115,57 @@ netplot_edge_formulae <- function(x, fm) {
       eval(val[[i]])
     }
 
+  # Creating the coloring
+  col <- do.call(new_edge_coloring, as.list(par))
+
+  lapply(seq_len(x$.M), function(e) {
+
+    nam <- netplot_name$make(x$.edgelist[e,])
+
+    col$vertex(
+      e = e,
+      i = x$.edgelist[e, 1],
+      j = x$.edgelist[e, 2],
+      n = length(x$children$graph$children[[nam]]$children$line$id.lengths)
+    )
+
+  })
 }
 
-color_formula <- function(x, col, alpha, env, type, mix = .5, postfix = NULL) {
+#' Formulas in `netplot`
+#'
+#' Edge colors in both [nplot()] and [set_edge_gpar()] can be specified using
+#' a formula based on `ego()` and `alter()` (source and target). This way the
+#' user can set various types of combination vaying the mixing of the colors,
+#' the alpha levels, and the actual mixing colors to create edge colors.
+#'
+#' @param col Any valid color. Can be a single color or a vector.
+#' @param alpha Number. Alpha levels
+#' @param mix Number. For mixing colors between `ego` and `alter`
+#' @param env,type,postfix For internal use only.
+#' @param ... Passed to `color_formula`.
+#' @param x An object of class [netplot].
+#' @examples
+#' library(igraph)
+#' library(gridExtra)
+#' library(magrittr)
+#' net <- make_ring(4)
+#'
+#' set.seed(1)
+#' np <- nplot(net, vertex.color = viridis::viridis(4), vertex.size.range=c(.1, .1))
+#' np %<>% set_edge_gpar(lwd = 4)
+#'
+#' grid.arrange(
+#'   np,
+#'   np %>% set_edge_gpar(col =~ego + alter),
+#'   np %>% set_edge_gpar(col =~ego(alpha=0) + alter),
+#'   np %>% set_edge_gpar(col =~ego + alter(alpha=0)),
+#'   np %>% set_edge_gpar(col =~ego(mix=0) + alter(mix=1)),
+#'   np %>% set_edge_gpar(col =~ego(mix=1) + alter(mix=0))
+#' )
+#' @name netplot-formulae
+#' @export
+color_formula <- function(x, col, alpha, env, type, mix = 1, postfix = NULL) {
 
   n <- switch(type, vertex = x$.N, edge = x$.M)
 
@@ -145,6 +187,15 @@ color_formula <- function(x, col, alpha, env, type, mix = .5, postfix = NULL) {
     stop("`alpha` has the wrong length (", length(alpha), "). When passing a ",
          "vector it should be of length ", n, ".", call. = FALSE)
 
+  # Checking mixing levels
+  mix <- if (missing(mix))
+    rep(1, x$.M)
+  else if (length(mix) == 1)
+    rep(mix, x$.M)
+  else if (length(mix) != x$.M)
+    stop("`mix` has the wrong length (", length(mix), "). When passing a ",
+         "vector it should be of length ", x$.M, ".", call. = FALSE)
+
   # Assigning values
   if (type == "vertex") {
     env[[paste0("vertex_color_", postfix)]] <- col
@@ -157,14 +208,34 @@ color_formula <- function(x, col, alpha, env, type, mix = .5, postfix = NULL) {
   if (!length(env$mix))
     env$mix <- mix
   else {
-    env$mix <- mix/(env$mix + mix)
+    env$mix <- 1 - env$mix/(env$mix + mix)
   }
 
   invisible()
 }
 
-ego   <- color_formula
-alter <- color_formula
+#' @export
+#' @rdname netplot-formulae
+ego   <- function(...) {
+
+  dots        <- list(...)
+  dots$type   <- "vertex"
+  dots$postfix <- "i"
+
+  do.call(color_formula, dots)
+}
+
+#' @export
+#' @rdname netplot-formulae
+alter <- function(...) {
+
+  dots        <- list(...)
+  dots$type   <- "vertex"
+  dots$postfix <- "j"
+
+  do.call(color_formula, dots)
+
+}
 
 edge <- function(x, col, alpha = .8) {
 

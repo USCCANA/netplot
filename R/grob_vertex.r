@@ -7,6 +7,18 @@
 #' @noRd
 grob_vertex <- function(netenv, v) {
 
+  if (netenv$skip.vertex)
+    return(
+      grid::gTree(
+        children = grid::gList(
+          grid::grob(name = "frame"),
+          grid::grob(name = "core"),
+          grid::grob(name = "label")
+        ),
+        name = netplot_name$make(v)
+      )
+    )
+
   # Computing coordinates
   coords <- npolygon(
     x = netenv$layout[v, 1],

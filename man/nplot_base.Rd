@@ -48,9 +48,7 @@ vertex does the frame occupy (values between 0 and 1).}
 \item{edge.color}{A vector of length \code{ecount(x)}. Can be \code{NULL} in which case
 the color is picked as a mixture between ego and alters' \code{vertex.color} values.}
 
-\item{edge.color.mix}{Numeric vector of length \code{ecount(x)} with values in
-\code{[0,1]}. 0 means color equal to ego's vertex color, one equals to alter's
-vertex color.}
+\item{edge.color.mix}{Proportion of the mixing.}
 
 \item{edge.color.alpha}{Either a vector of length 1 or 2, or a matrix of
 size \code{ecount(x)*2} with values in \code{[0,1]}. Alpha (transparency) levels (see

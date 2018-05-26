@@ -44,12 +44,6 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' @param edge.arrow.size Vector of length `ecount(x)`.
 #' @param edge.curvature Numeric vector of length `ecount(x)`. Curvature of edges
 #' in terms of radians.
-#' @param edge.color.mix Numeric vector of length `ecount(x)` with values in
-#' `[0,1]`. 0 means color equal to ego's vertex color, one equals to alter's
-#' vertex color.
-#' @param edge.color.alpha Either a vector of length 1 or 2, or a matrix of
-#' size `ecount(x)*2` with values in `[0,1]`. Alpha (transparency) levels (see
-#' details)
 #' @param edge.line.lty Vector of length `ecount(x)`.
 #' @param edge.line.breaks Vector of length `ecount(x)`. Number of vertices to
 #' draw (approximate) the arc (edge).
@@ -65,11 +59,7 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' @importFrom polygons piechart npolygon rotate colorRamp2 segments_gradient
 #'
 #' @details
-#' In the case of `edge.color.alpha`, the user can specify up to 2 alpha levels
-#' per edge. Edges are drawn using [polygons::segments_gradient] which allows
-#' drawing segments with a color gradient. In this case setting, for example
-#' `c(.1, .5)` will make the edge start with a transparency of 0.1 and end
-#' with 0.5.
+#' In the case of `edge.color`, the user can specify colors using [netplot-formulae].
 #' @return An object of class `c("netplot", "gTree", "grob", "gDesc")`. The object
 #' has an additional set of attributes:
 #' * `.xlim, .ylim` vector of size two with the x-asis/y-axis limits.
@@ -85,6 +75,7 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' plot(x) # ala igraph
 #' nplot(x) # ala netplot
 #' @name nplot
+#' @aliases netplot
 NULL
 
 
@@ -168,9 +159,7 @@ nplot.default <- function(
   edge.width              = 1,
   edge.width.range        = c(1, 2),
   edge.arrow.size         = NULL,
-  edge.color              = NULL,
-  edge.color.mix          = .5,
-  edge.color.alpha        = c(.1, .5),
+  edge.color              = ~ ego(alpha = .01) + alter,
   edge.curvature          = pi/3,
   edge.line.lty           = "solid",
   edge.line.breaks        = 15,
@@ -192,7 +181,7 @@ nplot.default <- function(
 
   # This function will repeat a patter taking into account the number of columns
   .rep <- function(x, .times) {
-    if (grepl("range$", p))
+    if (grepl("range$", p) | inherits(x, "formula"))
       return(x)
     matrix(rep(x, .times), ncol = length(x), byrow = TRUE)
   }
@@ -271,14 +260,12 @@ nplot.default <- function(
 
   # Generating grobs -----------------------------------------------------------
   grob.vertex <- vector("list", netenv$N)
-  if (!netenv$skip.vertex)
-    for (v in 1:netenv$N)
-      grob.vertex[[v]] <- grob_vertex(netenv, v)
+  for (v in 1:netenv$N)
+    grob.vertex[[v]] <- grob_vertex(netenv, v)
 
   grob.edge <- vector("list", netenv$M)
-  if (!netenv$skip.edges)
-    for (e in 1:netenv$M)
-      grob.edge[[e]] <- grob_edge(netenv, e)
+  for (e in 1:netenv$M)
+    grob.edge[[e]] <- grob_edge(netenv, e)
 
   # Agregated grob -------------------------------------------------------------
   ans <- do.call(
@@ -324,6 +311,34 @@ nplot.default <- function(
 
 
   class(ans) <- c("netplot", class(ans))
+
+  # Passing edge color
+  if (length(vertex.color))
+    ans %<>% set_vertex_gpar(
+      "core",
+      fill = vertex.color,
+      col  = vertex.color
+    )
+
+  if (length(vertex.frame.color))
+    ans %<>% set_vertex_gpar(
+      "frame",
+      fill = vertex.frame.color,
+      col  = vertex.frame.color
+    )
+
+  if (length(edge.color)) {
+
+    ans %<>% set_edge_gpar(col = edge.color)
+
+    gp <- get_edge_gpar(ans, "line", "col", simplify=FALSE)$col
+    gp <- sapply(seq_along(gp), function(i) gp[[i]][netenv$edge.line.breaks[i]])
+
+    ans %<>% set_edge_gpar("arrow", fill = gp, col=gp)
+  }
+
+
+
   ans
 
 

@@ -1,4 +1,3 @@
 
-# @useDynLib netplot, .registration = TRUE
-# @importFrom Rcpp sourceCpp
-# NULL
+#' @import magrittr
+NULL

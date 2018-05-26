@@ -48,6 +48,11 @@ library(igraph)
 #> 
 #>     union
 library(netplot)
+#> 
+#> Attaching package: 'netplot'
+#> The following object is masked from 'package:igraph':
+#> 
+#>     ego
 set.seed(1)
 data("UKfaculty", package = "igraphdata")
 l <- layout_with_fr(UKfaculty)
@@ -135,7 +140,7 @@ nplot(
   net,
   layout            = layout,
   edge.width        = E(net)$Passengers,
-  edge.color        = col,
+  vertex.color      = col,
   skip.vertex       = TRUE,
   vertex.size.range = c(0,0),
   edge.width.range  = c(.75, 4, 4),

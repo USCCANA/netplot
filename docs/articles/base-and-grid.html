@@ -82,7 +82,7 @@
       <h1>Mixing netplot with base graphics</h1>
                         <h4 class="author">George G. Vega Yon</h4>
             
-            <h4 class="date">2018-05-24</h4>
+            <h4 class="date">2018-05-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/USCCANA/netplot/blob/master/vignettes/base-and-grid.Rmd"><code>vignettes/base-and-grid.Rmd</code></a></small>
       <div class="hidden name"><code>base-and-grid.Rmd</code></div>
@@ -106,12 +106,17 @@ x1  &lt;-<span class="st"> </span>x0<span class="op">*</span>.<span class="dv">4
 <span class="co"># network</span>
 net &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/igraph/topics/sample_smallworld">sample_smallworld</a></span>(<span class="dv">1</span>, n, <span class="dv">4</span>, .<span class="dv">1</span>)</code></pre></div>
 <p>And here we can create the <code>netplot</code> object, we use the <a href="https://cran.r-project.org/package=magrittr"><code>magrittr</code></a> package to make the workflow nicer:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(netplot)
-<span class="kw">library</span>(magrittr)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(netplot)</code></pre></div>
+<pre><code>## 
+## Attaching package: 'netplot'</code></pre>
+<pre><code>## The following object is masked from 'package:igraph':
+## 
+##     ego</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(magrittr)
 
 np &lt;-<span class="st"> </span><span class="kw"><a href="../reference/nplot.html">nplot</a></span>(net, <span class="dt">bg.col =</span> <span class="st">"gray70"</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw"><a href="../reference/update_par.html">update_edge_par</a></span>(<span class="st">"line"</span>, <span class="dt">col =</span> <span class="st">"gray50"</span>, <span class="dt">alpha =</span> .<span class="dv">7</span>) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw"><a href="../reference/update_par.html">update_vertex_par</a></span>(<span class="st">"frame"</span>, <span class="dt">fill =</span> <span class="st">"black"</span>, <span class="dt">col =</span> <span class="st">"black"</span>)</code></pre></div>
+<span class="st">  </span><span class="kw"><a href="../reference/set_gpar.html">set_edge_gpar</a></span>(<span class="st">"line"</span>, <span class="dt">col =</span> <span class="st">"gray50"</span>, <span class="dt">alpha =</span> .<span class="dv">7</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw"><a href="../reference/set_gpar.html">set_vertex_gpar</a></span>(<span class="st">"frame"</span>, <span class="dt">fill =</span> <span class="st">"black"</span>, <span class="dt">col =</span> <span class="st">"black"</span>)</code></pre></div>
 <p>Imagine that we would like to include a plot of the network in the following plot</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(x0, x1)</code></pre></div>
 <p><img src="base-and-grid_files/figure-html/baseplot-1.png" width="576"></p>

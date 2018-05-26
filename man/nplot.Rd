@@ -2,7 +2,7 @@
 % Please edit documentation in R/netplot.r
 \name{nplot}
 \alias{nplot}
-\alias{nplot}
+\alias{netplot}
 \alias{nplot.igraph}
 \alias{nplot.network}
 \alias{nplot.default}
@@ -29,11 +29,10 @@ nplot(...)
   vertex.label.color = "black", vertex.label.fontfamily = "HersheySans",
   vertex.label.fontface = "bold", vertex.label.show = 0.3,
   vertex.label.range = c(5, 15), edge.width = 1, edge.width.range = c(1,
-  2), edge.arrow.size = NULL, edge.color = NULL, edge.color.mix = 0.5,
-  edge.color.alpha = c(0.1, 0.5), edge.curvature = pi/3,
-  edge.line.lty = "solid", edge.line.breaks = 15, sample.edges = 1,
-  skip.vertex = FALSE, skip.edges = FALSE, skip.arrows = skip.edges,
-  add = FALSE, zero.margins = TRUE, ...)
+  2), edge.arrow.size = NULL, edge.color = ~ego(alpha = 0.01) + alter,
+  edge.curvature = pi/3, edge.line.lty = "solid", edge.line.breaks = 15,
+  sample.edges = 1, skip.vertex = FALSE, skip.edges = FALSE,
+  skip.arrows = skip.edges, add = FALSE, zero.margins = TRUE, ...)
 
 \method{print}{netplot}(x, y = NULL, newpage = TRUE, ...)
 }
@@ -88,14 +87,6 @@ top ranking according to \code{vertex.size}.}
 \item{edge.color}{A vector of length \code{ecount(x)}. Can be \code{NULL} in which case
 the color is picked as a mixture between ego and alters' \code{vertex.color} values.}
 
-\item{edge.color.mix}{Numeric vector of length \code{ecount(x)} with values in
-\code{[0,1]}. 0 means color equal to ego's vertex color, one equals to alter's
-vertex color.}
-
-\item{edge.color.alpha}{Either a vector of length 1 or 2, or a matrix of
-size \code{ecount(x)*2} with values in \code{[0,1]}. Alpha (transparency) levels (see
-details)}
-
 \item{edge.curvature}{Numeric vector of length \code{ecount(x)}. Curvature of edges
 in terms of radians.}
 
@@ -130,11 +121,7 @@ has an additional set of attributes:
 Plot a network
 }
 \details{
-In the case of \code{edge.color.alpha}, the user can specify up to 2 alpha levels
-per edge. Edges are drawn using \link[polygons:segments_gradient]{polygons::segments_gradient} which allows
-drawing segments with a color gradient. In this case setting, for example
-\code{c(.1, .5)} will make the edge start with a transparency of 0.1 and end
-with 0.5.
+In the case of \code{edge.color}, the user can specify colors using \link{netplot-formulae}.
 }
 \examples{
 library(igraph)

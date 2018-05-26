@@ -70,6 +70,24 @@ netplot_validate <- (function() {
   vertex <- c("core", "frame", "label")
   edge   <- c("arrow", "line")
 
+  # GPAR
+  GPAR <- c("fill",
+  "col",
+  "gamma",
+  "lty",
+  "lwd",
+  "cex",
+  "fontsize",
+  "lineheight",
+  "font",
+  "fontfamily",
+  "alpha",
+  "lineend",
+  "linejoin",
+  "linemitre",
+  "lex",
+  "fontface")
+
   list(
     # Class
     is_netplot = function(x) {
@@ -128,12 +146,12 @@ netplot_validate <- (function() {
         gpar <- names(gpar)
 
       # Are the par aesthetics registered?
-      test <- which(!(gpar %in% names(grid::get.gpar())))
+      test <- which(!(gpar %in% GPAR))
       if (length(test))
         stop("The following parameters are not part of `grid::gpar`: '",
              paste(gpar[test], collapse="', '"), "'.",
              "Supported parameters are: '",
-             paste(names(grid::get.gpar()), collapse="', '"),"'.",
+             paste(GPAR, collapse="', '"),"'.",
              call. = FALSE)
 
       invisible()

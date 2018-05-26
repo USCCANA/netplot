@@ -125,6 +125,11 @@ devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocument
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     union</span>
 <span class="kw">library</span>(netplot)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Attaching package: 'netplot'</span>
+<span class="co">#&gt; The following object is masked from 'package:igraph':</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;     ego</span>
 <span class="kw">set.seed</span>(<span class="dv">1</span>)
 <span class="kw">data</span>(<span class="st">"UKfaculty"</span>, <span class="dt">package =</span> <span class="st">"igraphdata"</span>)
 l &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/igraph/topics/layout_with_fr">layout_with_fr</a></span>(UKfaculty)
@@ -199,7 +204,7 @@ col &lt;-<span class="st"> </span><span class="kw">adjustcolor</span>(
   net,
   <span class="dt">layout            =</span> layout,
   <span class="dt">edge.width        =</span> <span class="kw"><a href="http://www.rdocumentation.org/packages/igraph/topics/E">E</a></span>(net)<span class="op">$</span>Passengers,
-  <span class="dt">edge.color        =</span> col,
+  <span class="dt">vertex.color      =</span> col,
   <span class="dt">skip.vertex       =</span> <span class="ot">TRUE</span>,
   <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),
   <span class="dt">edge.width.range  =</span> <span class="kw">c</span>(.<span class="dv">75</span>, <span class="dv">4</span>, <span class="dv">4</span>),

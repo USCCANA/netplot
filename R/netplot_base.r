@@ -1,4 +1,8 @@
 #' `nplot` using base graphics
+#' @param edge.color.mix Proportion of the mixing.
+#' @param edge.color.alpha Either a vector of length 1 or 2, or a matrix of
+#' size `ecount(x)*2` with values in `[0,1]`. Alpha (transparency) levels (see
+#' details)
 #' @inheritParams nplot
 #' @export
 nplot_base <- function(

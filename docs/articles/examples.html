@@ -82,7 +82,7 @@
       <h1>Graph drawing with netplot</h1>
                         <h4 class="author">George G. Vega Yon</h4>
             
-            <h4 class="date">2018-05-24</h4>
+            <h4 class="date">2018-05-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/USCCANA/netplot/blob/master/vignettes/examples.Rmd"><code>vignettes/examples.Rmd</code></a></small>
       <div class="hidden name"><code>examples.Rmd</code></div>
@@ -126,8 +126,9 @@ nw &lt;-<span class="st"> </span><span class="kw">map_base_to_grid</span>(<span 
 np &lt;-<span class="st"> </span><span class="kw"><a href="../reference/nplot.html">nplot</a></span>(UKfaculty, <span class="dt">layout =</span> l_ukf)</code></pre></div>
 <p>Here is an example with <a href="https://cran.r-project.org/package=ggraph"><code>ggraph</code></a></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># This step is done to set a manual layout</span>
-<span class="kw"><a href="http://www.rdocumentation.org/packages/igraph/topics/V">V</a></span>(UKfaculty)<span class="op">$</span>x &lt;-<span class="st"> </span>l_ukf[,<span class="dv">1</span>]
-<span class="kw"><a href="http://www.rdocumentation.org/packages/igraph/topics/V">V</a></span>(UKfaculty)<span class="op">$</span>y &lt;-<span class="st"> </span>l_ukf[,<span class="dv">2</span>]
+<span class="co"># V(UKfaculty)$x &lt;- l_ukf[,1]</span>
+<span class="co"># V(UKfaculty)$y &lt;- l_ukf[,2]</span>
+<span class="co"># graph_attr(UKfaculty, "node.positions") &lt;- l_ukf</span>
 
 ggraph<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggraph/topics/ggraph">ggraph</a></span>(UKfaculty) <span class="op">+</span>
 <span class="st">  </span>ggraph<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/ggraph/topics/geom_edge_arc">geom_edge_arc</a></span>(<span class="kw">aes</span>(<span class="dt">alpha =</span> ..index..), <span class="dt">curvature=</span>.<span class="dv">15</span>) <span class="op">+</span>
@@ -194,9 +195,9 @@ x &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentat
 l &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/igraph/topics/layout_with_fr">layout_with_fr</a></span>(x)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
 gridExtra<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/gridExtra/topics/arrangeGrob">grid.arrange</a></span>(
-  <span class="kw"><a href="../reference/nplot.html">nplot</a></span>(x, <span class="dt">layout =</span> l, <span class="dt">edge.color.mix =</span> <span class="dv">1</span>, <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">05</span>,.<span class="dv">1</span>)),
-  <span class="kw"><a href="../reference/nplot.html">nplot</a></span>(x, <span class="dt">layout =</span> l, <span class="dt">edge.color.mix =</span> .<span class="dv">5</span>, <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">05</span>,.<span class="dv">1</span>)),
-  <span class="kw"><a href="../reference/nplot.html">nplot</a></span>(x, <span class="dt">layout =</span> l, <span class="dt">edge.color.mix =</span> <span class="dv">0</span>, <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">05</span>,.<span class="dv">1</span>)),
+  <span class="kw"><a href="../reference/nplot.html">nplot</a></span>(x, <span class="dt">layout =</span> l, <span class="dt">edge.color =</span> <span class="op">~</span><span class="kw"><a href="../reference/netplot-formulae.html">ego</a></span>(<span class="dt">mix=</span><span class="dv">0</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="../reference/netplot-formulae.html">alter</a></span>(<span class="dt">mix=</span><span class="dv">1</span>), <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">05</span>,.<span class="dv">1</span>)),
+  <span class="kw"><a href="../reference/nplot.html">nplot</a></span>(x, <span class="dt">layout =</span> l, <span class="dt">edge.color =</span> <span class="op">~</span><span class="kw"><a href="../reference/netplot-formulae.html">ego</a></span>(<span class="dt">mix=</span>.<span class="dv">5</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="../reference/netplot-formulae.html">alter</a></span>(<span class="dt">mix=</span>.<span class="dv">5</span>), <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">05</span>,.<span class="dv">1</span>)),
+  <span class="kw"><a href="../reference/nplot.html">nplot</a></span>(x, <span class="dt">layout =</span> l, <span class="dt">edge.color =</span> <span class="op">~</span><span class="kw"><a href="../reference/netplot-formulae.html">ego</a></span>(<span class="dt">mix=</span><span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="../reference/netplot-formulae.html">alter</a></span>(<span class="dt">mix=</span><span class="dv">0</span>), <span class="dt">vertex.size.range =</span> <span class="kw">c</span>(.<span class="dv">05</span>,.<span class="dv">1</span>)),
   <span class="dt">ncol=</span><span class="dv">3</span>, <span class="dt">nrow=</span><span class="dv">1</span>
 )</code></pre></div>
 <div class="figure">

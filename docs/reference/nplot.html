@@ -124,14 +124,13 @@
 
 <span class='co'># S3 method for igraph</span>
 <span class='fu'>nplot</span>(<span class='no'>x</span>, <span class='kw'>layout</span> <span class='kw'>=</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/igraph/topics/layout_nicely'>layout_nicely</a></span>(<span class='no'>x</span>),
-  <span class='kw'>vertex.size</span> <span class='kw'>=</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/igraph/topics/degree'>degree</a></span>(<span class='no'>x</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"in"</span>),
-  <span class='kw'>vertex.color</span> <span class='kw'>=</span> <span class='fu'><a href='set_colors.html'>set_vertex_colors</a></span>(<span class='no'>x</span>), <span class='kw'>vertex.label</span> <span class='kw'>=</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/igraph/topics/vertex_attr'>vertex_attr</a></span>(<span class='no'>x</span>,
-  <span class='st'>"name"</span>), <span class='kw'>edge.width</span> <span class='kw'>=</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/igraph/topics/edge_attr'>edge_attr</a></span>(<span class='no'>x</span>, <span class='st'>"weight"</span>), <span class='no'>...</span>)
+  <span class='kw'>vertex.size</span> <span class='kw'>=</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/igraph/topics/degree'>degree</a></span>(<span class='no'>x</span>, <span class='kw'>mode</span> <span class='kw'>=</span> <span class='st'>"in"</span>), <span class='kw'>vertex.color</span> <span class='kw'>=</span> <span class='st'>"tomato"</span>,
+  <span class='kw'>vertex.label</span> <span class='kw'>=</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/igraph/topics/vertex_attr'>vertex_attr</a></span>(<span class='no'>x</span>, <span class='st'>"name"</span>),
+  <span class='kw'>edge.width</span> <span class='kw'>=</span> <span class='kw pkg'>igraph</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/igraph/topics/edge_attr'>edge_attr</a></span>(<span class='no'>x</span>, <span class='st'>"weight"</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for network</span>
 <span class='fu'>nplot</span>(<span class='no'>x</span>, <span class='kw'>layout</span> <span class='kw'>=</span> <span class='kw pkg'>sna</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/sna/topics/gplot.layout'>gplot.layout.kamadakawai</a></span>(<span class='no'>x</span>, <span class='kw'>NULL</span>),
-  <span class='kw'>vertex.size</span> <span class='kw'>=</span> <span class='kw pkg'>sna</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/sna/topics/degree'>degree</a></span>(<span class='no'>x</span>, <span class='kw'>cmode</span> <span class='kw'>=</span> <span class='st'>"indegree"</span>),
-  <span class='kw'>vertex.color</span> <span class='kw'>=</span> <span class='fu'><a href='set_colors.html'>set_vertex_colors</a></span>(<span class='no'>x</span>),
+  <span class='kw'>vertex.size</span> <span class='kw'>=</span> <span class='kw pkg'>sna</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/sna/topics/degree'>degree</a></span>(<span class='no'>x</span>, <span class='kw'>cmode</span> <span class='kw'>=</span> <span class='st'>"indegree"</span>), <span class='kw'>vertex.color</span> <span class='kw'>=</span> <span class='st'>"tomato"</span>,
   <span class='kw'>vertex.label</span> <span class='kw'>=</span> <span class='kw pkg'>network</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/network/topics/attribute.methods'>get.vertex.attribute</a></span>(<span class='no'>x</span>, <span class='st'>"vertex.names"</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for default</span>
@@ -144,11 +143,10 @@
   <span class='kw'>vertex.label.color</span> <span class='kw'>=</span> <span class='st'>"black"</span>, <span class='kw'>vertex.label.fontfamily</span> <span class='kw'>=</span> <span class='st'>"HersheySans"</span>,
   <span class='kw'>vertex.label.fontface</span> <span class='kw'>=</span> <span class='st'>"bold"</span>, <span class='kw'>vertex.label.show</span> <span class='kw'>=</span> <span class='fl'>0.3</span>,
   <span class='kw'>vertex.label.range</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>5</span>, <span class='fl'>15</span>), <span class='kw'>edge.width</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>edge.width.range</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>,
-  <span class='fl'>2</span>), <span class='kw'>edge.arrow.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>edge.color</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>edge.color.mix</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
-  <span class='kw'>edge.color.alpha</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0.1</span>, <span class='fl'>0.5</span>), <span class='kw'>edge.curvature</span> <span class='kw'>=</span> <span class='no'>pi</span>/<span class='fl'>3</span>,
-  <span class='kw'>edge.line.lty</span> <span class='kw'>=</span> <span class='st'>"solid"</span>, <span class='kw'>edge.line.breaks</span> <span class='kw'>=</span> <span class='fl'>15</span>, <span class='kw'>sample.edges</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>skip.vertex</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>skip.edges</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>skip.arrows</span> <span class='kw'>=</span> <span class='no'>skip.edges</span>,
-  <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>zero.margins</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
+  <span class='fl'>2</span>), <span class='kw'>edge.arrow.size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>edge.color</span> <span class='kw'>=</span> ~<span class='fu'><a href='netplot-formulae.html'>ego</a></span>(<span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.01</span>) + <span class='no'>alter</span>,
+  <span class='kw'>edge.curvature</span> <span class='kw'>=</span> <span class='no'>pi</span>/<span class='fl'>3</span>, <span class='kw'>edge.line.lty</span> <span class='kw'>=</span> <span class='st'>"solid"</span>, <span class='kw'>edge.line.breaks</span> <span class='kw'>=</span> <span class='fl'>15</span>,
+  <span class='kw'>sample.edges</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>skip.vertex</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>skip.edges</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>skip.arrows</span> <span class='kw'>=</span> <span class='no'>skip.edges</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>zero.margins</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for netplot</span>
 <span class='fu'>print</span>(<span class='no'>x</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>newpage</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
@@ -251,18 +249,6 @@ top ranking according to <code>vertex.size</code>.</p></td>
 the color is picked as a mixture between ego and alters' <code>vertex.color</code> values.</p></td>
     </tr>
     <tr>
-      <th>edge.color.mix</th>
-      <td><p>Numeric vector of length <code>ecount(x)</code> with values in
-<code>[0,1]</code>. 0 means color equal to ego's vertex color, one equals to alter's
-vertex color.</p></td>
-    </tr>
-    <tr>
-      <th>edge.color.alpha</th>
-      <td><p>Either a vector of length 1 or 2, or a matrix of
-size <code>ecount(x)*2</code> with values in <code>[0,1]</code>. Alpha (transparency) levels (see
-details)</p></td>
-    </tr>
-    <tr>
       <th>edge.curvature</th>
       <td><p>Numeric vector of length <code>ecount(x)</code>. Curvature of edges
 in terms of radians.</p></td>
@@ -315,20 +301,12 @@ has an additional set of attributes:</p><ul>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>In the case of <code>edge.color.alpha</code>, the user can specify up to 2 alpha levels
-per edge. Edges are drawn using <a href='http://www.rdocumentation.org/packages/polygons/topics/segments_gradient'>polygons::segments_gradient</a> which allows
-drawing segments with a color gradient. In this case setting, for example
-<code>c(.1, .5)</code> will make the edge start with a transparency of 0.1 and end
-with 0.5.</p>
+    <p>In the case of <code>edge.color</code>, the user can specify colors using <a href='netplot-formulae.html'>netplot-formulae</a>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>igraph</span>)</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘igraph’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:stats’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    decompose, spectrum</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:base’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    union</span></div><div class='input'><span class='fu'>library</span>(<span class='no'>netplot</span>)
+    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>igraph</span>)
+<span class='fu'>library</span>(<span class='no'>netplot</span>)
 <span class='fu'>set.seed</span>(<span class='fl'>1</span>)
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/igraph/topics/sample_smallworld'>sample_smallworld</a></span>(<span class='fl'>1</span>, <span class='fl'>200</span>, <span class='fl'>5</span>, <span class='fl'>0.03</span>)
 
