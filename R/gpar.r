@@ -1,4 +1,57 @@
 
+#' Creates a nested list of parameters to be passed to [set_gpar]
+#' @noRd
+parse_gpar <- function(...) {
+
+  dots <- list(...)
+  ans <- new.env()
+
+  for (p in names(dots)) {
+
+    # What is hidding there
+    par <- strsplit(p, "\\.")[[1]]
+
+    # Setting it up
+
+    # If only length 2, then it sets global attributes for the component
+    if (length(par) == 2) {
+
+      # Is it a parameter?
+      if (!(par[[2]] %in% .grid_par_names))
+        next
+
+      nam <- par[1]
+      ans[[nam]] <- c(
+        ans[[nam]],
+        structure(
+          list(dots[[p]], par[1]),
+          names = c(par[2], "type")
+          )
+        )
+
+    } else {
+
+      # Is it a parameter?
+      if (!(par[[3]] %in% .grid_par_names))
+        next
+
+      nam <- paste(par[1:2], collapse="_")
+      ans[[nam]] <- c(
+        ans[[nam]],
+        structure(
+          list(dots[[p]], par[1], par[2]),
+          names = c(par[3], "type", "element")
+          )
+      )
+
+    }
+
+
+  }
+
+  as.list(ans)
+
+}
 
 #' Set/retrieve graphical parameters of a `netplot` object
 #'
@@ -31,9 +84,9 @@
 set_gpar <- function(x, type, element, idx, ...) {
 
   # Validations
-  netplot_validate$is_netplot(x)
-  netplot_validate$type(type)
-  netplot_validate$elements(element, type)
+  np_validate$is_netplot(x)
+  np_validate$type(type)
+  np_validate$elements(element, type)
 
   # If elements is more than one
   if (!missing(element) && length(element) > 1) {
@@ -60,26 +113,42 @@ set_gpar <- function(x, type, element, idx, ...) {
 
   # Converting
   listme <- function(...) {
-    Map(function(...) {list(...)}, ...)
+
+    x    <- list(...)
+    nill <- names(x)[which(sapply(x, is.null))]
+    for (p in nill)
+      x[p] <- NULL
+
+    f <- function(...) {
+      structure(
+        c(list(...), rep(list(NULL), length(nill))),
+        names = c(names(x), nill)
+        )
+    }
+
+    do.call(Map, c(list(f=f), x))
+
   }
 
   n <- ifelse(type == "edge", x$.M, x$.N)
   dots <- c(list(placeholder=integer(n)), list(...))
   dots <- do.call(listme, dots)
 
-  # Basic cheks
-  # netplot_validate$gpar(dots)
-
   # Updating the
   for (i in seq_along(idx)) {
+
+  np_validate$gpar(idx[[i]][-1])
 
     # Fabricating the name
     iname <- netplot_name$make(idx[[i]])
 
-    x$children$graph$children[[iname]]$children[[element]] <- grid::editGrob(
-        grob = x$children$graph$children[[iname]]$children[[element]],
-        gp    = do.call(grid::gpar, dots[[i]][-1])
-      )
+    for (p in names(dots[[i]][-1])) {
+      if (!missing(element))
+        x$children$graph$children[[iname]]$children[[element]]$gp[[p]] <- dots[[i]][[p]]
+      else
+        x$children$graph$children[[iname]]$gp[[p]] <- dots[[i]][[p]]
+
+    }
   }
 
   # Returning the grob
@@ -163,9 +232,9 @@ get_edge_gpar <- function(x, element, ..., idx) {
 get_gpar <- function(x, type, element, ..., idx, simplify=TRUE) {
 
   # Checking type and element
-  netplot_validate$is_netplot(x)
-  netplot_validate$type(type)
-  netplot_validate$elements(element, type)
+  np_validate$is_netplot(x)
+  np_validate$type(type)
+  np_validate$elements(element, type)
 
   # If no id provided
   if (missing(idx))
@@ -179,7 +248,7 @@ get_gpar <- function(x, type, element, ..., idx, simplify=TRUE) {
 
   # Basic cheks
   dots <- c(...)
-  netplot_validate$gpar(dots)
+  np_validate$gpar(dots)
 
   n   <- length(idx)
   ans <- lapply(seq_along(dots), function(i) vector("list", n))

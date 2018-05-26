@@ -73,7 +73,7 @@ new_edge_coloring <- function(
 netplot_edge_formulae <- function(x, fm) {
 
   # Basic validation
-  netplot_validate$is_netplot(x)
+  np_validate$is_netplot(x)
 
   if (!inherits(fm, "formula"))
     stop("Not a formula", call. = FALSE)

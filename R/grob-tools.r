@@ -36,7 +36,7 @@ netplot_name <- (function() {
       )
 
       # Validating elements
-      netplot_validate$elements(element, type)
+      np_validate$elements(element, type)
 
       do.call(
         grid::gPath,
@@ -62,31 +62,18 @@ netplot_name <- (function() {
 })()
 
 
+# GPAR
+.grid_par_names <- names(grid::get.gpar())
+graphics.off() # To make sure it is closed after the call
+
+
 #' Validating element types
 #' @noRd
-netplot_validate <- (function() {
+np_validate <- (function() {
 
   # Valid elements
   vertex <- c("core", "frame", "label")
   edge   <- c("arrow", "line")
-
-  # GPAR
-  GPAR <- c("fill",
-  "col",
-  "gamma",
-  "lty",
-  "lwd",
-  "cex",
-  "fontsize",
-  "lineheight",
-  "font",
-  "fontfamily",
-  "alpha",
-  "lineend",
-  "linejoin",
-  "linemitre",
-  "lex",
-  "fontface")
 
   list(
     # Class
@@ -102,10 +89,14 @@ netplot_validate <- (function() {
     # Elements
     elements = function(elements, type) {
 
+      # Is there anything to revise?
+      if (missing(elements) || is.null(elements))
+        return(invisible())
+
       test <- switch (
         type,
         vertex = which(!(elements %in% vertex)),
-        edge = which(!(elements %in% edge)),
+        edge   = which(!(elements %in% edge)),
         stop("The `type` should be either 'vertex' or 'edge'.", call. = FALSE)
       )
 
@@ -146,12 +137,12 @@ netplot_validate <- (function() {
         gpar <- names(gpar)
 
       # Are the par aesthetics registered?
-      test <- which(!(gpar %in% GPAR))
+      test <- which(!(gpar %in% .grid_par_names))
       if (length(test))
         stop("The following parameters are not part of `grid::gpar`: '",
              paste(gpar[test], collapse="', '"), "'.",
              "Supported parameters are: '",
-             paste(GPAR, collapse="', '"),"'.",
+             paste(.grid_par_names, collapse="', '"),"'.",
              call. = FALSE)
 
       invisible()
