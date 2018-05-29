@@ -3,6 +3,7 @@
 \name{nplot}
 \alias{nplot}
 \alias{netplot}
+\alias{nplot}
 \alias{nplot.igraph}
 \alias{nplot.network}
 \alias{nplot.default}

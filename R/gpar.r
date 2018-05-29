@@ -4,7 +4,7 @@
 parse_gpar <- function(...) {
 
   dots <- list(...)
-  ans <- new.env()
+  ans <- new.env(hash = FALSE)
 
   for (p in names(dots)) {
 
@@ -29,19 +29,25 @@ parse_gpar <- function(...) {
           )
         )
 
-    } else {
+    } else if (length(par) == 3) {
 
       # Is it a parameter?
       if (!(par[[3]] %in% .grid_par_names))
         next
 
       nam <- paste(par[1:2], collapse="_")
+
+
       ans[[nam]] <- c(
         ans[[nam]],
-        structure(
-          list(dots[[p]], par[1], par[2]),
-          names = c(par[3], "type", "element")
-          )
+        structure(dots[[p]], names = par[3]),
+        if (!length(ans[[nam]]))
+          structure(
+            list(par[1], par[2]),
+            names = c("type", "element")
+            )
+        else
+          NULL
       )
 
     }
@@ -132,12 +138,17 @@ set_gpar <- function(x, type, element, idx, ...) {
 
   n <- ifelse(type == "edge", x$.M, x$.N)
   dots <- c(list(placeholder=integer(n)), list(...))
+
+  for (d in names(dots))
+    if (inherits(dots[[d]], "formula"))
+      dots[[d]] <- netplot_edge_formulae(x, dots[[d]])
+
   dots <- do.call(listme, dots)
 
   # Updating the
   for (i in seq_along(idx)) {
 
-  np_validate$gpar(idx[[i]][-1])
+    np_validate$gpar(dots[[i]][-1])
 
     # Fabricating the name
     iname <- netplot_name$make(idx[[i]])
@@ -149,6 +160,11 @@ set_gpar <- function(x, type, element, idx, ...) {
         x$children$graph$children[[iname]]$gp[[p]] <- dots[[i]][[p]]
 
     }
+
+    if (!missing(element))
+      class(x$children$graph$children[[iname]]$children[[element]]$gp) <- "gpar"
+    else
+      class(x$children$graph$children[[iname]]$gp) <- "gpar"
   }
 
   # Returning the grob
@@ -172,9 +188,6 @@ set_edge_gpar <- function(x, element, idx, ...) {
     idx <- seq_len(x$.M)
 
   dots <- list(...)
-  for (d in names(dots))
-    if (inherits(dots[[d]], "formula"))
-      dots[[d]] <- netplot_edge_formulae(x, dots[[d]])
 
   dots$x       <- x
   dots$type    <- "edge"

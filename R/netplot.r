@@ -135,6 +135,44 @@ nplot.network <- function(
 
 }
 
+netplot_theme <- (function() {
+
+  v <- viridis::viridis(1)
+  darkv <- adjustcolor(
+    viridis::viridis(1),
+    red.f   = .7,
+    green.f = .7,
+    blue.f  = .7
+  )
+
+  default <- list(
+    vertex.core.col  = v,
+    vertex.core.fill = v,
+    vertex.frame.col = darkv,
+    vertex.frame.fill = darkv,
+    edge.col = ~ego(alpha=0) + alter(alpha = .7),
+    name      = "default"
+  )
+
+  current <- default
+
+  list(
+    set = function(...) {
+      dots <- list(...)
+      if (!length(dots$name))
+        dots$name <- "user"
+
+      current <<- rev(dots)
+    },
+    get = function() current,
+    reset = function() {
+      message("Restablishing the default theme")
+      current <<- default
+    }
+  )
+
+})()
+
 #' @export
 #' @rdname nplot
 #' @param edgelist An edgelist.
