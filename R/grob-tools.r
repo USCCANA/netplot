@@ -76,7 +76,7 @@ np_validate <- (function() {
   edge   <- c("arrow", "line")
 
   list(
-    # Class
+    # Class --------------------------------------------------------------------
     is_netplot = function(x) {
 
       if (!inherits(x, "netplot"))
@@ -86,7 +86,7 @@ np_validate <- (function() {
       invisible()
 
     },
-    # Elements
+    # Elements -----------------------------------------------------------------
     elements = function(elements, type) {
 
       # Is there anything to revise?
@@ -108,7 +108,16 @@ np_validate <- (function() {
       invisible()
 
     },
-    #Type
+    get_element = function(type) {
+
+      switch (type,
+        vertex = vertex,
+        edge   = edge,
+        stop("Type should be either 'edge' or 'vertex'.")
+      )
+
+    },
+    #Type ----------------------------------------------------------------------
     type = function(type, multiple = FALSE) {
 
       # Missing
@@ -131,6 +140,7 @@ np_validate <- (function() {
 
 
     },
+    # Gpar ---------------------------------------------------------------------
     gpar = function(gpar) {
 
       if (is.list(gpar))

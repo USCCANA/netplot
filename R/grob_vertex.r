@@ -41,10 +41,6 @@ grob_vertex <- function(netenv, v) {
   ans <- grid::polygonGrob(
     x    = c(coords[,1]),
     y    = c(coords[,2]),
-    gp   = grid::gpar(
-      fill = netenv$vertex.color[v],
-      col  = netenv$vertex.color[v]
-    ),
     default.units = "native",
     name = "core"
   )
@@ -53,10 +49,6 @@ grob_vertex <- function(netenv, v) {
     grid::polygonGrob(
       x    = framecoords[,1],
       y    = framecoords[,2],
-      gp   = grid::gpar(
-        fill = netenv$vertex.frame.color[v],
-        col  = netenv$vertex.frame.color[v]
-      ),
       default.units = "native",
       name = "frame"
     ),
@@ -75,12 +67,6 @@ grob_vertex <- function(netenv, v) {
           label = netenv$vertex.label[v],
           x     = netenv$layout[v, 1],
           y     = netenv$layout[v, 2] + netenv$vertex.size[v]*1.1,
-          gp    = grid::gpar(
-            fontsize   = netenv$vertex.label.fontsize[v],
-            col        = netenv$vertex.label.color[v],
-            fontfamily = netenv$vertex.label.fontfamily[v],
-            fontface   = netenv$vertex.label.fontface[v]
-          ),
           vjust         = 0,
           default.units = "native",
           name = "label"

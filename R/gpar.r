@@ -4,7 +4,7 @@
 parse_gpar <- function(...) {
 
   dots <- list(...)
-  ans <- new.env(hash = FALSE)
+  ans <- new.env()
 
   for (p in names(dots)) {
 
@@ -23,10 +23,11 @@ parse_gpar <- function(...) {
       nam <- par[1]
       ans[[nam]] <- c(
         ans[[nam]],
-        structure(
-          list(dots[[p]], par[1]),
-          names = c(par[2], "type")
-          )
+        structure(list(dots[[p]]), names = par[2]),
+        if (!length(ans[[nam]])) {
+          structure(list(par[1]), names = "type")
+        } else
+          NULL
         )
 
     } else if (length(par) == 3) {
@@ -35,12 +36,14 @@ parse_gpar <- function(...) {
       if (!(par[[3]] %in% .grid_par_names))
         next
 
-      nam <- paste(par[1:2], collapse="_")
+      # Is it an element
+      np_validate$elements(par[2], par[1])
 
+      nam <- paste(par[1:2], collapse=".")
 
       ans[[nam]] <- c(
         ans[[nam]],
-        structure(dots[[p]], names = par[3]),
+        structure(list(dots[[p]]), names = par[3]),
         if (!length(ans[[nam]]))
           structure(
             list(par[1], par[2]),
@@ -153,18 +156,29 @@ set_gpar <- function(x, type, element, idx, ...) {
     # Fabricating the name
     iname <- netplot_name$make(idx[[i]])
 
-    for (p in names(dots[[i]][-1])) {
-      if (!missing(element))
-        x$children$graph$children[[iname]]$children[[element]]$gp[[p]] <- dots[[i]][[p]]
-      else
-        x$children$graph$children[[iname]]$gp[[p]] <- dots[[i]][[p]]
+
+    # If no elememtn, then is for the entire grob (vertex or edge)
+    if (!missing(element)) {
+
+      x$children$graph$children[[iname]]$children[[element]]$gp[
+        names(dots[[i]][-1])
+      ] <- do.call(grid::gpar, dots[[i]][-1])
+
+      class(x$children$graph$children[[iname]]$children[[element]]$gp) <- "gpar"
+
+
+    } else {
+
+      x$children$graph$children[[iname]]$gp[
+        names(dots[[i]][-1])
+        ] <- do.call(grid::gpar, dots[[i]][-1])
+
+      class(x$children$graph$children[[iname]]$gp) <- "gpar"
 
     }
 
-    if (!missing(element))
-      class(x$children$graph$children[[iname]]$children[[element]]$gp) <- "gpar"
-    else
-      class(x$children$graph$children[[iname]]$gp) <- "gpar"
+
+
   }
 
   # Returning the grob

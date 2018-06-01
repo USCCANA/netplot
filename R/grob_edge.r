@@ -24,10 +24,7 @@ grob_edge <- function(netenv, e) {
     y          = coords[,2],
     id.lengths = rep(2, nbreaks),
     default.units = "native",
-    gp         = grid::gpar(
-      lwd = netenv$edge.width[e],
-      lineend = "butt"
-    ),
+    gp         = structure(list(lineend = 2), class="gpar"),
     name = "line"
   )
 
@@ -47,10 +44,7 @@ grob_edge <- function(netenv, e) {
       arrow[,1],
       arrow[,2],
       default.units = "native",
-      name = "arrow",
-      gp   = grid::gpar(
-        lwd  = netenv$edges.width[e]
-      )
+      name = "arrow"
     ),
     name = netplot_name$make(c(i, j))
   )

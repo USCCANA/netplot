@@ -21,36 +21,32 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' @param vertex.size Numeric vector of length `vcount(x)`. Absolute size of the vertex.
 #' @param vertex.nsides Numeric vector of length `vcount(x)`. Number of sizes of
 #' the vertex. E.g. three is a triangle, and 100 approximates a circle.
-#' @param vertex.color Vector of length `vcount(x)`. Vertex colors.
 #' @param vertex.size.range Vector of length `vcount(x)`.
-#' @param vertex.frame.color Vector of length `vcount(x)`.
 #' @param vertex.frame.prop Vector of length `vcount(x)`. What proportion of the
 #' vertex does the frame occupy (values between 0 and 1).
 #' @param vertex.rot Vector of length `vcount(x)`. Passed to [polygons::npolygon],
 #' elevation degree from which the polygon is drawn.
 #' @param vertex.label Character vector of length `vcount(x)`. Labels.
-#' @param vertex.label.fontsize Numeric vector.
-#' @param vertex.label.color Vector of colors of length `vcount(x)`.
-#' @param vertex.label.fontfamily Character vector of length `vcount(x)`.
-#' @param vertex.label.fontface See [grid::gpar]
 #' @param vertex.label.show Numeric scalar. Proportion of labels to show as the
 #' top ranking according to `vertex.size`.
 #' @param vertex.label.range Numeric vector of size 2 or 3. Relative scale of
 #' `vertex.label.fontsize` in points (see [grid::gpar]).
-#' @param edge.color A vector of length `ecount(x)`. Can be `NULL` in which case
-#' the color is picked as a mixture between ego and alters' `vertex.color` values.
-#' @param edge.width Vector of length `ecount(x)`.
 #' @param edge.width.range Vector of length `ecount(x)`.
 #' @param edge.arrow.size Vector of length `ecount(x)`.
 #' @param edge.curvature Numeric vector of length `ecount(x)`. Curvature of edges
 #' in terms of radians.
-#' @param edge.line.lty Vector of length `ecount(x)`.
 #' @param edge.line.breaks Vector of length `ecount(x)`. Number of vertices to
 #' draw (approximate) the arc (edge).
 #' @param sample.edges Numeric scalar between 0 and 1. Proportion of edges to sample.
 #' @param skip.vertex,skip.edges,skip.arrows Logical scalar. When `TRUE` the object
 #' is not plotted.
 #' @param add Logical scalar.
+#' @param vertex.col,vertex.fill Color (border) and fill of the vertex (both core
+#' and frame).
+#' @param edge.line.lwd Passed to [set_gpar()].
+#' @param ... Further arguments passed to [set_gpar()].
+#' @param gpar_order Vector of character specifying in what other the graphical
+#' parameters passed via `...` are evaluated.
 #' @param zero.margins Logical scalar.
 #' @importFrom viridis viridis
 #' @importFrom igraph layout_with_fr degree vcount ecount
@@ -88,24 +84,24 @@ nplot <- function(...) UseMethod("nplot")
 #' @rdname nplot
 nplot.igraph <- function(
   x,
-  layout       = igraph::layout_nicely(x),
-  vertex.size  = igraph::degree(x, mode="in"),
-  vertex.color = "tomato",
-  vertex.label = igraph::vertex_attr(x, "name"),
-  edge.width   = igraph::edge_attr(x, "weight"),
+  layout        = igraph::layout_nicely(x),
+  vertex.size   = igraph::degree(x, mode="in"),
+  vertex.col    = "tomato",
+  vertex.label  = igraph::vertex_attr(x, "name"),
+  edge.line.lwd = igraph::edge_attr(x, "weight"),
   ...
   ) {
 
-  if (!length(edge.width))
-    edge.width <- 1L
+  if (!length(edge.line.lwd))
+    edge.line.lwd <- 1L
 
   nplot.default(
-    edgelist     = igraph::as_edgelist(x, names = FALSE),
-    layout       = layout,
-    vertex.size  = vertex.size,
-    vertex.color = vertex.color,
-    vertex.label = vertex.label,
-    edge.width   = edge.width,
+    edgelist      = igraph::as_edgelist(x, names = FALSE),
+    layout        = layout,
+    vertex.size   = vertex.size,
+    vertex.col    = vertex.col,
+    vertex.label  = vertex.label,
+    edge.line.lwd = edge.line.lwd,
     ...
   )
 
@@ -119,7 +115,7 @@ nplot.network <- function(
   x,
   layout       = sna::gplot.layout.kamadakawai(x, NULL),
   vertex.size  = sna::degree(x, cmode="indegree"),
-  vertex.color = "tomato",
+  vertex.col = "tomato",
   vertex.label = network::get.vertex.attribute(x, "vertex.names"),
   ...
 ) {
@@ -128,7 +124,7 @@ nplot.network <- function(
     edgelist    = network::as.edgelist(x),
     layout      = layout,
     vertex.size = vertex.size,
-    vertex.color = vertex.color,
+    vertex.col = vertex.col,
     vertex.label = vertex.label,
     ...
   )
@@ -173,6 +169,18 @@ netplot_theme <- (function() {
 
 })()
 
+
+# vertex.color            = viridis::viridis(1),
+# vertex.frame.color      = grDevices::adjustcolor(vertex.color, red.f = .75, green.f = .75, blue.f = .75),
+# vertex.label.fontsize   = NULL,
+# vertex.label.color      = "black",
+# vertex.label.fontfamily = "HersheySans",
+# vertex.label.fontface   = "bold",
+# vertex.label.show       = .3,
+# edge.width              = 1,
+# edge.color              = ~ ego(alpha = .01) + alter,
+# edge.line.lty           = "solid",
+
 #' @export
 #' @rdname nplot
 #' @param edgelist An edgelist.
@@ -182,24 +190,15 @@ nplot.default <- function(
   vertex.size             = 1,
   bg.col                  = "transparent",
   vertex.nsides           = 50,
-  vertex.color            = viridis::viridis(1),
   vertex.size.range       = c(.01, .03),
-  vertex.frame.color      = grDevices::adjustcolor(vertex.color, red.f = .75, green.f = .75, blue.f = .75),
   vertex.rot              = 0,
   vertex.frame.prop       = .2,
   vertex.label            = NULL,
-  vertex.label.fontsize   = NULL,
-  vertex.label.color      = "black",
-  vertex.label.fontfamily = "HersheySans",
-  vertex.label.fontface   = "bold",
-  vertex.label.show       = .3,
   vertex.label.range      = c(5, 15),
-  edge.width              = 1,
+  vertex.label.show       = 1,
   edge.width.range        = c(1, 2),
   edge.arrow.size         = NULL,
-  edge.color              = ~ ego(alpha = .01) + alter,
   edge.curvature          = pi/3,
-  edge.line.lty           = "solid",
   edge.line.breaks        = 15,
   sample.edges            = 1,
   skip.vertex           = FALSE,
@@ -207,12 +206,14 @@ nplot.default <- function(
   skip.arrows             = skip.edges,
   add                     = FALSE,
   zero.margins            = TRUE,
+  gpar_order              = c("vertex", "vertex.core", "vertex.frame", "vertex.label", "edge", "edge.line", "edge.arrow"),
   ...
   ) {
 
 
   # listing objects
   netenv <- as.environment(mget(ls()))
+  netenv$gpar <- parse_gpar(...)
 
   netenv$N <- nrow(layout)
   netenv$M <- nrow(edgelist)
@@ -247,21 +248,30 @@ nplot.default <- function(
     )
 
   # Rescaling edges
-  netenv$edge.width <- rescale_size(
-    netenv$edge.width/max(netenv$edge.width, na.rm=TRUE),
-    rel = netenv$edge.width.range
-    )
+  # netenv$edge.line.lwd <- rescale_size(
+  #   netenv$edge.line.lwd/max(netenv$edge.line.lwd, na.rm=TRUE),
+  #   rel = netenv$edge.width.range
+  #   )
 
   # Rescaling arrows
   if (!length(netenv$edge.arrow.size))
     netenv$edge.arrow.size <- netenv$vertex.size[edgelist[,1]]/1.5
 
   # Rescaling text
-  if (!length(netenv$vertex.label.fontsize))
-    netenv$vertex.label.fontsize <- rescale_size(
-      netenv$vertex.size,
-      rel = netenv$vertex.label.range
-      )
+  if (length(netenv$vertex.label))
+    if (!length(netenv$gpar$vertex_label)) {
+
+      netenv$gpar <- c(netenv$gpar,
+      parse_gpar(
+        vertex.label.fontsize = rescale_size(
+          netenv$vertex.size,
+          rel = netenv$vertex.label.range
+        )
+        ))
+
+    }
+
+
 
   # Computing label threshold
   netenv$label_threshold <- stats::quantile(
@@ -347,35 +357,12 @@ nplot.default <- function(
     .M        = netenv$M
   )
 
-
   class(ans) <- c("netplot", class(ans))
 
-  # Passing edge color
-  if (length(vertex.color))
-    ans %<>% set_vertex_gpar(
-      "core",
-      fill = vertex.color,
-      col  = vertex.color
-    )
-
-  if (length(vertex.frame.color))
-    ans %<>% set_vertex_gpar(
-      "frame",
-      fill = vertex.frame.color,
-      col  = vertex.frame.color
-    )
-
-  if (length(edge.color)) {
-
-    ans %<>% set_edge_gpar(col = edge.color)
-
-    gp <- get_edge_gpar(ans, "line", "col", simplify=FALSE)$col
-    gp <- sapply(seq_along(gp), function(i) gp[[i]][netenv$edge.line.breaks[i]])
-
-    ans %<>% set_edge_gpar("arrow", fill = gp, col=gp)
-  }
-
-
+  # Setting gpar
+  for (g in gpar_order)
+    if (g %in% names(netenv$gpar))
+      ans <- do.call(set_gpar, c(list(ans), netenv$gpar[[g]]))
 
   ans
 

@@ -1,4 +1,10 @@
 #' `nplot` using base graphics
+#' @param vertex.color Vector of length `vcount(x)`. Vertex colors.
+#' @param vertex.frame.color Vector of length `vcount(x)`.
+#' @param edge.color A vector of length `ecount(x)`. Can be `NULL` in which case
+#' the color is picked as a mixture between ego and alters' `vertex.color` values.
+#' @param edge.width Vector of length `ecount(x)`.
+#' @param edge.line.lty Vector of length `ecount(x)`.
 #' @param edge.color.mix Proportion of the mixing.
 #' @param edge.color.alpha Either a vector of length 1 or 2, or a matrix of
 #' size `ecount(x)*2` with values in `[0,1]`. Alpha (transparency) levels (see

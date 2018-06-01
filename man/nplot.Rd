@@ -3,7 +3,6 @@
 \name{nplot}
 \alias{nplot}
 \alias{netplot}
-\alias{nplot}
 \alias{nplot.igraph}
 \alias{nplot.network}
 \alias{nplot.default}
@@ -13,42 +12,42 @@
 nplot(...)
 
 \method{nplot}{igraph}(x, layout = igraph::layout_nicely(x),
-  vertex.size = igraph::degree(x, mode = "in"), vertex.color = "tomato",
+  vertex.size = igraph::degree(x, mode = "in"), vertex.col = "tomato",
   vertex.label = igraph::vertex_attr(x, "name"),
-  edge.width = igraph::edge_attr(x, "weight"), ...)
+  edge.line.lwd = igraph::edge_attr(x, "weight"), ...)
 
 \method{nplot}{network}(x, layout = sna::gplot.layout.kamadakawai(x, NULL),
-  vertex.size = sna::degree(x, cmode = "indegree"), vertex.color = "tomato",
+  vertex.size = sna::degree(x, cmode = "indegree"), vertex.col = "tomato",
   vertex.label = network::get.vertex.attribute(x, "vertex.names"), ...)
 
 \method{nplot}{default}(edgelist, layout, vertex.size = 1,
-  bg.col = "transparent", vertex.nsides = 50,
-  vertex.color = viridis::viridis(1), vertex.size.range = c(0.01, 0.03),
-  vertex.frame.color = grDevices::adjustcolor(vertex.color, red.f = 0.75,
-  green.f = 0.75, blue.f = 0.75), vertex.rot = 0, vertex.frame.prop = 0.2,
-  vertex.label = NULL, vertex.label.fontsize = NULL,
-  vertex.label.color = "black", vertex.label.fontfamily = "HersheySans",
-  vertex.label.fontface = "bold", vertex.label.show = 0.3,
-  vertex.label.range = c(5, 15), edge.width = 1, edge.width.range = c(1,
-  2), edge.arrow.size = NULL, edge.color = ~ego(alpha = 0.01) + alter,
-  edge.curvature = pi/3, edge.line.lty = "solid", edge.line.breaks = 15,
-  sample.edges = 1, skip.vertex = FALSE, skip.edges = FALSE,
-  skip.arrows = skip.edges, add = FALSE, zero.margins = TRUE, ...)
+  bg.col = "transparent", vertex.nsides = 50, vertex.size.range = c(0.01,
+  0.03), vertex.rot = 0, vertex.frame.prop = 0.2, vertex.label = NULL,
+  vertex.label.range = c(5, 15), vertex.label.show = 1,
+  edge.width.range = c(1, 2), edge.arrow.size = NULL,
+  edge.curvature = pi/3, edge.line.breaks = 15, sample.edges = 1,
+  skip.vertex = FALSE, skip.edges = FALSE, skip.arrows = skip.edges,
+  add = FALSE, zero.margins = TRUE, gpar_order = c("vertex",
+  "vertex.core", "vertex.frame", "vertex.label", "edge", "edge.line",
+  "edge.arrow"), ...)
 
 \method{print}{netplot}(x, y = NULL, newpage = TRUE, ...)
 }
 \arguments{
+\item{...}{Further arguments passed to \code{\link[=set_gpar]{set_gpar()}}.}
+
 \item{x}{An \code{igraph} object.}
 
 \item{layout}{Numeric two-column matrix with the graph layout.}
 
 \item{vertex.size}{Numeric vector of length \code{vcount(x)}. Absolute size of the vertex.}
 
-\item{vertex.color}{Vector of length \code{vcount(x)}. Vertex colors.}
+\item{vertex.col, vertex.fill}{Color (border) and fill of the vertex (both core
+and frame).}
 
 \item{vertex.label}{Character vector of length \code{vcount(x)}. Labels.}
 
-\item{edge.width}{Vector of length \code{ecount(x)}.}
+\item{edge.line.lwd}{Passed to \code{\link[=set_gpar]{set_gpar()}}.}
 
 \item{edgelist}{An edgelist.}
 
@@ -59,39 +58,24 @@ the vertex. E.g. three is a triangle, and 100 approximates a circle.}
 
 \item{vertex.size.range}{Vector of length \code{vcount(x)}.}
 
-\item{vertex.frame.color}{Vector of length \code{vcount(x)}.}
-
 \item{vertex.rot}{Vector of length \code{vcount(x)}. Passed to \link[polygons:npolygon]{polygons::npolygon},
 elevation degree from which the polygon is drawn.}
 
 \item{vertex.frame.prop}{Vector of length \code{vcount(x)}. What proportion of the
 vertex does the frame occupy (values between 0 and 1).}
 
-\item{vertex.label.fontsize}{Numeric vector.}
-
-\item{vertex.label.color}{Vector of colors of length \code{vcount(x)}.}
-
-\item{vertex.label.fontfamily}{Character vector of length \code{vcount(x)}.}
-
-\item{vertex.label.fontface}{See \link[grid:gpar]{grid::gpar}}
+\item{vertex.label.range}{Numeric vector of size 2 or 3. Relative scale of
+\code{vertex.label.fontsize} in points (see \link[grid:gpar]{grid::gpar}).}
 
 \item{vertex.label.show}{Numeric scalar. Proportion of labels to show as the
 top ranking according to \code{vertex.size}.}
-
-\item{vertex.label.range}{Numeric vector of size 2 or 3. Relative scale of
-\code{vertex.label.fontsize} in points (see \link[grid:gpar]{grid::gpar}).}
 
 \item{edge.width.range}{Vector of length \code{ecount(x)}.}
 
 \item{edge.arrow.size}{Vector of length \code{ecount(x)}.}
 
-\item{edge.color}{A vector of length \code{ecount(x)}. Can be \code{NULL} in which case
-the color is picked as a mixture between ego and alters' \code{vertex.color} values.}
-
 \item{edge.curvature}{Numeric vector of length \code{ecount(x)}. Curvature of edges
 in terms of radians.}
-
-\item{edge.line.lty}{Vector of length \code{ecount(x)}.}
 
 \item{edge.line.breaks}{Vector of length \code{ecount(x)}. Number of vertices to
 draw (approximate) the arc (edge).}
@@ -104,6 +88,9 @@ is not plotted.}
 \item{add}{Logical scalar.}
 
 \item{zero.margins}{Logical scalar.}
+
+\item{gpar_order}{Vector of character specifying in what other the graphical
+parameters passed via \code{...} are evaluated.}
 
 \item{y, ...}{Ignored}
 
