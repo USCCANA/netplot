@@ -115,7 +115,7 @@ set_gpar <- function(x, type, element, idx, ...) {
   idx <- if (type == "vertex")
     as.list(idx)
   else
-    lapply(idx, function(e) x$.edgelist[e, ])
+    unname(split(x$.edgelist[idx,], idx)) #lapply(idx, function(e) x$.edgelist[e, ])
 
   # Converting
   listme <- function(...) {
@@ -187,14 +187,13 @@ set_edge_gpar <- function(x, element, idx, ...) {
   if (missing(idx))
     idx <- seq_len(x$.M)
 
-  dots <- list(...)
-
-  dots$x       <- x
-  dots$type    <- "edge"
-  dots$element <- element
-  dots$idx     <- idx
-
-  do.call(set_gpar, dots)
+  # dots <- list(...)
+  #
+  # dots$x       <- x
+  # dots$type    <- "edge"
+  # dots$element <- element
+  # dots$idx     <- idx
+  set_gpar(x = x, type = "edge", element = element, idx = idx, ...)
 
 }
 
@@ -257,7 +256,7 @@ get_gpar <- function(x, type, element, ..., idx, simplify=TRUE) {
   idx <- if (type == "vertex")
     as.list(idx)
   else
-    lapply(idx, function(e) x$.edgelist[e, ])
+    unname(split(x$.edgelist[idx,], idx))#lapply(idx, function(e) x$.edgelist[e, ])
 
   # Basic cheks
   dots <- c(...)

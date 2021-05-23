@@ -149,7 +149,7 @@ for (i in seq_along(ans$edge.coords)) {
     as.vector(t(cbind(coord[-n,1], coord[-1,1]))),
     as.vector(t(cbind(coord[-n,2], coord[-1,2]))),
     default.units = "native",
-    name = paste0("edge.coords",i),
+    name = sprintf("edge.coords%i",i),
     id = sort(rep(1:(n-1), 2)),
     gp = gpar(col = col, lwd=ans$edge.width[i], lineend=1)
     )
@@ -163,7 +163,7 @@ for (i in seq_along(ans$edge.arrow.coords))
     ans$edge.arrow.coords[[i]][,1],
     ans$edge.arrow.coords[[i]][,2],
     default.units = "native",
-    name = paste0("edge.arrow.coords",i),
+    name = sprintf("edge.arrow.coords%i",i),
     gp = gpar(col = ans$edge.color[[i]], fill=ans$edge.color[[i]],
               lwd=ans$edge.width[i])
     )
@@ -175,7 +175,7 @@ for (i in seq_along(ans$vertex.coords)) {
     ans$vertex.coords[[i]][,2],
     default.units = "native",
     gp = gpar(fill = ans$vertex.color[i], col = ans$vertex.color[i]),
-    name = paste0("vertex.coords",i)
+    name = sprintf("vertex.coords%i",i)
   )
 
   grid.polygon(
@@ -183,7 +183,7 @@ for (i in seq_along(ans$vertex.coords)) {
     ans$vertex.frame.coords[[i]][,2],
     default.units = "native",
     gp = gpar(fill = ans$vertex.frame.color[i], col = ans$vertex.frame.color[i]),
-    name = paste0("vertex.frame.coords",i)
+    name = sprintf("vertex.frame.coords%i",i)
   )
 }
 

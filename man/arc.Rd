@@ -4,7 +4,7 @@
 \alias{arc}
 \title{Arc between two nodes}
 \usage{
-arc(p0, p1, alpha = pi/3, n = 20L, radii = c(0, 0))
+arc(p0, p1, alpha = pi/3, n = 10L, radii = c(0, 0))
 }
 \arguments{
 \item{p0, p1}{Numeric vector of length 2. Center coordinates}

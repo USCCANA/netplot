@@ -198,8 +198,8 @@ color_formula <- function(x, col, alpha, env, type, mix = 1, postfix = NULL) {
 
   # Assigning values
   if (type == "vertex") {
-    env[[paste0("vertex_color_", postfix)]] <- col
-    env[[paste0("vertex_alpha_", postfix)]] <- alpha
+    env[[sprintf("vertex_color_%s", postfix)]] <- col
+    env[[sprintf("vertex_alpha_%s", postfix)]] <- alpha
   } else {
     env[["edge_color"]] <- col
     env[["edge_alpha"]] <- alpha

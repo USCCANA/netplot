@@ -12,11 +12,11 @@ netplot_name <- (function() {
     make = function(idx, for_graph = FALSE) {
 
       if (for_graph)
-        paste0("graph.", idx[1])
+        sprintf("graph.%i", idx[1])
       else if (length(idx) == 2)
         sprintf("edge.%i-%i", idx[1], idx[2])
       else if (length(idx) == 1L)
-        paste0("vertex.", idx)
+        sprintf("vertex.%i", idx)
       else
         stop("Invalid type.", call. = FALSE)
 

@@ -84,12 +84,12 @@ arc <- function(
   p0,
   p1,
   alpha = pi/3,
-  n     = 20L,
+  n     = 10L,
   radii = c(0, 0)
 ) {
 
   # If no curve, nothing to do (old fashioned straight line)
-  if (alpha == 0) {
+  if (alpha == 0 | n == 1) {
     alpha <- 1e-5
   }
 
@@ -105,7 +105,6 @@ arc <- function(
   } else {
     r <- d/2/(sin(alpha/2))
   }
-
 
   # Angles
   alpha0 <- asin(radii[1]/2/r)*2

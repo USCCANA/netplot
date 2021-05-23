@@ -201,7 +201,7 @@ nplot.default <- function(
   edge.width              = 1,
   edge.width.range        = c(1, 2),
   edge.arrow.size         = NULL,
-  edge.color              = ~ ego(alpha = .01) + alter,
+  edge.color              = ~ ego(alpha = .25) + alter,
   edge.curvature          = pi/3,
   edge.line.lty           = "solid",
   edge.line.breaks        = 10,
@@ -375,12 +375,12 @@ nplot.default <- function(
 
   if (length(edge.color)) {
 
-    ans <- set_edge_gpar(x = ans, col = edge.color)
+    ans <- set_edge_gpar(x = ans, element = "line", col = edge.color)
 
-    gp <- get_edge_gpar(ans, "line", "col", simplify=FALSE)$col
+    gp <- get_edge_gpar(x = ans, element = "line", "col", simplify=FALSE)$col
     gp <- sapply(seq_along(gp), function(i) gp[[i]][netenv$edge.line.breaks[i]])
 
-    ans <- set_edge_gpar(ans, "arrow", fill = gp, col=gp)
+    ans <- set_edge_gpar(x = ans, "arrow", fill = gp, col=gp)
   }
 
 
@@ -449,7 +449,7 @@ locate_vertex <- function(x) {
   v <- which.min(abs(x$layout - loc))
 
   list(
-    name = paste0("vertex.", v),
+    name = sprintf("vertex.%i", v),
     x    = loc[1,1],
     y    = loc[1,2],
     vp   = grid::current.viewport()

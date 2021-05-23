@@ -23,6 +23,7 @@ Imports:
 Suggests: 
     knitr,
     rmarkdown,
+    markdown,
     igraphdata,
     intergraph,
     ggraph,
