@@ -35,8 +35,8 @@ nplot(...)
   layout,
   vertex.size = 1,
   bg.col = "transparent",
-  vertex.nsides = 20,
-  vertex.color = viridis::viridis(1),
+  vertex.nsides = 15,
+  vertex.color = grDevices::hcl.colors(1),
   vertex.size.range = c(0.01, 0.03),
   vertex.frame.color = grDevices::adjustcolor(vertex.color, red.f = 0.75, green.f =
     0.75, blue.f = 0.75),

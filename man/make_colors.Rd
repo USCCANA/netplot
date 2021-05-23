@@ -42,8 +42,7 @@ indegree.
 data(UKfaculty, package="igraphdata")
 col <- make_vertex_colors(UKfaculty, "Group")
 
-if (require("magrittr")) {
-  library(magrittr)
+if (require(magrittr)) {
 
   nplot(UKfaculty) \%>\%
     set_vertex_gpar("core", fill = col, col=col) \%>\%

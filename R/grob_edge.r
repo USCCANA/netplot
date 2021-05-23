@@ -24,9 +24,13 @@ grob_edge <- function(netenv, e) {
     y          = coords[,2],
     id.lengths = rep(2, nbreaks),
     default.units = "native",
-    gp         = grid::gpar(
-      lwd = netenv$edge.width[e],
-      lineend = "butt"
+    gp         = do.call(
+      grid::gpar,
+      list(
+        lwd     = netenv$edge.width[e],
+        lineend = "butt",
+        lty     = netenv$edge.line.lty[e]
+        )
     ),
     name = "line"
   )

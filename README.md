@@ -8,6 +8,8 @@ status](https://travis-ci.org/USCCANA/netplot.svg?branch=master)](https://travis
 [![Build
 status](https://ci.appveyor.com/api/projects/status/3k2m3oq6o99qcs0r?svg=true)](https://ci.appveyor.com/project/gvegayon/netplot)
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![USC’s Department of Preventive
+Medicine](https://raw.githubusercontent.com/USCbiostats/badges/master/tommy-uscprevmed-badge.svg)](https://preventivemedicine.usc.edu)
 
 An alternative graph visualization engine that puts an emphasis on
 aesthetics at the same time of providing default parameters that provide

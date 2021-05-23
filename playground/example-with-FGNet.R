@@ -32,7 +32,7 @@ nplot(
   vertex.frame.prop  = .5,
   vertex.label.range = c(10,10),
   vertex.color       = "gray",
-  vertex.frame.color = viridis::inferno(max(frameCol))[frameCol],
+  vertex.frame.color = grDevices::hcl.colors(max(frameCol), "Inferno")[frameCol],
   vertex.nsides      = frameCol+2,
   bg.col             = "transparent",
   edge.arrow.size    = .03

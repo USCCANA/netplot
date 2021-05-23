@@ -1,6 +1,6 @@
 Package: netplot
 Title: Beautiful graph drawing
-Version: 0.0.9000
+Version: 0.1-0
 Authors@R: person("George", "Vega Yon", email = "g.vegayon@gmail.com", role = c("aut", "cre"),
   comment = c(ORCID = "0000-0002-3171-0844")
   )

@@ -137,16 +137,16 @@ netplot_theme <- (function() {
 
   v <- viridis::viridis(1)
   darkv <- adjustcolor(
-    viridis::viridis(1),
-    red.f   = .7,
-    green.f = .7,
-    blue.f  = .7
+    grDevices::hcl.colors(1),
+    red.f   = .5,
+    green.f = .5,
+    blue.f  = .5
   )
 
   default <- list(
-    vertex.core.col  = v,
-    vertex.core.fill = v,
-    vertex.frame.col = darkv,
+    vertex.core.col   = v,
+    vertex.core.fill  = v,
+    vertex.frame.col  = darkv,
     vertex.frame.fill = darkv,
     edge.col = ~ego(alpha=0) + alter(alpha = .7),
     name      = "default"
@@ -185,8 +185,8 @@ nplot.default <- function(
   layout,
   vertex.size             = 1,
   bg.col                  = "transparent",
-  vertex.nsides           = 20,
-  vertex.color            = viridis::viridis(1),
+  vertex.nsides           = 15,
+  vertex.color            = grDevices::hcl.colors(1),
   vertex.size.range       = c(.01, .03),
   vertex.frame.color      = grDevices::adjustcolor(vertex.color, red.f = .75, green.f = .75, blue.f = .75),
   vertex.rot              = 0,
@@ -206,7 +206,7 @@ nplot.default <- function(
   edge.line.lty           = "solid",
   edge.line.breaks        = 10,
   sample.edges            = 1,
-  skip.vertex           = FALSE,
+  skip.vertex             = FALSE,
   skip.edges              = FALSE,
   skip.arrows             = skip.edges,
   add                     = FALSE,
@@ -358,27 +358,29 @@ nplot.default <- function(
 
   # Passing edge color
   if (length(vertex.color))
-    ans %<>% set_vertex_gpar(
-      "core",
-      fill = vertex.color,
-      col  = vertex.color
+    ans <- set_vertex_gpar(
+      x       = ans,
+      element = "core",
+      fill    = vertex.color,
+      col     = vertex.color
     )
 
   if (length(vertex.frame.color))
-    ans %<>% set_vertex_gpar(
-      "frame",
-      fill = vertex.frame.color,
-      col  = vertex.frame.color
+    ans <- set_vertex_gpar(
+      x       = ans,
+      element = "frame",
+      fill    = vertex.frame.color,
+      col     = vertex.frame.color
     )
 
   if (length(edge.color)) {
 
-    ans %<>% set_edge_gpar(col = edge.color)
+    ans <- set_edge_gpar(x = ans, col = edge.color)
 
     gp <- get_edge_gpar(ans, "line", "col", simplify=FALSE)$col
     gp <- sapply(seq_along(gp), function(i) gp[[i]][netenv$edge.line.breaks[i]])
 
-    ans %<>% set_edge_gpar("arrow", fill = gp, col=gp)
+    ans <- set_edge_gpar(ans, "arrow", fill = gp, col=gp)
   }
 
 

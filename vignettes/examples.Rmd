@@ -135,9 +135,21 @@ l <- layout_with_fr(x)
 ```{r edge-color, fig.width=7, fig.height=3, fig.cap="Modifying `edge.color.mix`: Each figure shows a different parameter for the edge color mixer. From left to right, (a) colors the edges as alter, (b) mixes ego and alter's colors, and (c) only uses ego"}
 
 gridExtra::grid.arrange(
-  nplot(x, layout = l, edge.color = ~ego(mix=0) + alter(mix=1), vertex.size.range = c(.05,.1)),
-  nplot(x, layout = l, edge.color = ~ego(mix=.5) + alter(mix=.5), vertex.size.range = c(.05,.1)),
-  nplot(x, layout = l, edge.color = ~ego(mix=1) + alter(mix=0), vertex.size.range = c(.05,.1)),
+  nplot(
+    x, layout          = l,
+    edge.color        = ~ego(mix=0, alpha = .1, col="black") + alter(mix=1),
+    vertex.size.range = c(.05,.1)
+    ),
+  nplot(
+    x, layout          = l,
+    edge.color        = ~ego(mix=.5, alpha = .1, col="black") + alter(mix=.5),
+    vertex.size.range = c(.05,.1)
+    ),
+  nplot(
+    x, layout          = l,
+    edge.color        = ~ego(mix=1, alpha = .1, col="black") + alter(mix=0),
+    vertex.size.range = c(.05,.1)
+    ),
   ncol=3, nrow=1
 )
 
