@@ -15,7 +15,7 @@ fit_coords_to_dev(coords, adj = grDevices::dev.size())
 Adjust coordinates to fit aspect ratio of the device
 }
 \details{
-It first adjusts \code{coords} to range between \code{-1,1}, and then, using
+It first adjusts \code{coords} to range between \verb{-1,1}, and then, using
 \code{graphics::par("pin")}, it rescales the second column of it (\code{y}) to adjust
 for the device's aspec ratio.
 }

@@ -33,21 +33,21 @@ user can set various types of combination vaying the mixing of the colors,
 the alpha levels, and the actual mixing colors to create edge colors.
 }
 \examples{
-library(igraph)
-library(gridExtra)
-library(magrittr)
-net <- make_ring(4)
+if (require(gridExtra) & require(magrittr)) {
+  library(igraph)
+  net <- make_ring(4)
 
-set.seed(1)
-np <- nplot(net, vertex.color = viridis::viridis(4), vertex.size.range=c(.1, .1))
-np \%<>\% set_edge_gpar(lwd = 4)
+  set.seed(1)
+  np <- nplot(net, vertex.color = grDevices::hcl.colors(4), vertex.size.range=c(.1, .1))
+  np \%<>\% set_edge_gpar(lwd = 4)
 
-grid.arrange(
-  np,
-  np \%>\% set_edge_gpar(col =~ego + alter),
-  np \%>\% set_edge_gpar(col =~ego(alpha=0) + alter),
-  np \%>\% set_edge_gpar(col =~ego + alter(alpha=0)),
-  np \%>\% set_edge_gpar(col =~ego(mix=0) + alter(mix=1)),
-  np \%>\% set_edge_gpar(col =~ego(mix=1) + alter(mix=0))
-)
+  grid.arrange(
+    np,
+    np \%>\% set_edge_gpar(col =~ego + alter),
+    np \%>\% set_edge_gpar(col =~ego(alpha=0) + alter),
+    np \%>\% set_edge_gpar(col =~ego + alter(alpha=0)),
+    np \%>\% set_edge_gpar(col =~ego(mix=0) + alter(mix=1)),
+    np \%>\% set_edge_gpar(col =~ego(mix=1) + alter(mix=0))
+  )
+}
 }

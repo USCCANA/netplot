@@ -137,35 +137,35 @@ pushViewport(top)
 # Drawing ----------------------------------------------------------------------
 
 # Drawing edges
-for (i in seq_along(ans$edges.coords)) {
+for (i in seq_along(ans$edge.coords)) {
 
   # Computing vector of colors
-  n     <- nrow(ans$edges.coords[[i]])
-  col   <- ans$edges.color[[i]](seq(0, 1, length.out = n-1))
+  n     <- nrow(ans$edge.coords[[i]])
+  col   <- ans$edge.color[[i]](seq(0, 1, length.out = n-1))
   col   <- rgb(col[,1:3], alpha = col[,4], maxColorValue = 255)
-  coord <- ans$edges.coords[[i]]
+  coord <- ans$edge.coords[[i]]
 
   grid.polyline(
     as.vector(t(cbind(coord[-n,1], coord[-1,1]))),
     as.vector(t(cbind(coord[-n,2], coord[-1,2]))),
     default.units = "native",
-    name = paste0("edges.coords",i),
+    name = paste0("edge.coords",i),
     id = sort(rep(1:(n-1), 2)),
-    gp = gpar(col = col, lwd=ans$edges.width[i], lineend=1)
+    gp = gpar(col = col, lwd=ans$edge.width[i], lineend=1)
     )
 
-  ans$edges.color[[i]] <- col[n-1]
+  ans$edge.color[[i]] <- col[n-1]
 }
 
 # Drawing arrows
-for (i in seq_along(ans$edges.arrow.coords))
+for (i in seq_along(ans$edge.arrow.coords))
   grid.polygon(
-    ans$edges.arrow.coords[[i]][,1],
-    ans$edges.arrow.coords[[i]][,2],
+    ans$edge.arrow.coords[[i]][,1],
+    ans$edge.arrow.coords[[i]][,2],
     default.units = "native",
-    name = paste0("edges.arrow.coords",i),
-    gp = gpar(col = ans$edges.color[[i]], fill=ans$edges.color[[i]],
-              lwd=ans$edges.width[i])
+    name = paste0("edge.arrow.coords",i),
+    gp = gpar(col = ans$edge.color[[i]], fill=ans$edge.color[[i]],
+              lwd=ans$edge.width[i])
     )
 
 # Drawing vertices

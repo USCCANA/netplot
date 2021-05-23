@@ -49,7 +49,7 @@ grob_edge <- function(netenv, e) {
       default.units = "native",
       name = "arrow",
       gp   = grid::gpar(
-        lwd  = netenv$edges.width[e]
+        lwd  = netenv$edge.width[e]
       )
     ),
     name = netplot_name$make(c(i, j))

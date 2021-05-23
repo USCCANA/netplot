@@ -1,15 +1,22 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-netplot
-=======
 
-[![Travis build status](https://travis-ci.org/USCCANA/netplot.svg?branch=master)](https://travis-ci.org/USCCANA/netplot) [![Build status](https://ci.appveyor.com/api/projects/status/3k2m3oq6o99qcs0r?svg=true)](https://ci.appveyor.com/project/gvegayon/netplot) [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+# netplot
 
-An alternative graph visualization engine that puts an emphasis on aesthetics at the same time of providing default parameters that provide visualizations that are out-of-the-box nice.
+[![Travis build
+status](https://travis-ci.org/USCCANA/netplot.svg?branch=master)](https://travis-ci.org/USCCANA/netplot)
+[![Build
+status](https://ci.appveyor.com/api/projects/status/3k2m3oq6o99qcs0r?svg=true)](https://ci.appveyor.com/project/gvegayon/netplot)
+[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+
+An alternative graph visualization engine that puts an emphasis on
+aesthetics at the same time of providing default parameters that provide
+visualizations that are out-of-the-box nice.
 
 Some features:
 
-1.  Auto-scaling of vertices using sizes relative to the plotting device.
+1.  Auto-scaling of vertices using sizes relative to the plotting
+    device.
 2.  Embedded edge color mixer.
 3.  True curved edges drawing.
 4.  User-defined edge curvature.
@@ -18,13 +25,13 @@ Some features:
 
 The package uses the `grid` plotting system (just like `ggplot2`).
 
-Installation
-------------
+## Installation
 
 <!-- You can install the released version of netplot from [CRAN](https://CRAN.R-project.org) with: -->
 <!-- ``` r -->
 <!-- install.packages("netplot") -->
 <!-- ``` -->
+
 And the development version from [GitHub](https://github.com/) with:
 
 ``` r
@@ -32,8 +39,7 @@ And the development version from [GitHub](https://github.com/) with:
 devtools::install_github("USCCANA/netplot")
 ```
 
-Example
--------
+## Example
 
 This is a basic example which shows you how to solve a common problem:
 
@@ -84,7 +90,7 @@ nam <- sample(babynames::babynames$name, vcount(UKfaculty))
 ans <- nplot(
   UKfaculty,
   layout                = l,
-  vertex.color          = viridis::plasma(5)[V(UKfaculty)$Group + 1],
+  vertex.color          = grDevices::hcl.colors(5, "Plasma")[V(UKfaculty)$Group + 1],
   vertex.label          = nam,
   vertex.size.range     = c(.01, .04, 4),
   vertex.label.col      =  "black",
@@ -132,7 +138,7 @@ net <- simplify(USairports, edge.attr.comb = list(
 
 f <- 1.5
 col <- adjustcolor(
-  viridis::plasma(10, direction = -1, alpha = .5)[1],
+  rev(grDevices::hcl.colors(10, alpha = .5))[1],
   red.f = f, blue.f = f, green.f = f
   )
 
@@ -148,4 +154,4 @@ nplot(
   )
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-1.png" width="85%" />
+<img src="man/figures/README-us-airports-1.png" width="85%" />

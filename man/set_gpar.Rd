@@ -32,7 +32,7 @@ get_gpar(x, type, element, ..., idx, simplify = TRUE)
 \item{idx}{(optional) Integer vector. Indices of the elements to be modified.
 When missing, all elements are modified.}
 
-\item{...}{Parameters to be modified/retrieved. This is passed to \link[grid:editGrob]{grid::editGrob}
+\item{...}{Parameters to be modified/retrieved. This is passed to \link[grid:grid.edit]{grid::editGrob}
 via \link[grid:gpar]{grid::gpar}.}
 
 \item{simplify}{Logical. When \code{TRUE} it tries to simplify the result.

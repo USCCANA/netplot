@@ -2,12 +2,12 @@
 #' @param i,j Integer scalar. Indices of ego and alter from 1 through n.
 #' @param p Numeric scalar from 0 to 1. Proportion of mixing.
 #' @param vcols Vector of colors.
-#' @param alpha Numeric scalar from 0 to 1. Passed to [polygons::colorRamp2]
+#' @param alpha Numeric scalar from 0 to 1. Passed to [colorRamp2]
 #' @return A color.
 edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 
   grDevices::adjustcolor(grDevices::rgb(
-    polygons::colorRamp2(vcols[c(i,j)], alpha = FALSE)(p),
+    colorRamp2(vcols[c(i,j)], alpha = FALSE)(p),
     maxColorValue = 255
   ), alpha = alpha)
 
@@ -26,7 +26,7 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' @param vertex.frame.color Vector of length `vcount(x)`.
 #' @param vertex.frame.prop Vector of length `vcount(x)`. What proportion of the
 #' vertex does the frame occupy (values between 0 and 1).
-#' @param vertex.rot Vector of length `vcount(x)`. Passed to [polygons::npolygon],
+#' @param vertex.rot Vector of length `vcount(x)`. Passed to [npolygon],
 #' elevation degree from which the polygon is drawn.
 #' @param vertex.label Character vector of length `vcount(x)`. Labels.
 #' @param vertex.label.fontsize Numeric vector.
@@ -52,11 +52,9 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' is not plotted.
 #' @param add Logical scalar.
 #' @param zero.margins Logical scalar.
-#' @importFrom viridis viridis
 #' @importFrom igraph layout_with_fr degree vcount ecount
 #' @importFrom grDevices adjustcolor rgb
 #' @importFrom graphics lines par plot polygon rect segments plot.new plot.window
-#' @importFrom polygons piechart npolygon rotate colorRamp2 segments_gradient
 #'
 #' @details
 #' In the case of `edge.color`, the user can specify colors using [netplot-formulae].
@@ -168,6 +166,12 @@ netplot_theme <- (function() {
     reset = function() {
       message("Restablishing the default theme")
       current <<- default
+    },
+    vertex_defaults = function() {
+      str(current[grepl("^vertex\\.", names(current))])
+    },
+    edge_defaults = function() {
+      str(current[grepl("^edge\\.", names(current))])
     }
   )
 
@@ -181,7 +185,7 @@ nplot.default <- function(
   layout,
   vertex.size             = 1,
   bg.col                  = "transparent",
-  vertex.nsides           = 50,
+  vertex.nsides           = 20,
   vertex.color            = viridis::viridis(1),
   vertex.size.range       = c(.01, .03),
   vertex.frame.color      = grDevices::adjustcolor(vertex.color, red.f = .75, green.f = .75, blue.f = .75),
@@ -200,7 +204,7 @@ nplot.default <- function(
   edge.color              = ~ ego(alpha = .01) + alter,
   edge.curvature          = pi/3,
   edge.line.lty           = "solid",
-  edge.line.breaks        = 15,
+  edge.line.breaks        = 10,
   sample.edges            = 1,
   skip.vertex           = FALSE,
   skip.edges              = FALSE,
@@ -212,7 +216,7 @@ nplot.default <- function(
 
 
   # listing objects
-  netenv <- as.environment(mget(ls()))
+  netenv <- environment()
 
   netenv$N <- nrow(layout)
   netenv$M <- nrow(edgelist)
@@ -225,12 +229,14 @@ nplot.default <- function(
   }
 
   # Checking defaults for vertex
-  for (p in ls(pattern = "^vertex", envir = netenv))
+  vertex_par <- ls(pattern = "^vertex\\.", envir = netenv)
+  for (p in vertex_par)
     if (length(netenv[[p]]) > 0 && length(netenv[[p]]) < netenv$N)
       netenv[[p]] <- .rep(netenv[[p]], netenv$N)
 
   # Checking defaults for edges
-  for (p in ls(pattern = "^edge", envir = netenv))
+  edge_par <- ls(pattern = "^edge\\.", envir = netenv)
+  for (p in edge_par)
     if (length(netenv[[p]]) > 0 && length(netenv[[p]]) < netenv$M)
       netenv[[p]] <- .rep(netenv[[p]], netenv$M)
 

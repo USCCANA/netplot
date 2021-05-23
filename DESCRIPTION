@@ -11,20 +11,15 @@ Depends: R (>= 3.4.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Remotes: USCbiostats/polygons
-RoxygenNote: 6.0.1.9000
+RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
 Imports: 
-    viridis,
     graphics,
     grDevices,
     igraph,
-    polygons,
-    gridExtra,
     network,
     sna,
-    stats,
-    magrittr
+    stats
 Suggests: 
     knitr,
     rmarkdown,
@@ -33,7 +28,9 @@ Suggests:
     ggraph,
     gridGraphics,
     ggplot2,
-    gridBase
+    gridExtra,
+    gridBase,
+    magrittr
 VignetteBuilder: knitr 
 URL: https://github.com/USCCANA/netplot
 BugReports: https://github.com/USCCANA/netplot/issues

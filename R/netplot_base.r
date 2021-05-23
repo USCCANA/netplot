@@ -36,7 +36,7 @@ nplot_base <- function(
   # Computing colors
   if (!length(vertex.color)) {
     vertex.color <- length(table(igraph::degree(x, mode = "in")))
-    vertex.color <- viridis::viridis(vertex.color)
+    vertex.color <- grDevices::hcl.colors(vertex.color)
     vertex.color <- vertex.color[
       as.factor(igraph::degree(x, mode = "in"))
       ]
@@ -97,14 +97,14 @@ nplot_base <- function(
   )/cos(pi/6)
 
   # Making space for the arrow and edges coordinates
-  edges.coords <- vector("list", nrow(E))
-  edges.arrow.coords <- vector("list", length(edges.coords))
+  edge.coords <- vector("list", nrow(E))
+  edge.arrow.coords <- vector("list", length(edge.coords))
 
   if (length(edge.curvature) == 1)
-    edge.curvature <- rep(edge.curvature, length(edges.coords))
+    edge.curvature <- rep(edge.curvature, length(edge.coords))
 
   if (length(edge.line.breaks) == 1)
-    edge.line.breaks <- rep(edge.line.breaks, length(edges.coords))
+    edge.line.breaks <- rep(edge.line.breaks, length(edge.coords))
 
 
   for (e in 1:nrow(E)) {
@@ -113,7 +113,7 @@ nplot_base <- function(
     j <- E[e,2]
 
     # Calculating edges coordinates
-    edges.coords[[e]] <- arc(
+    edge.coords[[e]] <- arc(
       layout[i,], layout[j,],
       radii = vertex.size[c(i,j)] + c(0, arrow.size.adj[e]),
       alpha = edge.curvature[e],
@@ -121,9 +121,9 @@ nplot_base <- function(
     )
 
     # Computing arrow
-    alpha1 <- attr(edges.coords[[e]], "alpha1")
-    edges.arrow.coords[[e]] <- arrow_fancy(
-      x = edges.coords[[e]][nrow(edges.coords[[e]]),1:2] +
+    alpha1 <- attr(edge.coords[[e]], "alpha1")
+    edge.arrow.coords[[e]] <- arrow_fancy(
+      x = edge.coords[[e]][nrow(edge.coords[[e]]),1:2] +
         arrow.size.adj[e]*c(cos(alpha1), sin(alpha1)),
       alpha = alpha1,
       l     = edge.arrow.size[e]
@@ -133,19 +133,19 @@ nplot_base <- function(
 
   # Edges ----------------------------------------------------------------------
   if (!length(edge.color.mix))
-    edge.color.mix <- rep(.5, length(edges.coords))
+    edge.color.mix <- rep(.5, length(edge.coords))
   else if (length(edge.color.mix) == 1)
-    edge.color.mix <- rep(edge.color.mix, length(edges.coords))
+    edge.color.mix <- rep(edge.color.mix, length(edge.coords))
 
   if (!length(edge.line.lty))
-    edge.line.lty <- rep(1L, length(edges.coords))
+    edge.line.lty <- rep(1L, length(edge.coords))
   else if (length(edge.line.lty) == 1)
-    edge.line.lty <- rep(edge.line.lty, length(edges.coords))
+    edge.line.lty <- rep(edge.line.lty, length(edge.coords))
 
   if (!length(edge.color.alpha))
-    edge.color.alpha <- matrix(.5, nrow= length(edges.coords), ncol=2)
+    edge.color.alpha <- matrix(.5, nrow= length(edge.coords), ncol=2)
   else if (length(edge.color.alpha) <= 2)
-    edge.color.alpha <- matrix(edge.color.alpha, nrow= length(edges.coords), ncol=2, byrow = TRUE)
+    edge.color.alpha <- matrix(edge.color.alpha, nrow= length(edge.coords), ncol=2, byrow = TRUE)
 
   # Nodes ----------------------------------------------------------------------
   if (length(vertex.color) == 1)
@@ -163,11 +163,11 @@ nplot_base <- function(
   if (length(vertex.frame.prop) == 1)
     vertex.frame.prop <- rep(vertex.frame.prop, nrow(layout))
 
-  edges.color <- vector("list", length(edges.coords))
+  edge.color <- vector("list", length(edge.coords))
 
-  for (i in seq_along(edges.coords)) {
+  for (i in seq_along(edge.coords)) {
 
-    if (!length(edges.coords[[i]]))
+    if (!length(edge.coords[[i]]))
       next
 
     # Not plotting self (for now)
@@ -183,7 +183,7 @@ nplot_base <- function(
       alpha = 1
     )
 
-    edges.color[[i]] <- polygons::colorRamp2(
+    edge.color[[i]] <- colorRamp2(
       c(
         adjustcolor(col, alpha.f = edge.color.alpha[i,1]),
         adjustcolor(col, alpha.f = edge.color.alpha[i,2])
@@ -191,9 +191,9 @@ nplot_base <- function(
 
     # Drawing lines
     if (!skip.edges) {
-      polygons::segments_gradient(
-        edges.coords[[i]], lwd= edge.width[i],
-        col = edges.color[[i]],
+      segments_gradient(
+        edge.coords[[i]], lwd= edge.width[i],
+        col = edge.color[[i]],
         lty = edge.line.lty[i]
       )
     }
@@ -201,7 +201,7 @@ nplot_base <- function(
     if (!skip.arrows) {
       # Drawing arrows
       graphics::polygon(
-        edges.arrow.coords[[i]],
+        edge.arrow.coords[[i]],
         col    = col,
         border = col,
         lwd    = edge.width[i]
@@ -218,13 +218,13 @@ nplot_base <- function(
   if (!skip.vertex)
     for (i in 1:nrow(layout)) {
       # Computing coordinates
-      vertex.coords[[i]] <- polygons::npolygon(
+      vertex.coords[[i]] <- npolygon(
         layout[i,1], layout[i,2],
         n = vertex.nsides[i],
         r = vertex.size[i]*vertex.frame.prop[i],
         vertex.rot[i]
       )
-      vertex.frame.coords[[i]] <- polygons::piechart(
+      vertex.frame.coords[[i]] <- piechart(
         1,
         origin = layout[i,],
         edges  = vertex.nsides[i],
@@ -261,10 +261,10 @@ nplot_base <- function(
       vertex.color        = vertex.color,
       vertex.frame.coords = vertex.frame.coords,
       vertex.frame.color  = vertex.frame.color,
-      edges.color         = edges.color,
-      edges.coords        = edges.coords,
-      edges.arrow.coords  = edges.arrow.coords,
-      edges.width         = edge.width,
+      edge.color         = edge.color,
+      edge.coords        = edge.coords,
+      edge.arrow.coords  = edge.arrow.coords,
+      edge.width         = edge.width,
       xlim                = xlim,
       ylim                = ylim
     )

@@ -23,13 +23,13 @@ new_edge_coloring <- function(
 
       # [OPTIONAL] ---------------------------------------------------------------
       # Linear combination between i and j
-      col_i <- polygons::colorRamp2(x=c(col_i, col_j))(mix[e])
+      col_i <- colorRamp2(x=c(col_i, col_j))(mix[e])
       col_i <- grDevices::rgb(col_i, alpha=col_i[,4], maxColorValue = 255)
       col_j <- col_i
       # --------------------------------------------------------------------------
 
       # Applying alpha levels and getting mix
-      col <- polygons::colorRamp2(
+      col <- colorRamp2(
         x = c(
           grDevices::adjustcolor(col = col_i, alpha.f = alpha_i),
           grDevices::adjustcolor(col = col_j, alpha.f = alpha_j)
@@ -50,7 +50,7 @@ new_edge_coloring <- function(
       col_ij   <- grDevices::adjustcolor(col = edge_color[e], alpha.f = edge_alpha[e])
 
       # Applying alpha levels and getting mix
-      col <- polygons::colorRamp2(x=
+      col <- colorRamp2(x=
         c(
           grDevices::adjustcolor(col = col_ij, alpha.f = alpha_i),
           grDevices::adjustcolor(col = col_ij, alpha.f = alpha_j)
@@ -146,23 +146,23 @@ netplot_edge_formulae <- function(x, fm) {
 #' @param ... Passed to `color_formula`.
 #' @param x An object of class [netplot].
 #' @examples
-#' library(igraph)
-#' library(gridExtra)
-#' library(magrittr)
-#' net <- make_ring(4)
+#' if (require(gridExtra) & require(magrittr)) {
+#'   library(igraph)
+#'   net <- make_ring(4)
 #'
-#' set.seed(1)
-#' np <- nplot(net, vertex.color = viridis::viridis(4), vertex.size.range=c(.1, .1))
-#' np %<>% set_edge_gpar(lwd = 4)
+#'   set.seed(1)
+#'   np <- nplot(net, vertex.color = grDevices::hcl.colors(4), vertex.size.range=c(.1, .1))
+#'   np %<>% set_edge_gpar(lwd = 4)
 #'
-#' grid.arrange(
-#'   np,
-#'   np %>% set_edge_gpar(col =~ego + alter),
-#'   np %>% set_edge_gpar(col =~ego(alpha=0) + alter),
-#'   np %>% set_edge_gpar(col =~ego + alter(alpha=0)),
-#'   np %>% set_edge_gpar(col =~ego(mix=0) + alter(mix=1)),
-#'   np %>% set_edge_gpar(col =~ego(mix=1) + alter(mix=0))
-#' )
+#'   grid.arrange(
+#'     np,
+#'     np %>% set_edge_gpar(col =~ego + alter),
+#'     np %>% set_edge_gpar(col =~ego(alpha=0) + alter),
+#'     np %>% set_edge_gpar(col =~ego + alter(alpha=0)),
+#'     np %>% set_edge_gpar(col =~ego(mix=0) + alter(mix=1)),
+#'     np %>% set_edge_gpar(col =~ego(mix=1) + alter(mix=0))
+#'   )
+#' }
 #' @name netplot-formulae
 #' @export
 color_formula <- function(x, col, alpha, env, type, mix = 1, postfix = NULL) {

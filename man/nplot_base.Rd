@@ -4,16 +4,33 @@
 \alias{nplot_base}
 \title{\code{nplot} using base graphics}
 \usage{
-nplot_base(x, layout = igraph::layout_nicely(x),
-  vertex.size = igraph::degree(x, mode = "in"), bg.col = "lightgray",
-  vertex.nsides = 50, vertex.color = NULL, vertex.size.range = c(0.01,
-  0.03), vertex.frame.color = NULL, vertex.rot = 0,
-  vertex.frame.prop = 0.1, edge.width = NULL, edge.width.range = c(1, 2),
-  edge.arrow.size = NULL, edge.color = NULL, edge.color.mix = 0.5,
-  edge.color.alpha = c(0.1, 0.5), edge.curvature = pi/3,
-  edge.line.lty = "solid", edge.line.breaks = 15, sample.edges = 1,
-  skip.vertex = FALSE, skip.edges = FALSE, skip.arrows = skip.edges,
-  add = FALSE, zero.margins = TRUE)
+nplot_base(
+  x,
+  layout = igraph::layout_nicely(x),
+  vertex.size = igraph::degree(x, mode = "in"),
+  bg.col = "lightgray",
+  vertex.nsides = 50,
+  vertex.color = NULL,
+  vertex.size.range = c(0.01, 0.03),
+  vertex.frame.color = NULL,
+  vertex.rot = 0,
+  vertex.frame.prop = 0.1,
+  edge.width = NULL,
+  edge.width.range = c(1, 2),
+  edge.arrow.size = NULL,
+  edge.color = NULL,
+  edge.color.mix = 0.5,
+  edge.color.alpha = c(0.1, 0.5),
+  edge.curvature = pi/3,
+  edge.line.lty = "solid",
+  edge.line.breaks = 15,
+  sample.edges = 1,
+  skip.vertex = FALSE,
+  skip.edges = FALSE,
+  skip.arrows = skip.edges,
+  add = FALSE,
+  zero.margins = TRUE
+)
 }
 \arguments{
 \item{x}{An \code{igraph} object.}
@@ -33,7 +50,7 @@ the vertex. E.g. three is a triangle, and 100 approximates a circle.}
 
 \item{vertex.frame.color}{Vector of length \code{vcount(x)}.}
 
-\item{vertex.rot}{Vector of length \code{vcount(x)}. Passed to \link[polygons:npolygon]{polygons::npolygon},
+\item{vertex.rot}{Vector of length \code{vcount(x)}. Passed to \link{npolygon},
 elevation degree from which the polygon is drawn.}
 
 \item{vertex.frame.prop}{Vector of length \code{vcount(x)}. What proportion of the
@@ -51,7 +68,7 @@ the color is picked as a mixture between ego and alters' \code{vertex.color} val
 \item{edge.color.mix}{Proportion of the mixing.}
 
 \item{edge.color.alpha}{Either a vector of length 1 or 2, or a matrix of
-size \code{ecount(x)*2} with values in \code{[0,1]}. Alpha (transparency) levels (see
+size \code{ecount(x)*2} with values in \verb{[0,1]}. Alpha (transparency) levels (see
 details)}
 
 \item{edge.curvature}{Numeric vector of length \code{ecount(x)}. Curvature of edges

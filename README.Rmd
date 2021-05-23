@@ -74,7 +74,7 @@ nam <- sample(babynames::babynames$name, vcount(UKfaculty))
 ans <- nplot(
   UKfaculty,
   layout                = l,
-  vertex.color          = viridis::plasma(5)[V(UKfaculty)$Group + 1],
+  vertex.color          = grDevices::hcl.colors(5, "Plasma")[V(UKfaculty)$Group + 1],
   vertex.label          = nam,
   vertex.size.range     = c(.01, .04, 4),
   vertex.label.col      =  "black",
@@ -93,7 +93,7 @@ ans
 
 ### USairports
 
-```{r, cache=FALSE}
+```{r us-airports, cache=FALSE}
 # Loading the data
 data(USairports, package="igraphdata")
 
@@ -121,7 +121,7 @@ net <- simplify(USairports, edge.attr.comb = list(
 
 f <- 1.5
 col <- adjustcolor(
-  viridis::plasma(10, direction = -1, alpha = .5)[1],
+  rev(grDevices::hcl.colors(10, alpha = .5))[1],
   red.f = f, blue.f = f, green.f = f
   )
 

@@ -16,18 +16,19 @@
 #' data(UKfaculty, package="igraphdata")
 #' col <- make_vertex_colors(UKfaculty, "Group")
 #'
-#' library(magrittr)
+#' if (require("magrittr")) {
+#'   library(magrittr)
 #'
-#' nplot(UKfaculty) %>%
-#'   set_vertex_gpar("core", fill = col, col=col) %>%
-#'   set_vertex_gpar("frame", fill = col, col=col, alpha=.7) %>%
-#'   set_edge_gpar(col="gray50", fill="gray50", alpha=.5)
-#'
+#'   nplot(UKfaculty) %>%
+#'     set_vertex_gpar("core", fill = col, col=col) %>%
+#'     set_vertex_gpar("frame", fill = col, col=col, alpha=.7) %>%
+#'     set_edge_gpar(col="gray50", fill="gray50", alpha=.5)
+#' }
 #' @export
 make_colors <- function(
   dat,
   categorical = FALSE,
-  color_map = viridis::viridis
+  color_map   = grDevices::hcl.colors
   ) {
 
   # What type of attribute?

@@ -13,7 +13,7 @@ edge_color_mixer(i, j, vcols, p = 0.5, alpha = 0.15)
 
 \item{p}{Numeric scalar from 0 to 1. Proportion of mixing.}
 
-\item{alpha}{Numeric scalar from 0 to 1. Passed to \link[polygons:colorRamp2]{polygons::colorRamp2}}
+\item{alpha}{Numeric scalar from 0 to 1. Passed to \link{colorRamp2}}
 }
 \value{
 A color.

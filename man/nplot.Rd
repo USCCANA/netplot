@@ -3,7 +3,6 @@
 \name{nplot}
 \alias{nplot}
 \alias{netplot}
-\alias{nplot}
 \alias{nplot.igraph}
 \alias{nplot.network}
 \alias{nplot.default}
@@ -12,28 +11,59 @@
 \usage{
 nplot(...)
 
-\method{nplot}{igraph}(x, layout = igraph::layout_nicely(x),
-  vertex.size = igraph::degree(x, mode = "in"), vertex.color = "tomato",
+\method{nplot}{igraph}(
+  x,
+  layout = igraph::layout_nicely(x),
+  vertex.size = igraph::degree(x, mode = "in"),
+  vertex.color = "tomato",
   vertex.label = igraph::vertex_attr(x, "name"),
-  edge.width = igraph::edge_attr(x, "weight"), ...)
+  edge.width = igraph::edge_attr(x, "weight"),
+  ...
+)
 
-\method{nplot}{network}(x, layout = sna::gplot.layout.kamadakawai(x, NULL),
-  vertex.size = sna::degree(x, cmode = "indegree"), vertex.color = "tomato",
-  vertex.label = network::get.vertex.attribute(x, "vertex.names"), ...)
+\method{nplot}{network}(
+  x,
+  layout = sna::gplot.layout.kamadakawai(x, NULL),
+  vertex.size = sna::degree(x, cmode = "indegree"),
+  vertex.color = "tomato",
+  vertex.label = network::get.vertex.attribute(x, "vertex.names"),
+  ...
+)
 
-\method{nplot}{default}(edgelist, layout, vertex.size = 1,
-  bg.col = "transparent", vertex.nsides = 50,
-  vertex.color = viridis::viridis(1), vertex.size.range = c(0.01, 0.03),
-  vertex.frame.color = grDevices::adjustcolor(vertex.color, red.f = 0.75,
-  green.f = 0.75, blue.f = 0.75), vertex.rot = 0, vertex.frame.prop = 0.2,
-  vertex.label = NULL, vertex.label.fontsize = NULL,
-  vertex.label.color = "black", vertex.label.fontfamily = "HersheySans",
-  vertex.label.fontface = "bold", vertex.label.show = 0.3,
-  vertex.label.range = c(5, 15), edge.width = 1, edge.width.range = c(1,
-  2), edge.arrow.size = NULL, edge.color = ~ego(alpha = 0.01) + alter,
-  edge.curvature = pi/3, edge.line.lty = "solid", edge.line.breaks = 15,
-  sample.edges = 1, skip.vertex = FALSE, skip.edges = FALSE,
-  skip.arrows = skip.edges, add = FALSE, zero.margins = TRUE, ...)
+\method{nplot}{default}(
+  edgelist,
+  layout,
+  vertex.size = 1,
+  bg.col = "transparent",
+  vertex.nsides = 20,
+  vertex.color = viridis::viridis(1),
+  vertex.size.range = c(0.01, 0.03),
+  vertex.frame.color = grDevices::adjustcolor(vertex.color, red.f = 0.75, green.f =
+    0.75, blue.f = 0.75),
+  vertex.rot = 0,
+  vertex.frame.prop = 0.2,
+  vertex.label = NULL,
+  vertex.label.fontsize = NULL,
+  vertex.label.color = "black",
+  vertex.label.fontfamily = "HersheySans",
+  vertex.label.fontface = "bold",
+  vertex.label.show = 0.3,
+  vertex.label.range = c(5, 15),
+  edge.width = 1,
+  edge.width.range = c(1, 2),
+  edge.arrow.size = NULL,
+  edge.color = ~ego(alpha = 0.01) + alter,
+  edge.curvature = pi/3,
+  edge.line.lty = "solid",
+  edge.line.breaks = 10,
+  sample.edges = 1,
+  skip.vertex = FALSE,
+  skip.edges = FALSE,
+  skip.arrows = skip.edges,
+  add = FALSE,
+  zero.margins = TRUE,
+  ...
+)
 
 \method{print}{netplot}(x, y = NULL, newpage = TRUE, ...)
 }
@@ -61,7 +91,7 @@ the vertex. E.g. three is a triangle, and 100 approximates a circle.}
 
 \item{vertex.frame.color}{Vector of length \code{vcount(x)}.}
 
-\item{vertex.rot}{Vector of length \code{vcount(x)}. Passed to \link[polygons:npolygon]{polygons::npolygon},
+\item{vertex.rot}{Vector of length \code{vcount(x)}. Passed to \link{npolygon},
 elevation degree from which the polygon is drawn.}
 
 \item{vertex.frame.prop}{Vector of length \code{vcount(x)}. What proportion of the
@@ -113,7 +143,7 @@ is not plotted.}
 An object of class \code{c("netplot", "gTree", "grob", "gDesc")}. The object
 has an additional set of attributes:
 \itemize{
-\item \code{.xlim, .ylim} vector of size two with the x-asis/y-axis limits.
+\item \verb{.xlim, .ylim} vector of size two with the x-asis/y-axis limits.
 \item \code{.layout} A numeric matrix of size \code{vcount(x) * 2} with the vertices positions
 \item \code{.edgelist} A numeric matrix, The edgelist.
 }

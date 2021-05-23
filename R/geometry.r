@@ -57,23 +57,20 @@ fit_coords_to_dev <- function(coords, adj = grDevices::dev.size()) {
 
 }
 
-#' Rotate a polygon
-#' @noRd
+#' Rotation of polygon
+#' @param mat Two-column numeric matrix. Coordinates of the polygon.
+#' @param origin Numeric vector of length two. Origin.
+#' @param alpha Numeric scalar. Rotation degree in radians.
+#' @export
 rotate <- function(mat, origin, alpha) {
+  R <- matrix(
+    c(cos(alpha), -sin(alpha), sin(alpha), cos(alpha)),
+    nrow = 2, byrow = TRUE)
 
-  R <- matrix(c(cos(alpha), -sin(alpha), sin(alpha), cos(alpha)), nrow=2, ncol=2)
-
-  origin <- matrix(origin, ncol=2, byrow = TRUE, nrow=nrow(mat))
-  ((mat - origin) %*% R) + origin
+  origin <- matrix(c(origin[1], origin[2]), ncol=2, nrow = nrow(mat), byrow = TRUE)
+  t(R %*% t(mat - origin)) + origin
 }
 
-
-#' Compute coordinates for an nsided polygon
-#' @noRd
-npolygon <- function (x = 0, y = 0, n = 6L, r = 1, d = 2 * pi/(n)/2) {
-  deg <- seq(d, 2 * pi + d, length.out = n + 1)[-(n + 1)]
-  cbind(x = cos(deg) * r + x, y = sin(deg) * r + y)
-}
 
 #' Arc between two nodes
 #'
