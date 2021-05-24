@@ -3,8 +3,7 @@
 
 # netplot
 
-[![Travis build
-status](https://travis-ci.org/USCCANA/netplot.svg?branch=master)](https://travis-ci.org/USCCANA/netplot)
+[![R](https://github.com/USCCANA/netplot/actions/workflows/r-check.yml/badge.svg)](https://github.com/USCCANA/netplot/actions/workflows/r-check.yml)
 [![Build
 status](https://ci.appveyor.com/api/projects/status/3k2m3oq6o99qcs0r?svg=true)](https://ci.appveyor.com/project/gvegayon/netplot)
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
