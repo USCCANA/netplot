@@ -135,9 +135,9 @@ nplot.network <- function(
 
 netplot_theme <- (function() {
 
-  v <- viridis::viridis(1)
+  v <- grDevices::hcl.colors(1)
   darkv <- adjustcolor(
-    grDevices::hcl.colors(1),
+    v,
     red.f   = .5,
     green.f = .5,
     blue.f  = .5
