@@ -31,8 +31,8 @@ knitr::opts_chunk$set(
 ```{r pkgs-and-data, message=FALSE, warning=FALSE}
 library(netplot)
 library(igraph)
-library(ggraph)
 library(sna)
+library(ggraph)
 
 # We will use the UKfaculty data from the igraphdata package
 data("UKfaculty", package = "igraphdata")
@@ -53,31 +53,31 @@ map_base_to_grid <- function(fun) {
 ```
 
 
-```{r nplot-vs-plot, fig.keep='none'}
+```{r igraph-sna, fig.keep='none'}
 # Mapping base to grid
-ig <- map_base_to_grid(function() plot(UKfaculty))
-nw <- map_base_to_grid(function() gplot(as.matrix(as_adj(UKfaculty)), coord = l_ukf))
-np <- nplot(UKfaculty, layout = l_ukf)
+ig <- map_base_to_grid(function() plot(UKfaculty, main = "igraph"))
+nw <- map_base_to_grid(function() gplot(as.matrix(as_adj(UKfaculty)), coord = l_ukf, main = "sna"))
+```
+
+```{r nplot, fig.keep='none'}
+nplot(UKfaculty, layout = l_ukf, main="netplot")
+grid::grid.text("netplot", x = .05, y=.9)
+np <- grid::grid.grab()
 ```
 
 Here is an example with [`ggraph`](https://cran.r-project.org/package=ggraph)
 
 ```{r, fig.width=7, fig.height=5, fig.keep='none'}
-# This step is done to set a manual layout
-# V(UKfaculty)$x <- l_ukf[,1]
-# V(UKfaculty)$y <- l_ukf[,2]
-# graph_attr(UKfaculty, "node.positions") <- l_ukf
-
-ggraph::ggraph(UKfaculty) +
-  ggraph::geom_edge_arc(aes(alpha = ..index..), curvature=.15) +
-  ggraph::geom_node_point(aes(colour = Group, size=igraph::degree(UKfaculty))) +
-  ggplot2::theme(legend.position="none")
+ggraph::ggraph(UKfaculty, layout = l_ukf) +
+  ggraph::geom_edge_arc() +
+  ggraph::geom_node_point() +
+  ggplot2::ggtitle("ggraph")
 
 gg <- grid::grid.grab()
 ```
 
 
-```{r, fig.width=7, fig.height=7, fig.cap="Comparision of default `igraph` vs `netplot` default call. `nplot` fills completely the plotting area, and adjusts vertex size, edge width, and edge arrows' size accordingly to the plotting area and plotting device.", fig.keep='last'}
+```{r, fig.width=7, fig.height=7, fig.cap="Comparision of default `igraph`, `sna`, `ggraph`, and `netplot` default call. `nplot` fills completely the plotting area, and adjusts vertex size, edge width, and edge arrows' size accordingly to the plotting area and plotting device."}
 # Putting all together
 gridExtra::grid.arrange(ig, nw, gg, np, nrow=2, ncol=2)
 ```

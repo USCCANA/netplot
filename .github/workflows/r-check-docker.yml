@@ -1,0 +1,37 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+#
+# See https://github.com/r-lib/actions/tree/master/examples#readme for
+# additional example workflows available for the R community.
+
+name: R ci w docker
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: Ubuntu-latest
+    strategy:
+      matrix:
+        cntr: gvegayon/netplot-deps:latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Container
+        run: docker pull ${{ matrix.cntr }}
+
+      - name: SessionInfo
+        run: docker run --rm -i -v ${PWD}:/mnt -w /mnt ${{ matrix.cntr }} R -q -e 'sessionInfo()'
+
+      - name: Build
+        run: docker run --rm -i -v ${PWD}:/mnt -w /mnt ${{ matrix.cntr }} R CMD build --no-build-vignettes --no-manual .
+
+      - name: Check
+        run: docker run --rm -i -v ${PWD}:/mnt -w /mnt -e CI=true ${{ matrix.cntr }} R CMD check --no-vignettes --no-manual netplot_*.tar.gz
