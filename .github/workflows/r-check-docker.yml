@@ -19,7 +19,9 @@ jobs:
     runs-on: Ubuntu-latest
     strategy:
       matrix:
-        cntr: gvegayon/netplot-deps:latest
+        include:
+        - name: latest
+          cntr: gvegayon/netplot-deps:latest
 
     steps:
       - uses: actions/checkout@v2
