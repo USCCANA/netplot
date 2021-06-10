@@ -1,3 +1,4 @@
 build:
-	R CMD build . &&\
-		R CMD check --as-cran --no-manual netplot_*.tar.gz
+	docker build -t usccana/netplot:latest .
+push:
+	docker push usccana/netplot:latest

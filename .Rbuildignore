@@ -4,6 +4,7 @@
 ^LICENSE\.md$
 ^README\.Rmd$
 ^docs$
+^docker$
 ^\.travis\.yml$
 ^appveyor\.yml$
 ^README_cache$
