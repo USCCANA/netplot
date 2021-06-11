@@ -25,7 +25,7 @@ jobs:
           cntr: ${REPO}:release
  
         - name: dev
-          cmd : RD
+          cmd : R
           cntr: ${REPO}:devel
 
     steps:
