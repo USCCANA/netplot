@@ -3,7 +3,7 @@
 
 # netplot
 
-[![R](https://github.com/USCCANA/netplot/actions/workflows/r-check.yml/badge.svg)](https://github.com/USCCANA/netplot/actions/workflows/r-check.yml)
+[![R](https://github.com/USCCANA/netplot/actions/workflows/ci.yml/badge.svg)](https://github.com/USCCANA/netplot/actions/workflows/ci.yml)
 [![Build
 status](https://ci.appveyor.com/api/projects/status/3k2m3oq6o99qcs0r?svg=true)](https://ci.appveyor.com/project/gvegayon/netplot)
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
@@ -29,8 +29,11 @@ The package uses the `grid` plotting system (just like `ggplot2`).
 ## Installation
 
 <!-- You can install the released version of netplot from [CRAN](https://CRAN.R-project.org) with: -->
+
 <!-- ``` r -->
+
 <!-- install.packages("netplot") -->
+
 <!-- ``` -->
 
 And the development version from [GitHub](https://github.com/) with:
