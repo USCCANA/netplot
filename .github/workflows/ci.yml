@@ -10,8 +10,6 @@ name: R CI
 
 on: [push, pull_request]
 
-env:
-  cntr: usccana/netplot:latest
 
 jobs:
   build:
@@ -21,8 +19,11 @@ jobs:
         include:
         - name: release
           cmd : R
+          cntr: usccana/netplot:release
+ 
         - name: dev
           cmd : RD
+          cntr: usccana/netplot:devel
 
     steps:
       - uses: actions/checkout@v2

@@ -10,3 +10,4 @@
 ^README_cache$
 \.github
 netplot\._.*\.tar\.gz
+^Makefile$
