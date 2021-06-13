@@ -58,7 +58,7 @@ This can be useful if, for example, the user only wants to draw the labels.}
 
 \item{rescale}{Logical scalar. When \code{TRUE} (default), the y-coordinates of
 the polygons (slices), text and tickmarks will be rescaled such that the
-aspect ratio is preserved, i.e. looks like a circle.}
+aspectt ratio is preserved, i.e. looks like a circle.}
 
 \item{...}{Further arguments passed to \code{\link[graphics:polygon]{graphics::polygon()}}
 (see details).}

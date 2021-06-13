@@ -4,9 +4,11 @@ Version: 0.1-0
 Authors@R: person("George", "Vega Yon", email = "g.vegayon@gmail.com", role = c("aut", "cre"),
   comment = c(ORCID = "0000-0002-3171-0844")
   )
-Description: An alternative graph visualization engine that puts an emphasis on 
-  aesthetics at the same time of providing default parameters that provide visualizations
-  that are out-of-the-box nice.
+Description: A graph visualization engine that puts an emphasis on 
+  aesthetics at the same time of providing default parameters that yield
+  out-of-the-box-nice visualizations. The package is built on top of
+  'The Grid Graphics Package' and seamlessly work with 'igraph' and 
+  'network' objects.
 Depends: R (>= 3.4.0)
 License: MIT + file LICENSE
 Encoding: UTF-8

@@ -4,6 +4,7 @@
 #' @param vcols Vector of colors.
 #' @param alpha Numeric scalar from 0 to 1. Passed to [colorRamp2]
 #' @return A color.
+#' @noRd
 edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 
   grDevices::adjustcolor(grDevices::rgb(
@@ -279,7 +280,7 @@ nplot.default <- function(
   )/cos(pi/6)
 
 
-  # Creating viewport with fixed aspect ratio ----------------------------------
+  # Creating viewport with fixed aspectt ratio ----------------------------------
   netenv$xlim <- range(netenv$layout[,1], na.rm=TRUE)
   netenv$ylim <- range(netenv$layout[,2], na.rm=TRUE)
 
@@ -290,7 +291,7 @@ nplot.default <- function(
   lo  <- grid::grid.layout(
     widths  = grid::unit(1, "null"),
     heights = grid::unit(asp[2]/asp[1], "null"),
-    respect = TRUE # This forcces it to the aspect ratio
+    respect = TRUE # This forcces it to the aspectt ratio
     )
 
   vp_graph <- grid::viewport(

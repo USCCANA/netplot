@@ -32,7 +32,7 @@ that can be used either during the creation of the \link{nplot} object, or
 afterwards when changing \code{gpar} (graphical parameter) values with \link{set_gpar}.
 }
 \details{
-If no attribute is provided, then by defaul the colors are set accoring to
+If no attribute is provided, then by defaul the colors are set according to
 indegree.
 
 \code{x} can be either a graph of class \code{igraph} or \code{network}.

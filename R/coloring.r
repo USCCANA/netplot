@@ -136,7 +136,7 @@ netplot_edge_formulae <- function(x, fm) {
 #'
 #' Edge colors in both [nplot()] and [set_edge_gpar()] can be specified using
 #' a formula based on `ego()` and `alter()` (source and target). This way the
-#' user can set various types of combination vaying the mixing of the colors,
+#' user can set various types of combination varying the mixing of the colors,
 #' the alpha levels, and the actual mixing colors to create edge colors.
 #'
 #' @param col Any valid color. Can be a single color or a vector.

@@ -59,15 +59,6 @@
 #' )
 #'
 #'
-#' \dontrun{
-#' # Ho much better?
-#' n <- 20
-#' microbenchmark::microbenchmark(
-#'   myramp = myf((1:n)/n),
-#'   rramp  = f((1:n)/n), times = 1e4,
-#'   unit = "relative"
-#' )
-#' }
 #'
 colorRamp2 <- function(x, alpha = TRUE, thresholds=NULL) {
 
@@ -111,7 +102,7 @@ colorRamp2 <- function(x, alpha = TRUE, thresholds=NULL) {
 
 }
 
-#' Draw segments colores by gradients
+#' Draw segments colored by gradients
 #' @param x,y Coordinates passed to [grDevices::xy.coords].
 #' @param col Color ramp function (see [grDevices::colorRamp]).
 #' @param lend Passed to [graphics::segments].

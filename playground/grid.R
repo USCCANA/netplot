@@ -117,7 +117,7 @@ data(UKfaculty, package="igraphdata")
 
 ans <- nplot(UKfaculty)
 
-# Aspect ratio -----------------------------------------------------------------
+# aspectt ratio -----------------------------------------------------------------
 asp <- list(
   unit(min(1,diff(ans$xlim)/diff(ans$ylim)), "snpc"),
   unit(min(1,diff(ans$ylim)/diff(ans$xlim)), "snpc")
@@ -125,7 +125,7 @@ asp <- list(
 
 # Creating the viewport
 top <- viewport(
-  width  = asp[[1]], # aspect ratio preserved
+  width  = asp[[1]], # aspectt ratio preserved
   height = asp[[2]],
   xscale = ans$xlim + .04*diff(ans$xlim)*c(-1,1),
   yscale = ans$ylim + .04*diff(ans$ylim)*c(-1,1)

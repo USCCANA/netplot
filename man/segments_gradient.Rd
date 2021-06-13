@@ -2,7 +2,7 @@
 % Please edit documentation in R/color-paletts.R
 \name{segments_gradient}
 \alias{segments_gradient}
-\title{Draw segments colores by gradients}
+\title{Draw segments colored by gradients}
 \usage{
 segments_gradient(
   x,
@@ -22,7 +22,7 @@ segments_gradient(
 \item{...}{Further arguments passed to \code{segments}.}
 }
 \description{
-Draw segments colores by gradients
+Draw segments colored by gradients
 }
 \examples{
 

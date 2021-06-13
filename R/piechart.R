@@ -1,4 +1,4 @@
-#' Function to rescale a polygon such that it keeps the "original" aspec ratio.
+#' Function to rescale a polygon such that it keeps the "original" aspect ratio.
 #' @param coordinates A two-column matrix or data frame with coordinates (xy).
 #' @param yorigin Reference point in the y-axis.
 #' @param adj Rescale factor (scalar). By default the adjustment is computed
@@ -76,9 +76,10 @@ pieslice <- function(a0, a1, r, d, x0, y0, edges, off) {
 #' @param x0,y0 Numeric scalars. Center of the circle
 #' @param r Numeric scalar. Radius of the circle.
 #' @param rescale Logical scalar. When [TRUE], rescales the polygon
-#' coordinates such that it preservers its aspect ratio once plotted.
+#' coordinates such that it preservers its aspectt ratio once plotted.
 #'
-#' @export
+#'@noRd
+# @export
 circle <- function(x0, y0, r, rescale=TRUE) {
   ans <-  pieslice(0, 2*pi, r=r, d=0, x0, y0, edges=100, off=0)
   ans <- ans[-nrow(ans), ]
@@ -116,7 +117,7 @@ circle <- function(x0, y0, r, rescale=TRUE) {
 #' This can be useful if, for example, the user only wants to draw the labels.
 #' @param rescale Logical scalar. When `TRUE` (default), the y-coordinates of
 #' the polygons (slices), text and tickmarks will be rescaled such that the
-#' aspect ratio is preserved, i.e. looks like a circle.
+#' aspectt ratio is preserved, i.e. looks like a circle.
 #' @param ... Further arguments passed to [graphics::polygon()]
 #' (see details).
 #'

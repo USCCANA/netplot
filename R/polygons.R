@@ -45,7 +45,7 @@ npolygon <- function(
 }
 
 
-#' Function to rescale a polygon such that it keeps the "original" aspec ratio.
+#' Function to rescale a polygon such that it keeps the "original" aspect ratio.
 #' @param coordinates A two-column matrix or data frame with coordinates (xy).
 #' @param yorigin Reference point in the y-axis.
 #' @param adj Rescale factor (scalar). By default the adjustment is computed

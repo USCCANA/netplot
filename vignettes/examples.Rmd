@@ -77,7 +77,7 @@ gg <- grid::grid.grab()
 ```
 
 
-```{r, fig.width=7, fig.height=7, fig.cap="Comparision of default `igraph`, `sna`, `ggraph`, and `netplot` default call. `nplot` fills completely the plotting area, and adjusts vertex size, edge width, and edge arrows' size accordingly to the plotting area and plotting device."}
+```{r, fig.width=7, fig.height=7, fig.cap="Comparison of default `igraph`, `sna`, `ggraph`, and `netplot` default call. `nplot` fills completely the plotting area, and adjusts vertex size, edge width, and edge arrows' size accordingly to the plotting area and plotting device."}
 # Putting all together
 gridExtra::grid.arrange(ig, nw, gg, np, nrow=2, ncol=2)
 ```

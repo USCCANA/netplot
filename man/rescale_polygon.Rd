@@ -2,7 +2,7 @@
 % Please edit documentation in R/piechart.R, R/polygons.R
 \name{rescale_polygon}
 \alias{rescale_polygon}
-\title{Function to rescale a polygon such that it keeps the "original" aspec ratio.}
+\title{Function to rescale a polygon such that it keeps the "original" aspect ratio.}
 \usage{
 rescale_polygon(coordinates, yorigin = mean(coordinates[, 2]), adj = NULL)
 
@@ -17,7 +17,7 @@ rescale_polygon(coordinates, yorigin = mean(coordinates[, 2]), adj = NULL)
 using \code{graphics::par()} \code{usr} and \code{pin}.}
 }
 \description{
-Function to rescale a polygon such that it keeps the "original" aspec ratio.
+Function to rescale a polygon such that it keeps the "original" aspect ratio.
 
-Function to rescale a polygon such that it keeps the "original" aspec ratio.
+Function to rescale a polygon such that it keeps the "original" aspect ratio.
 }

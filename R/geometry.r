@@ -1,4 +1,4 @@
-#' Rescale the size of a node to make it relative to the aspect ratio of the device
+#' Rescale the size of a node to make it relative to the aspectt ratio of the device
 #' @param size Numeric vector. Size of the node (radious).
 #' @param rel Numeric vector of length 3. Relative size for the minimum and maximum
 #' of the plot, and curvature of the scale. The third number is used as `size^rel[3]`.
@@ -6,6 +6,7 @@
 #' @details
 #' This function is to be called after [plot.new], as it takes the parameter `usr`
 #' from the
+#' @noRd
 rescale_size <- function(size, rel=c(.01, .05, 1)) {
 
   # Checking the rel size
@@ -32,14 +33,15 @@ rescale_size <- function(size, rel=c(.01, .05, 1)) {
 
 }
 
-#' Adjust coordinates to fit aspect ratio of the device
+#' Adjust coordinates to fit aspectt ratio of the device
 #' @param coords Two column numeric matrix. Vertices coordinates.
 #' @details
 #' It first adjusts `coords` to range between `-1,1`, and then, using
 #' `graphics::par("pin")`, it rescales the second column of it (`y`) to adjust
-#' for the device's aspec ratio.
+#' for the device's aspect ratio.
 #' @param adj Numeric vector of length 2.
-#' @export
+#' @noRd
+# @export
 fit_coords_to_dev <- function(coords, adj = grDevices::dev.size()) {
 
   # Making it -1 to 1
@@ -49,7 +51,7 @@ fit_coords_to_dev <- function(coords, adj = grDevices::dev.size()) {
   coords[,1] <- (coords[,1] - xran[1])/(xran[2] - xran[1])*2 - 1
   coords[,2] <- (coords[,2] - yran[1])/(yran[2] - yran[1])*2 - 1
 
-  # Adjusting aspect ratio according to the ploting area
+  # Adjusting aspectt ratio according to the ploting area
   coords[,2] <- coords[,2]*adj[2]/adj[1]
 
   # Returning new coordinates
@@ -61,7 +63,8 @@ fit_coords_to_dev <- function(coords, adj = grDevices::dev.size()) {
 #' @param mat Two-column numeric matrix. Coordinates of the polygon.
 #' @param origin Numeric vector of length two. Origin.
 #' @param alpha Numeric scalar. Rotation degree in radians.
-#' @export
+#' @noRd
+# @export
 rotate <- function(mat, origin, alpha) {
   R <- matrix(
     c(cos(alpha), -sin(alpha), sin(alpha), cos(alpha)),
@@ -78,7 +81,8 @@ rotate <- function(mat, origin, alpha) {
 #' @param alpha Numeric scalar. Arc angle in radians.
 #' @param n Integer scalar. Number of segments to approximate the arc.
 #' @param radii Numeric vector of length 2. Radious
-#' @export
+#' @noRd
+# @export
 #'
 arc <- function(
   p0,
@@ -152,7 +156,8 @@ arc <- function(
 #'
 #' @param x Numeric vector of length 2. Coordinates of the tip
 #' @param alpha,l,a,b Numeric scalars
-#' @export
+#' @noRd
+# @export
 arrow_fancy <- function(x, alpha = 0, l=.25, a=pi/6, b = pi/1.5) {
 
 

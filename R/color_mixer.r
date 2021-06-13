@@ -75,7 +75,7 @@ make_edges_colors <- function(
 #' @rdname make_colors
 #' @details
 #'
-#' If no attribute is provided, then by defaul the colors are set accoring to
+#' If no attribute is provided, then by defaul the colors are set according to
 #' indegree.
 #'
 #' `x` can be either a graph of class `igraph` or `network`.

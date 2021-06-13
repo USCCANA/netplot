@@ -70,14 +70,5 @@ rect(
 )
 
 
-\dontrun{
-# Ho much better?
-n <- 20
-microbenchmark::microbenchmark(
-  myramp = myf((1:n)/n),
-  rramp  = f((1:n)/n), times = 1e4,
-  unit = "relative"
-)
-}
 
 }
