@@ -21,6 +21,9 @@ segments_gradient(
 
 \item{...}{Further arguments passed to \code{segments}.}
 }
+\value{
+See \link[graphics:segments]{graphics::segments}.
+}
 \description{
 Draw segments colored by gradients
 }

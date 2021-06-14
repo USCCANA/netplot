@@ -19,12 +19,16 @@ make_vertex_colors(x, vattr, ...)
 
 \item{color_map}{A function to generate a palette.}
 
-\item{x}{A graph.}
+\item{x}{A graph of class \code{network} or \code{igraph}.}
 
 \item{...}{Further arguments passed to \code{make_colors}.}
 
 \item{vattr, eattr}{Character. Names of either vertex or edge variables to be
 used for generating the colors.}
+}
+\value{
+A vector of colors with the attribute \code{color_map}. The color map used
+to generate the colors.
 }
 \description{
 Using \code{vertex}/\code{edge} attributes, these functions return vectors of colors

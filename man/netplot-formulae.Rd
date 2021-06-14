@@ -26,6 +26,10 @@ alter(...)
 
 \item{...}{Passed to \code{color_formula}.}
 }
+\value{
+Nothing. These functions are called internally when using
+formulas. \code{color_formula} modifies the environment \code{env}.
+}
 \description{
 Edge colors in both \code{\link[=nplot]{nplot()}} and \code{\link[=set_edge_gpar]{set_edge_gpar()}} can be specified using
 a formula based on \code{ego()} and \code{alter()} (source and target). This way the

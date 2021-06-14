@@ -5,15 +5,38 @@
 #' details)
 #' @inheritParams nplot
 #' @export
+#' @return `nplot_base` returns a list with the following components:
+#'
+#' - `vertex.coords` A list of length `N` where each element describes the
+#' geomtry of each vertex.
+#' - `vertex.color` A vector of colors
+#' - `vertex.frame.coords` Similar to `vertex.coords`, but for the frame.
+#' - `vertex.frame.color` Similar to `vertex.color`, but for the frame.
+#' - `edge.color` Vector of functions used to compute the edge colors.
+#' - `edge.coords` Similar to `vertex.coords`, the points that describe each
+#' edge.
+#' - `edge.arrow.coords` A list of matrices describing the geometry of the
+#' tip of the edges.
+#' - `edge.width` A numeric vector with edges' widths.
+#' - `xlim`, `ylim` Limits of the plot area.
+#' @seealso [nplot]
+#' @examples
+#' # Same example as in nplot
+#' library(igraph)
+#' library(netplot)
+#' set.seed(1)
+#' x <- sample_smallworld(1, 200, 5, 0.03)
+#'
+#' nplot_base(x) # ala netplot (using base)
 nplot_base <- function(
   x,
   layout              = igraph::layout_nicely(x),
   vertex.size         = igraph::degree(x, mode="in"),
-  bg.col              = "lightgray",
-  vertex.nsides       = 50,
-  vertex.color        = NULL,
+  bg.col              = "transparent",
+  vertex.nsides       = 15,
+  vertex.color        = grDevices::hcl.colors(1),
   vertex.size.range   = c(.01, .03),
-  vertex.frame.color  = NULL,
+  vertex.frame.color  = grDevices::adjustcolor(vertex.color, red.f = .75, green.f = .75, blue.f = .75),
   vertex.rot          = 0,
   vertex.frame.prop   = .1,
   edge.width          = NULL,
@@ -24,9 +47,9 @@ nplot_base <- function(
   edge.color.alpha    = c(.1, .5),
   edge.curvature      = pi/3,
   edge.line.lty       = "solid",
-  edge.line.breaks    = 15,
+  edge.line.breaks    = 10,
   sample.edges        = 1,
-  skip.vertex       = FALSE,
+  skip.vertex         = FALSE,
   skip.edges          = FALSE,
   skip.arrows         = skip.edges,
   add                 = FALSE,

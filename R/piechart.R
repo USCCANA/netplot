@@ -1,36 +1,3 @@
-#' Function to rescale a polygon such that it keeps the "original" aspect ratio.
-#' @param coordinates A two-column matrix or data frame with coordinates (xy).
-#' @param yorigin Reference point in the y-axis.
-#' @param adj Rescale factor (scalar). By default the adjustment is computed
-#' using `graphics::par()` `usr` and `pin`.
-#' @export
-rescale_polygon <- function(
-  coordinates,
-  yorigin = mean(coordinates[,2]),
-  adj = NULL
-) {
-
-  # Adjustment value
-  if (!length(adj)) {
-    usr_adj <- with(graphics::par(), (usr[2] - usr[1])/(usr[4] - usr[3]))
-    dev_adj <- with(graphics::par(), pin[2]/pin[1])
-    adj <- 1/dev_adj/usr_adj
-  }
-
-  # If it is multiple polygons (adj is passed by scoping)
-  if (!is.data.frame(coordinates) && is.list(coordinates))
-    return(mapply(rescale_polygon, coordinates=coordinates, yorigin=yorigin,
-                  SIMPLIFY = FALSE))
-
-  # Adjusting
-  if ((is.matrix(coordinates) | is.data.frame(coordinates)) && ncol(coordinates) > 1)
-    coordinates[,2] <- yorigin + (coordinates[,2] - yorigin)*adj
-  else
-    return(yorigin + (coordinates - yorigin)*adj)
-
-  coordinates
-}
-
 pieslice <- function(a0, a1, r, d, x0, y0, edges, off) {
 
   # Intermideate points
@@ -347,6 +314,27 @@ piechart <- function(
 #' @param tick.args,label.args,main.args Lists of arguments passed to
 #' [graphics::text] for drawing ticks, labels and main respectively.
 #' @export
+#' @return NULL.
+#' @examples
+#' set.seed(22231)
+#'
+#' # A random figure
+#' dat <- matrix(runif(100*3), ncol = 3)
+#' col <- colorRamp2(c("blue", "white", "red"))
+#'
+#' plot(
+#'   dat[,1], dat[,2],
+#'   col = rgb(col(dat[,3]), maxColorValue=255),
+#'   cex=2, pch=20
+#'   )
+#'
+#' # Pretty color key
+#' colorkey(
+#'   x0 = .60, y0 = .80,
+#'   x1 = .95, y1 = .95,
+#'   cols = c("blue", "white", "red"),
+#'   main = "Some color scale"
+#' )
 colorkey <- function(
   x0,y0,x1,y1,
   cols       = c("white", "steelblue"),
@@ -461,5 +449,6 @@ colorkey <- function(
       ), main.args)
     )
 
+  invisible()
 }
 

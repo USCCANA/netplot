@@ -50,7 +50,8 @@ npolygon <- function(
 #' @param yorigin Reference point in the y-axis.
 #' @param adj Rescale factor (scalar). By default the adjustment is computed
 #' using `graphics::par()` `usr` and `pin`.
-#' @export
+# @export
+#' @noRd
 rescale_polygon <- function(
   coordinates,
   yorigin = mean(coordinates[,2]),

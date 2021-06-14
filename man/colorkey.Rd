@@ -46,6 +46,30 @@ to the plotting region area taking \verb{x0, x1, y0, y1} as relative location.}
 \item{tick.args, label.args, main.args}{Lists of arguments passed to
 \link[graphics:text]{graphics::text} for drawing ticks, labels and main respectively.}
 }
+\value{
+NULL.
+}
 \description{
 Function to create a color key
+}
+\examples{
+set.seed(22231)
+
+# A random figure
+dat <- matrix(runif(100*3), ncol = 3)
+col <- colorRamp2(c("blue", "white", "red"))
+
+plot(
+  dat[,1], dat[,2],
+  col = rgb(col(dat[,3]), maxColorValue=255),
+  cex=2, pch=20
+  )
+
+# Pretty color key
+colorkey(
+  x0 = .60, y0 = .80,
+  x1 = .95, y1 = .95,
+  cols = c("blue", "white", "red"),
+  main = "Some color scale"
+)
 }

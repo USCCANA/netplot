@@ -15,7 +15,6 @@ nplot(...)
   x,
   layout = igraph::layout_nicely(x),
   vertex.size = igraph::degree(x, mode = "in"),
-  vertex.color = "tomato",
   vertex.label = igraph::vertex_attr(x, "name"),
   edge.width = igraph::edge_attr(x, "weight"),
   ...
@@ -25,7 +24,6 @@ nplot(...)
   x,
   layout = sna::gplot.layout.kamadakawai(x, NULL),
   vertex.size = sna::degree(x, cmode = "indegree"),
-  vertex.color = "tomato",
   vertex.label = network::get.vertex.attribute(x, "vertex.names"),
   ...
 )
@@ -74,8 +72,6 @@ nplot(...)
 
 \item{vertex.size}{Numeric vector of length \code{vcount(x)}. Absolute size of the vertex.}
 
-\item{vertex.color}{Vector of length \code{vcount(x)}. Vertex colors.}
-
 \item{vertex.label}{Character vector of length \code{vcount(x)}. Labels.}
 
 \item{edge.width}{Vector of length \code{ecount(x)}.}
@@ -86,6 +82,8 @@ nplot(...)
 
 \item{vertex.nsides}{Numeric vector of length \code{vcount(x)}. Number of sizes of
 the vertex. E.g. three is a triangle, and 100 approximates a circle.}
+
+\item{vertex.color}{Vector of length \code{vcount(x)}. Vertex colors.}
 
 \item{vertex.size.range}{Vector of length \code{vcount(x)}.}
 
@@ -147,6 +145,25 @@ has an additional set of attributes:
 \item \code{.layout} A numeric matrix of size \code{vcount(x) * 2} with the vertices positions
 \item \code{.edgelist} A numeric matrix, The edgelist.
 }
+
+In the case of \code{nplot.default}, an object of class \code{netplot} and \code{grob} (see
+\link[grid:grid.grob]{grid::grob}) with the following slots:
+\itemize{
+\item \code{children} The main \code{grob} of the object.
+\item \code{name} Character scalar. The name of the plot
+\item \code{.xlim} and \code{.ylim} Two vectors indicating the limits of the plot
+\item \code{.layout} A two-column matrix with the location of the vertices.
+\item \code{.edgelist} A two-column matrix, an edgelist.
+\item \code{.N} Integer. The number of vertices.
+\item \code{.M} Integer. The number of edges.
+}
+
+The \code{children} \code{grob} contains the following two objects:
+\itemize{
+\item \code{background} a \code{grob} rectangule.
+\item \code{graph} a \code{gTree} that contains each vertex and each edge
+of the figure.
+}
 }
 \description{
 Plot a network
@@ -162,4 +179,7 @@ x <- sample_smallworld(1, 200, 5, 0.03)
 
 plot(x) # ala igraph
 nplot(x) # ala netplot
+}
+\seealso{
+\link{nplot_base}
 }

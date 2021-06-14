@@ -89,7 +89,6 @@ nplot.igraph <- function(
   x,
   layout       = igraph::layout_nicely(x),
   vertex.size  = igraph::degree(x, mode="in"),
-  vertex.color = "tomato",
   vertex.label = igraph::vertex_attr(x, "name"),
   edge.width   = igraph::edge_attr(x, "weight"),
   ...
@@ -102,7 +101,6 @@ nplot.igraph <- function(
     edgelist     = igraph::as_edgelist(x, names = FALSE),
     layout       = layout,
     vertex.size  = vertex.size,
-    vertex.color = vertex.color,
     vertex.label = vertex.label,
     edge.width   = edge.width,
     ...
@@ -118,7 +116,6 @@ nplot.network <- function(
   x,
   layout       = sna::gplot.layout.kamadakawai(x, NULL),
   vertex.size  = sna::degree(x, cmode="indegree"),
-  vertex.color = "tomato",
   vertex.label = network::get.vertex.attribute(x, "vertex.names"),
   ...
 ) {
@@ -127,7 +124,6 @@ nplot.network <- function(
     edgelist    = network::as.edgelist(x),
     layout      = layout,
     vertex.size = vertex.size,
-    vertex.color = vertex.color,
     vertex.label = vertex.label,
     ...
   )
@@ -181,6 +177,24 @@ netplot_theme <- (function() {
 #' @export
 #' @rdname nplot
 #' @param edgelist An edgelist.
+#' @return
+#' In the case of `nplot.default`, an object of class `netplot` and `grob` (see
+#' [grid::grob]) with the following slots:
+#'
+#' - `children` The main `grob` of the object.
+#' - `name` Character scalar. The name of the plot
+#' - `.xlim` and `.ylim` Two vectors indicating the limits of the plot
+#' - `.layout` A two-column matrix with the location of the vertices.
+#' - `.edgelist` A two-column matrix, an edgelist.
+#' - `.N` Integer. The number of vertices.
+#' - `.M` Integer. The number of edges.
+#'
+#' The `children` `grob` contains the following two objects:
+#'
+#' - `background` a `grob` rectangule.
+#' - `graph` a `gTree` that contains each vertex and each edge
+#' of the figure.
+#' @seealso [nplot_base]
 nplot.default <- function(
   edgelist,
   layout,
@@ -353,7 +367,6 @@ nplot.default <- function(
     .N        = netenv$N,
     .M        = netenv$M
   )
-
 
   class(ans) <- c("netplot", class(ans))
 

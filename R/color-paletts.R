@@ -9,7 +9,7 @@
 #' @param thresholds A numeric vector of length `length(x)`. Optional threshold
 #' levels so that the mixing can be different that even.
 #' @export
-#'
+#' @return A function as in [grDevices::colorRamp].
 #' @examples
 #'
 #' # Creating a function for 2 colors
@@ -114,6 +114,7 @@ colorRamp2 <- function(x, alpha = TRUE, thresholds=NULL) {
 #' x <- cbind(cumsum(rnorm(1e3, sd=.1)), cumsum(rnorm(1e3, sd=.4)))
 #' plot(x, type="n")
 #' segments_gradient(x)
+#' @return See [graphics::segments].
 segments_gradient <- function(
   x, y = NULL,
   col  = colorRamp2(c("transparent", "black"), TRUE),

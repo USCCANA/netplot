@@ -8,11 +8,12 @@ nplot_base(
   x,
   layout = igraph::layout_nicely(x),
   vertex.size = igraph::degree(x, mode = "in"),
-  bg.col = "lightgray",
-  vertex.nsides = 50,
-  vertex.color = NULL,
+  bg.col = "transparent",
+  vertex.nsides = 15,
+  vertex.color = grDevices::hcl.colors(1),
   vertex.size.range = c(0.01, 0.03),
-  vertex.frame.color = NULL,
+  vertex.frame.color = grDevices::adjustcolor(vertex.color, red.f = 0.75, green.f =
+    0.75, blue.f = 0.75),
   vertex.rot = 0,
   vertex.frame.prop = 0.1,
   edge.width = NULL,
@@ -23,7 +24,7 @@ nplot_base(
   edge.color.alpha = c(0.1, 0.5),
   edge.curvature = pi/3,
   edge.line.lty = "solid",
-  edge.line.breaks = 15,
+  edge.line.breaks = 10,
   sample.edges = 1,
   skip.vertex = FALSE,
   skip.edges = FALSE,
@@ -94,6 +95,35 @@ is not plotted.}
 
 \item{zero.margins}{Logical scalar.}
 }
+\value{
+\code{nplot_base} returns a list with the following components:
+\itemize{
+\item \code{vertex.coords} A list of length \code{N} where each element describes the
+geomtry of each vertex.
+\item \code{vertex.color} A vector of colors
+\item \code{vertex.frame.coords} Similar to \code{vertex.coords}, but for the frame.
+\item \code{vertex.frame.color} Similar to \code{vertex.color}, but for the frame.
+\item \code{edge.color} Vector of functions used to compute the edge colors.
+\item \code{edge.coords} Similar to \code{vertex.coords}, the points that describe each
+edge.
+\item \code{edge.arrow.coords} A list of matrices describing the geometry of the
+tip of the edges.
+\item \code{edge.width} A numeric vector with edges' widths.
+\item \code{xlim}, \code{ylim} Limits of the plot area.
+}
+}
 \description{
 \code{nplot} using base graphics
+}
+\examples{
+# Same example as in nplot
+library(igraph)
+library(netplot)
+set.seed(1)
+x <- sample_smallworld(1, 200, 5, 0.03)
+
+nplot_base(x) # ala netplot (using base)
+}
+\seealso{
+\link{nplot}
 }

@@ -165,6 +165,8 @@ netplot_edge_formulae <- function(x, fm) {
 #' }
 #' @name netplot-formulae
 #' @export
+#' @return Nothing. These functions are called internally when using
+#' formulas. `color_formula` modifies the environment `env`.
 color_formula <- function(x, col, alpha, env, type, mix = 1, postfix = NULL) {
 
   n <- switch(type, vertex = x$.N, edge = x$.M)

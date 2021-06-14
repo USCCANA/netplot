@@ -18,6 +18,9 @@ performance. It is equivalent to the linear interpolation of the function
 \item{thresholds}{A numeric vector of length \code{length(x)}. Optional threshold
 levels so that the mixing can be different that even.}
 }
+\value{
+A function as in \link[grDevices:colorRamp]{grDevices::colorRamp}.
+}
 \description{
 A faster implementation of \link[grDevices:colorRamp]{grDevices::colorRamp} for linear interpolation.
 }

@@ -4,7 +4,7 @@
 #' that can be used either during the creation of the [nplot] object, or
 #' afterwards when changing `gpar` (graphical parameter) values with [set_gpar].
 #'
-#' @param x A graph.
+#' @param x A graph of class `network` or `igraph`.
 #' @param dat A vector of data to generate the color from.
 #' @param vattr,eattr Character. Names of either vertex or edge variables to be
 #' used for generating the colors.
@@ -24,6 +24,9 @@
 #'     set_edge_gpar(col="gray50", fill="gray50", alpha=.5)
 #' }
 #' @export
+#' @return
+#' A vector of colors with the attribute `color_map`. The color map used
+#' to generate the colors.
 make_colors <- function(
   dat,
   categorical = FALSE,

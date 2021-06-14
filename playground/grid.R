@@ -193,7 +193,7 @@ grid.DLapply(function(x) {
 
   if (is.grob(x)) {
 
-    if (grepl("vertex\\.coords", x$name))
+    if (grepl("vertex\\.", x$name))
       gridSVG::garnishGrob(
         x,
         `stroke-linecap`="butt",
