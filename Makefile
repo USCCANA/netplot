@@ -8,7 +8,7 @@ install:
 		
 
 $(PKGNAME)_$(VERSION).tar.gz: R/*.R inst/NEWS README.md
-	R CMD build --no-build-vignettes --no-manual . 
+	R CMD build  . 
 
 inst/NEWS: NEWS.md
 	Rscript -e "rmarkdown::pandoc_convert('NEWS.md', 'plain', output='inst/NEWS')"&& \
