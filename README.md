@@ -30,13 +30,12 @@ The package uses the `grid` plotting system (just like `ggplot2`).
 
 ## Installation
 
-<!-- You can install the released version of netplot from [CRAN](https://CRAN.R-project.org) with: -->
+You can install the released version of netplot from
+[CRAN](https://CRAN.R-project.org) with:
 
-<!-- ``` r -->
-
-<!-- install.packages("netplot") -->
-
-<!-- ``` -->
+``` r
+install.packages("netplot")
+```
 
 And the development version from [GitHub](https://github.com/) with:
 
