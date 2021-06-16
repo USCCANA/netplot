@@ -1,13 +1,16 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# netplot
-
+[![CRAN
+status](https://www.r-pkg.org/badges/version/fmcmc)](https://cran.r-project.org/package=fmcmc)
+[![CRAN](https://cranlogs.r-pkg.org/badges/netplot)](https://cran.r-project.org/package=netplot)
 [![R](https://github.com/USCCANA/netplot/actions/workflows/ci.yml/badge.svg)](https://github.com/USCCANA/netplot/actions/workflows/ci.yml)
 [![Build
 status](https://ci.appveyor.com/api/projects/status/3k2m3oq6o99qcs0r?svg=true)](https://ci.appveyor.com/project/gvegayon/netplot)
 [![USC’s Department of Preventive
 Medicine](https://raw.githubusercontent.com/USCbiostats/badges/master/tommy-uscprevmed-badge.svg)](https://preventivemedicine.usc.edu)
+
+# netplot
 
 An alternative graph visualization engine that puts an emphasis on
 aesthetics at the same time of providing default parameters that provide
@@ -28,8 +31,11 @@ The package uses the `grid` plotting system (just like `ggplot2`).
 ## Installation
 
 <!-- You can install the released version of netplot from [CRAN](https://CRAN.R-project.org) with: -->
+
 <!-- ``` r -->
+
 <!-- install.packages("netplot") -->
+
 <!-- ``` -->
 
 And the development version from [GitHub](https://github.com/) with:
