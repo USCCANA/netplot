@@ -3,7 +3,7 @@ name: netplot website
 on: [push, pull_request]
 
 env:
-  cntr: rocker/tidyverse:latest
+  cntr: usccana/netplot:release
 
 jobs:
   build:
@@ -16,7 +16,7 @@ jobs:
         run: docker pull ${cntr}
 
       - name: Building website
-        run: docker run --rm -i -v ${PWD}:/home/mnt -w /home/mnt ${cntr} Rscript -e 'install.packages(c("network", "sna", "igraph", "gridExtra", "gridBase", "gridGraphics", "ggraph", "igraphdata", "netplot"));system("R CMD INSTALL .");pkgdown::build_site(install=FALSE)'
+        run: docker run --rm -i -v ${PWD}:/home/mnt -w /home/mnt ${cntr} Rscript -e 'system("R CMD INSTALL .");pkgdown::build_site(install=FALSE)'
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
