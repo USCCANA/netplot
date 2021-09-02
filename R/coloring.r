@@ -33,7 +33,7 @@ new_edge_coloring <- function(
       col <- if (n != 1L)
         colorRamp2(x = c(col_i, col_j))((0:(n - 1))/(n - 1)) # seq(0, 1, length.out = n)
       else
-        colorRamp2(x = c(col_i, col_j))(1.0)
+        colorRamp2(x = c(col_i, col_j))(0.0)
 
       # Returning
       grDevices::rgb(col, alpha = col[,4], maxColorValue = 255)
