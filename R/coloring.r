@@ -23,18 +23,13 @@ new_edge_coloring <- function(
 
       # [OPTIONAL] ---------------------------------------------------------------
       # Linear combination between i and j
-      col_i <- colorRamp2(x=c(col_i, col_j))(mix[e])
-      col_i <- grDevices::rgb(col_i, alpha=col_i[,4], maxColorValue = 255)
-      col_j <- col_i
+      col_tmp <- colorRamp2(x=c(col_i, col_j))(mix[e])
+      col_i <- grDevices::rgb(col_tmp, alpha = col_tmp[,4] * alpha_i, maxColorValue = 255)
+      col_j <- grDevices::rgb(col_tmp, alpha = col_tmp[,4] * alpha_j, maxColorValue = 255)
       # --------------------------------------------------------------------------
 
       # Applying alpha levels and getting mix
-      col <- colorRamp2(
-        x = c(
-          grDevices::adjustcolor(col = col_i, alpha.f = alpha_i),
-          grDevices::adjustcolor(col = col_j, alpha.f = alpha_j)
-        )
-      )(seq(0, 1, length.out = n))
+      col <- colorRamp2(x = c(col_i, col_j))((0:(n - 1))/(n - 1)) # seq(0, 1, length.out = n)
 
       # Returning
       grDevices::rgb(col, alpha = col[,4], maxColorValue = 255)
@@ -47,15 +42,19 @@ new_edge_coloring <- function(
       alpha_j <- vertex_alpha_j[j]
 
       # Edge level params
-      col_ij   <- grDevices::adjustcolor(col = edge_color[e], alpha.f = edge_alpha[e])
+      col_ij <- t(
+        col2rgb(grDevices::adjustcolor(
+          col = edge_color[e], alpha.f = edge_alpha[e]
+          ), alpha = TRUE)
+      )
 
       # Applying alpha levels and getting mix
       col <- colorRamp2(x=
         c(
-          grDevices::adjustcolor(col = col_ij, alpha.f = alpha_i),
-          grDevices::adjustcolor(col = col_ij, alpha.f = alpha_j)
+          grDevices::rgb(col_ij, alpha = col_ij[4L] * alpha_i, maxColorValue = 255),
+          grDevices::rgb(col_ij, alpha = col_ij[4L] * alpha_j, maxColorValue = 255)
         )
-      )(seq(0, 1, length.out = n))
+      )((0:(n - 1))/(n - 1)) # seq(0, 1, length.out = n)
 
       # Returning
       grDevices::rgb(col, alpha = col[,4], maxColorValue = 255)
@@ -71,12 +70,6 @@ new_edge_coloring <- function(
 #' @noRd
 #' @importFrom stats terms
 netplot_edge_formulae <- function(x, fm) {
-
-  # Basic validation
-  np_validate$is_netplot(x)
-
-  if (!inherits(fm, "formula"))
-    stop("Not a formula", call. = FALSE)
 
   tm  <- stats::terms(fm)
   mat <- attr(tm, "factors")

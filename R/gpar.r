@@ -89,10 +89,13 @@ parse_gpar <- function(...) {
 #' @export
 set_gpar <- function(x, type, element, idx, ...) {
 
-  # Validations
+  # Basic checks
   np_validate$is_netplot(x)
   np_validate$type(type)
-  np_validate$elements(element, type)
+
+  # If no specific ids are provided
+  if (missing(idx))
+    idx <- seq_len(ifelse(type == "vertex", x$.N, x$.M))
 
   # If elements is more than one
   if (!missing(element) && length(element) > 1) {
@@ -107,15 +110,14 @@ set_gpar <- function(x, type, element, idx, ...) {
 
   }
 
-  # If no specific ids are provided
-  if (missing(idx))
-    idx <- seq_len(ifelse(type == "vertex", x$.N, x$.M))
+  # Validations
+  np_validate$elements(element, type)
 
   # Creating loop sequence
   idx <- if (type == "vertex")
     as.list(idx)
   else
-    unname(split(x$.edgelist[idx,], idx)) #lapply(idx, function(e) x$.edgelist[e, ])
+    unname(split(x$.edgelist[idx,], idx))
 
   # Converting
   listme <- function(...) {
