@@ -76,6 +76,7 @@ colorRamp2 <- function(x, alpha = TRUE, thresholds=NULL) {
 
   if (n == 2L) {
     function(x) {
+
       N    <- length(x)
       col0 <- rep(1, N)
       x    <- (x - thresholds[1])/(thresholds[2] - thresholds[1])
@@ -83,6 +84,7 @@ colorRamp2 <- function(x, alpha = TRUE, thresholds=NULL) {
       x[x>1] <- 1
 
       col[col0, ,drop=FALSE] * (1-x) + col[col0+1, ,drop=FALSE] * x
+
     }
   } else
     function(x) {

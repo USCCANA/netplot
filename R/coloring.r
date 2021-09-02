@@ -23,13 +23,17 @@ new_edge_coloring <- function(
 
       # [OPTIONAL] ---------------------------------------------------------------
       # Linear combination between i and j
-      col_tmp <- colorRamp2(x=c(col_i, col_j))(mix[e])
+      col_tmp <- if (col_i == col_j) t(grDevices::col2rgb(col = col_i, alpha = TRUE))
+      else colorRamp2(x=c(col_i, col_j))(mix[e])
       col_i <- grDevices::rgb(col_tmp, alpha = col_tmp[,4] * alpha_i, maxColorValue = 255)
       col_j <- grDevices::rgb(col_tmp, alpha = col_tmp[,4] * alpha_j, maxColorValue = 255)
       # --------------------------------------------------------------------------
 
       # Applying alpha levels and getting mix
-      col <- colorRamp2(x = c(col_i, col_j))((0:(n - 1))/(n - 1)) # seq(0, 1, length.out = n)
+      col <- if (n != 1L)
+        colorRamp2(x = c(col_i, col_j))((0:(n - 1))/(n - 1)) # seq(0, 1, length.out = n)
+      else
+        colorRamp2(x = c(col_i, col_j))(1.0)
 
       # Returning
       grDevices::rgb(col, alpha = col[,4], maxColorValue = 255)

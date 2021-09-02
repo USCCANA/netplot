@@ -147,26 +147,33 @@ set_gpar <- function(x, type, element, idx, ...) {
 
   dots <- do.call(listme, dots)
 
-  # Updating the
-  for (i in seq_along(idx)) {
+  if (!missing(element)) {
+
+    for (i in seq_along(idx)) {
+
+      np_validate$gpar(dots[[i]][-1])
+
+      # Fabricating the name
+      iname <- netplot_name$make(idx[[i]])
+      for (p in names(dots[[i]][-1]))
+        x$children$graph$children[[iname]]$children[[element]]$gp[[p]] <- dots[[i]][[p]]
+
+      class(x$children$graph$children[[iname]]$children[[element]]$gp) <- "gpar"
+
+    }
+
+  } else {
 
     np_validate$gpar(dots[[i]][-1])
 
     # Fabricating the name
     iname <- netplot_name$make(idx[[i]])
 
-    for (p in names(dots[[i]][-1])) {
-      if (!missing(element))
-        x$children$graph$children[[iname]]$children[[element]]$gp[[p]] <- dots[[i]][[p]]
-      else
-        x$children$graph$children[[iname]]$gp[[p]] <- dots[[i]][[p]]
+    for (p in names(dots[[i]][-1]))
+      x$children$graph$children[[iname]]$gp[[p]] <- dots[[i]][[p]]
 
-    }
+    class(x$children$graph$children[[iname]]$gp) <- "gpar"
 
-    if (!missing(element))
-      class(x$children$graph$children[[iname]]$children[[element]]$gp) <- "gpar"
-    else
-      class(x$children$graph$children[[iname]]$gp) <- "gpar"
   }
 
   # Returning the grob
@@ -278,7 +285,7 @@ get_gpar <- function(x, type, element, ..., idx, simplify=TRUE) {
       if (!length(v) || !length(v$children[[element]])) {
         ans[[p]][[i]] <- NA
         next
-       }
+      }
 
       # And it has the element
       v <- v$children[[element]]$gp[[p]]
