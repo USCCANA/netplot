@@ -144,6 +144,7 @@
   vertex.size <span class='op'>=</span> <span class='fu'>igraph</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/igraph/man/degree.html'>degree</a></span><span class='op'>(</span><span class='va'>x</span>, mode <span class='op'>=</span> <span class='st'>"in"</span><span class='op'>)</span>,
   vertex.label <span class='op'>=</span> <span class='fu'>igraph</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/igraph/man/vertex_attr.html'>vertex_attr</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>"name"</span><span class='op'>)</span>,
   edge.width <span class='op'>=</span> <span class='fu'>igraph</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/igraph/man/edge_attr.html'>edge_attr</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>"weight"</span><span class='op'>)</span>,
+  skip.arrows <span class='op'>=</span> <span class='op'>!</span><span class='fu'>igraph</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/igraph/man/is_directed.html'>is_directed</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
   <span class='va'>...</span>
 <span class='op'>)</span>
 
@@ -153,6 +154,7 @@
   layout <span class='op'>=</span> <span class='fu'>sna</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/sna/man/gplot.layout.html'>gplot.layout.kamadakawai</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='cn'>NULL</span><span class='op'>)</span>,
   vertex.size <span class='op'>=</span> <span class='fu'>sna</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/sna/man/degree.html'>degree</a></span><span class='op'>(</span><span class='va'>x</span>, cmode <span class='op'>=</span> <span class='st'>"indegree"</span><span class='op'>)</span>,
   vertex.label <span class='op'>=</span> <span class='fu'>network</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/network/man/attribute.methods.html'>get.vertex.attribute</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>"vertex.names"</span><span class='op'>)</span>,
+  skip.arrows <span class='op'>=</span> <span class='op'>!</span><span class='fu'>network</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/network/man/network.indicators.html'>is.directed</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
   <span class='va'>...</span>
 <span class='op'>)</span>
 
