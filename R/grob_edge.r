@@ -21,45 +21,57 @@ grob_edge <- function(netenv, e) {
     )
 
     # Generating grob
-    ans <- grid::polylineGrob(
-      x          = coords[,1],
-      y          = coords[,2],
-      id.lengths = rep(2, nbreaks),
-      default.units = "native",
-      gp         = do.call(
-        grid::gpar,
-        list(
-          lwd     = netenv$edge.width[e],
-          lineend = "butt",
-          lty     = netenv$edge.line.lty[e]
-          )
-      ),
-      name = "line"
-    )
+    if (!netenv$skip.edges) {
+
+      ans <- grid::polylineGrob(
+        x          = coords[,1],
+        y          = coords[,2],
+        id.lengths = rep(2, nbreaks),
+        default.units = "native",
+        gp         = do.call(
+          grid::gpar,
+          list(
+            lwd     = netenv$edge.width[e],
+            lineend = "butt",
+            lty     = netenv$edge.line.lty[e]
+            )
+        ),
+        name = "line"
+      )
+
+    } else
+      ans <- NULL
 
     # Arrow
     # Computing arrow
-    alpha1 <- attr(coords, "alpha1")
-    arrow  <- arrow_fancy(
-      x     = coords[nbreaks*2, 1:2] +
-        netenv$arrow.size.adj[e]*c(cos(alpha1), sin(alpha1)),
-      alpha = alpha1,
-      l     = netenv$edge.arrow.size[e]
-    )
+    if (!netenv$skip.arrows) {
 
-    ans <- grid::grobTree(
-      ans,
-      grid::polygonGrob(
-        arrow[,1],
-        arrow[,2],
-        default.units = "native",
-        name = "arrow",
-        gp   = grid::gpar(
-          lwd  = netenv$edge.width[e]
-        )
-      ),
-      name = netplot_name$make(c(i, j))
-    )
+      alpha1 <- attr(coords, "alpha1")
+      arrow  <- arrow_fancy(
+        x     = coords[nbreaks*2, 1:2] +
+          netenv$arrow.size.adj[e]*c(cos(alpha1), sin(alpha1)),
+        alpha = alpha1,
+        l     = netenv$edge.arrow.size[e]
+      )
+
+      ans <- grid::grobTree(
+        ans,
+        grid::polygonGrob(
+          arrow[,1],
+          arrow[,2],
+          default.units = "native",
+          name = "arrow",
+          gp   = grid::gpar(
+            lwd  = netenv$edge.width[e]
+          )
+        ),
+        name = netplot_name$make(c(i, j))
+      )
+
+    } else
+      ans <- grid::grobTree(ans, name = netplot_name$make(c(i, j)))
+
+
 
   } else {
 
