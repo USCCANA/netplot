@@ -91,6 +91,7 @@ nplot.igraph <- function(
   vertex.size  = igraph::degree(x, mode="in"),
   vertex.label = igraph::vertex_attr(x, "name"),
   edge.width   = igraph::edge_attr(x, "weight"),
+  skip.arrows  = !igraph::is_directed(x),
   ...
   ) {
 
@@ -103,6 +104,7 @@ nplot.igraph <- function(
     vertex.size  = vertex.size,
     vertex.label = vertex.label,
     edge.width   = edge.width,
+    skip.arrows = skip.arrows,
     ...
   )
 
@@ -117,6 +119,7 @@ nplot.network <- function(
   layout       = sna::gplot.layout.kamadakawai(x, NULL),
   vertex.size  = sna::degree(x, cmode="indegree"),
   vertex.label = network::get.vertex.attribute(x, "vertex.names"),
+  skip.arrows  = !network::is.directed(x),
   ...
 ) {
 
@@ -125,6 +128,7 @@ nplot.network <- function(
     layout      = layout,
     vertex.size = vertex.size,
     vertex.label = vertex.label,
+    skip.arrows = skip.arrows,
     ...
   )
 
@@ -255,17 +259,19 @@ nplot.default <- function(
     if (length(netenv[[p]]) > 0 && length(netenv[[p]]) < netenv$M)
       netenv[[p]] <- .rep(netenv[[p]], netenv$M)
 
-
   # Adjusting size -------------------------------------------------------------
 
   # Adjusting layout to fit the device
   netenv$layout <- fit_coords_to_dev(netenv$layout)
 
   # Rescaling size
-  netenv$vertex.size <- rescale_size(
-    netenv$vertex.size,
-    rel = netenv$vertex.size.range
-    )
+  if (!skip.vertex) {
+    netenv$vertex.size <- rescale_size(
+      netenv$vertex.size,
+      rel = netenv$vertex.size.range
+      )
+  } else
+    netenv$vertex.size <- rep(0, netenv$N)
 
   # Rescaling edges
   netenv$edge.width <- rescale_size(
@@ -276,6 +282,9 @@ nplot.default <- function(
   # Rescaling arrows
   if (!length(netenv$edge.arrow.size))
     netenv$edge.arrow.size <- netenv$vertex.size[edgelist[,1]]/1.5
+
+  if (netenv$skip.arrows)
+    netenv$edge.arrow.size <- rep(0.0, length(netenv$edge.arrow.size))
 
   # Rescaling text
   if (!length(netenv$vertex.label.fontsize))
@@ -318,13 +327,21 @@ nplot.default <- function(
   )
 
   # Generating grobs -----------------------------------------------------------
-  grob.vertex <- vector("list", netenv$N)
-  for (v in 1:netenv$N)
-    grob.vertex[[v]] <- grob_vertex(netenv, v)
+  if (!skip.vertex) {
+    grob.vertex <- vector("list", netenv$N)
+    for (v in 1:netenv$N)
+      grob.vertex[[v]] <- grob_vertex(netenv, v)
+  } else
+    grob.vertex <- NULL
 
-  grob.edge <- vector("list", netenv$M)
-  for (e in 1:netenv$M)
-    grob.edge[[e]] <- grob_edge(netenv, e)
+  if (!skip.edges | !skip.arrows) {
+
+    grob.edge <- vector("list", netenv$M)
+    for (e in 1:netenv$M)
+      grob.edge[[e]] <- grob_edge(netenv, e)
+
+  } else
+    grob.edge <- NULL
 
   # Agregated grob -------------------------------------------------------------
   ans <- do.call(

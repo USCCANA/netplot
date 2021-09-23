@@ -17,6 +17,7 @@ nplot(...)
   vertex.size = igraph::degree(x, mode = "in"),
   vertex.label = igraph::vertex_attr(x, "name"),
   edge.width = igraph::edge_attr(x, "weight"),
+  skip.arrows = !igraph::is_directed(x),
   ...
 )
 
@@ -25,6 +26,7 @@ nplot(...)
   layout = sna::gplot.layout.kamadakawai(x, NULL),
   vertex.size = sna::degree(x, cmode = "indegree"),
   vertex.label = network::get.vertex.attribute(x, "vertex.names"),
+  skip.arrows = !network::is.directed(x),
   ...
 )
 
