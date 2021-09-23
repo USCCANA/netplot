@@ -12,9 +12,9 @@ Medicine](https://raw.githubusercontent.com/USCbiostats/badges/master/tommy-uscp
 
 # netplot
 
-An alternative graph visualization engine that puts an emphasis on
-aesthetics at the same time of providing default parameters that provide
-visualizations that are out-of-the-box nice.
+An alternative graph visualization tool that emphasizes aesthetics,
+providing default parameters that deliver out-of-the-box lovely
+visualizations.
 
 Some features:
 
@@ -24,7 +24,7 @@ Some features:
 3.  True curved edges drawing.
 4.  User-defined edge curvature.
 5.  Nicer vertex frame color.
-6.  Better use of space filling the plotting device.
+6.  Better use of space-filling the plotting device.
 
 The package uses the `grid` plotting system (just like `ggplot2`).
 
@@ -153,7 +153,7 @@ nplot(
   edge.width        = E(net)$Passengers,
   vertex.color      = col,
   skip.vertex       = TRUE,
-  vertex.size.range = c(0,0),
+  skip.arrows       = TRUE,
   edge.width.range  = c(.75, 4, 4),
   bg.col            = "black"
   )
