@@ -2,8 +2,7 @@ VERSION:=$(shell Rscript -e 'x<-readLines("DESCRIPTION");cat(gsub(".+[:]\\s*", "
 PKGNAME:=$(shell Rscript -e 'x<-readLines("DESCRIPTION");cat(gsub(".+[:]\\s*", "", x[grepl("^Package", x)]))')
 
 install: 
-	$(MAKE) clean && \
-		R CMD build $(PKGNAME)_$(VERSION).tar.gz && \
+	$(MAKE) clean && R CMD build . && \
 		R CMD INSTALL $(PKGNAME)_$(VERSION).tar.gz
 		
 
