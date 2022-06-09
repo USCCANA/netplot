@@ -445,7 +445,7 @@ nplot.default <- function(
 #' @export
 #' @param newpage Logical scalar. When `TRUE` calls [grid::grid.newpage].
 #' @param y,... Ignored
-print.netplot <- function(x, y = NULL, newpage=TRUE, ...) {
+print.netplot <- function(x, y = NULL, newpage = TRUE, ...) {
 
   # Drawing
   if (newpage) {

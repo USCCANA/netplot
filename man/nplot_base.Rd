@@ -82,13 +82,7 @@ draw (approximate) the arc (edge).}
 
 \item{sample.edges}{Numeric scalar between 0 and 1. Proportion of edges to sample.}
 
-\item{skip.vertex}{Logical scalar. When \code{TRUE} the object
-is not plotted.}
-
-\item{skip.edges}{Logical scalar. When \code{TRUE} the object
-is not plotted.}
-
-\item{skip.arrows}{Logical scalar. When \code{TRUE} the object
+\item{skip.vertex, skip.edges, skip.arrows}{Logical scalar. When \code{TRUE} the object
 is not plotted.}
 
 \item{add}{Logical scalar.}
