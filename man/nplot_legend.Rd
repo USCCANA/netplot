@@ -50,13 +50,36 @@ V(x)$nsides <- sample(c(10, 4), 200, replace = TRUE)
 g <- nplot(
   x,
   vertex.nsides = V(x)$nsides,
-  vertex.color  = ifelse(V(x)$nsides == 4, "red", "steelblue")
+  vertex.color  = ifelse(V(x)$nsides == 4, "red", "steelblue"),
+  edge.line.breaks = 5
   )
 
 nplot_legend(
   g,
-  labels = c("circle", "diamond"),
-  pch    = c(21, 23),
-  gp     = gpar(fill = c("steelblue", "red"))
+  labels = c("circle", "diamond", "edge"),
+  pch    = c(21, 23, NA),
+  gp     = gpar(
+    fill = c("steelblue", "red", NA),
+    lwd  = c(NA, NA, 1),
+    col  = c(NA, NA, "purple")
+    )
   )
+grid.text("Legend to the left (default)", y = unit(.95, "npc"), just = "bottom")
+
+nplot_legend(
+  g,
+  labels = c("circle", "diamond", "edge"),
+  pch    = c(21, 23, NA),
+  gp     = gpar(
+    fill = c("steelblue", "red", NA),
+    lwd  = c(NA, NA, 1),
+    col  = c(NA, NA, "purple")
+    ),
+  # These two extra options set the legend to the bottom
+  packgrob.args = list(side = "bottom"),
+  ncol = 3
+  )
+grid.text("Legend bottom", y = unit(.95, "npc"), just = "bottom")
+
+
 }

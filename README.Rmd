@@ -94,6 +94,13 @@ ans <- nplot(
 # Plot it!
 ans
 
+# With a legend
+nplot_legend(
+  ans, 
+  labels = paste("Group", 1:4),
+  pch    = c(21, 21, 21),
+  gp     = gpar(fill = grDevices::hcl.colors(5, "Plasma")[2:4])
+  )
 ```
 
 ### USairports
@@ -137,8 +144,9 @@ nplot(
   vertex.color      = col,
   skip.vertex       = TRUE,
   skip.arrows       = TRUE,
-  edge.width.range  = c(.75, 4, 4),
-  bg.col            = "black"
+  edge.width.range  = c(.75, 4, 4), 
+  bg.col            = "black",
+  edge.line.breaks  = 10
   )
 ```
 

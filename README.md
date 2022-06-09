@@ -59,6 +59,7 @@ library(igraph)
 #> 
 #>     union
 library(netplot)
+#> Loading required package: grid
 #> 
 #> Attaching package: 'netplot'
 #> The following object is masked from 'package:igraph':
@@ -113,6 +114,18 @@ ans
 
 <img src="man/figures/README-unnamed-chunk-1-1.png" width="85%" />
 
+``` r
+# With a legend
+nplot_legend(
+  ans, 
+  labels = paste("Group", 1:4),
+  pch    = c(21, 21, 21),
+  gp     = gpar(fill = grDevices::hcl.colors(5, "Plasma")[2:4])
+  )
+```
+
+<img src="man/figures/README-unnamed-chunk-1-2.png" width="85%" />
+
 ### USairports
 
 ``` r
@@ -154,8 +167,9 @@ nplot(
   vertex.color      = col,
   skip.vertex       = TRUE,
   skip.arrows       = TRUE,
-  edge.width.range  = c(.75, 4, 4),
-  bg.col            = "black"
+  edge.width.range  = c(.75, 4, 4), 
+  bg.col            = "black",
+  edge.line.breaks  = 10
   )
 ```
 

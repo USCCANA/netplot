@@ -24,15 +24,38 @@
 #' g <- nplot(
 #'   x,
 #'   vertex.nsides = V(x)$nsides,
-#'   vertex.color  = ifelse(V(x)$nsides == 4, "red", "steelblue")
+#'   vertex.color  = ifelse(V(x)$nsides == 4, "red", "steelblue"),
+#'   edge.line.breaks = 5
 #'   )
 #'
 #' nplot_legend(
 #'   g,
-#'   labels = c("circle", "diamond"),
-#'   pch    = c(21, 23),
-#'   gp     = gpar(fill = c("steelblue", "red"))
+#'   labels = c("circle", "diamond", "edge"),
+#'   pch    = c(21, 23, NA),
+#'   gp     = gpar(
+#'     fill = c("steelblue", "red", NA),
+#'     lwd  = c(NA, NA, 1),
+#'     col  = c(NA, NA, "purple")
+#'     )
 #'   )
+#' grid.text("Legend to the left (default)", y = unit(.95, "npc"), just = "bottom")
+#'
+#' nplot_legend(
+#'   g,
+#'   labels = c("circle", "diamond", "edge"),
+#'   pch    = c(21, 23, NA),
+#'   gp     = gpar(
+#'     fill = c("steelblue", "red", NA),
+#'     lwd  = c(NA, NA, 1),
+#'     col  = c(NA, NA, "purple")
+#'     ),
+#'   # These two extra options set the legend to the bottom
+#'   packgrob.args = list(side = "bottom"),
+#'   ncol = 3
+#'   )
+#' grid.text("Legend bottom", y = unit(.95, "npc"), just = "bottom")
+#'
+#'
 nplot_legend <- function(
     g,
     labels,
@@ -42,26 +65,33 @@ nplot_legend <- function(
     packgrob.args = list(side = "left")
     ) {
 
-  # Cleaning up
-  if (newpage)
-    grid::grid.newpage()
-
   # Creating the new frame
   gf <- grid::packGrob(grid::frameGrob(), g)
 
   # Adding the legend
-  legend.args   <- do.call(grid::legendGrob, c(list(labels = labels, pch = pch, gp = gp), list(...)))
+  legend.args   <- do.call(
+    grid::legendGrob,
+    c(list(labels = labels, pch = pch, gp = gp), list(...))
+    )
+
   packgrob.args <- c(list(frame = gf, grob = legend.args), packgrob.args)
 
   gf <- do.call(grid::packGrob, packgrob.args)
 
   # Setting the right names
-  gf$children[[1]] <- editGrob(gf$children[[1]], name = grobName(gf$children[[1]], "graph"))
-  gf$children[[2]] <- editGrob(gf$children[[2]], name = grobName(gf$children[[2]], "legend"))
+  gf$children[[1]] <- editGrob(
+    gf$children[[1]],
+    name = grobName(gf$children[[1]], "graph")
+    )
+
+  gf$children[[2]] <- editGrob(
+    gf$children[[2]],
+    name = grobName(gf$children[[2]], "legend")
+  )
 
   structure(
     gf,
-    class = "netplot_legend"
+    class = c("netplot_legend", class(gf))
   )
 
 }

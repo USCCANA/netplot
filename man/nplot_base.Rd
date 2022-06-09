@@ -9,7 +9,7 @@ nplot_base(
   layout = igraph::layout_nicely(x),
   vertex.size = igraph::degree(x, mode = "in"),
   bg.col = "transparent",
-  vertex.nsides = 15,
+  vertex.nsides = 10,
   vertex.color = grDevices::hcl.colors(1),
   vertex.size.range = c(0.01, 0.03),
   vertex.frame.color = grDevices::adjustcolor(vertex.color, red.f = 0.75, green.f =
@@ -24,7 +24,7 @@ nplot_base(
   edge.color.alpha = c(0.1, 0.5),
   edge.curvature = pi/3,
   edge.line.lty = "solid",
-  edge.line.breaks = 10,
+  edge.line.breaks = 5,
   sample.edges = 1,
   skip.vertex = FALSE,
   skip.edges = FALSE,
