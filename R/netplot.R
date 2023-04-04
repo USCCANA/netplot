@@ -237,6 +237,15 @@ nplot.default <- function(
   # listing objects
   netenv <- environment()
 
+  # Checking layout
+  if (!inherits(layout, which = c("matrix")))
+    stop(
+      "-layout- should be of class 'matrix'. It currently is '",
+      class(layout),
+      "'"
+      )
+
+
   netenv$N <- nrow(layout)
   netenv$M <- nrow(edgelist)
 

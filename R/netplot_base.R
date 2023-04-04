@@ -56,6 +56,14 @@ nplot_base <- function(
   zero.margins        = TRUE
 ) {
 
+  # Checking layout
+  if (!inherits(layout, which = c("matrix")))
+    stop(
+      "-layout- should be of class 'matrix'. It currently is '",
+      class(layout),
+      "'"
+    )
+
   # Computing colors
   if (!length(vertex.color)) {
     vertex.color <- length(table(igraph::degree(x, mode = "in")))
