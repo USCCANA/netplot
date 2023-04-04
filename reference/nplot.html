@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">netplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2-1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2-0</span>
       </span>
     </div>
 
@@ -127,7 +127,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Plot a network</h1>
-    <small class="dont-index">Source: <a href='https://github.com/USCCANA/netplot/blob/master/R/netplot.r'><code>R/netplot.r</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/USCCANA/netplot/blob/master/R/netplot.R'><code>R/netplot.R</code></a></small>
     <div class="hidden name"><code>nplot.Rd</code></div>
     </div>
 
@@ -158,6 +158,9 @@
   <span class='va'>...</span>
 <span class='op'>)</span>
 
+<span class='co'># S3 method for matrix</span>
+<span class='fu'>nplot</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
 <span class='co'># S3 method for default</span>
 <span class='fu'>nplot</span><span class='op'>(</span>
   <span class='va'>edgelist</span>,
@@ -167,8 +170,8 @@
   vertex.nsides <span class='op'>=</span> <span class='fl'>10</span>,
   vertex.color <span class='op'>=</span> <span class='fu'>grDevices</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/grDevices/palettes.html'>hcl.colors</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>,
   vertex.size.range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.01</span>, <span class='fl'>0.03</span><span class='op'>)</span>,
-  vertex.frame.color <span class='op'>=</span> <span class='fu'>grDevices</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/grDevices/adjustcolor.html'>adjustcolor</a></span><span class='op'>(</span><span class='va'>vertex.color</span>, red.f <span class='op'>=</span> <span class='fl'>0.75</span>, green.f <span class='op'>=</span>
-    <span class='fl'>0.75</span>, blue.f <span class='op'>=</span> <span class='fl'>0.75</span><span class='op'>)</span>,
+  vertex.frame.color <span class='op'>=</span> <span class='fu'>grDevices</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/grDevices/adjustcolor.html'>adjustcolor</a></span><span class='op'>(</span><span class='va'>vertex.color</span>, red.f <span class='op'>=</span> <span class='fl'>0.75</span>, green.f <span class='op'>=</span> <span class='fl'>0.75</span>,
+    blue.f <span class='op'>=</span> <span class='fl'>0.75</span><span class='op'>)</span>,
   vertex.rot <span class='op'>=</span> <span class='fl'>0</span>,
   vertex.frame.prop <span class='op'>=</span> <span class='fl'>0.2</span>,
   vertex.label <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -202,7 +205,8 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>An <code>igraph</code> object.</p></td>
+      <td><p>A graph. It supports networks stored as <code>igraph</code>, <code>network</code>, and
+matrices objects (see details).</p></td>
     </tr>
     <tr>
       <th>layout</th>
@@ -363,7 +367,8 @@ of the figure.</p></li>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>In the case of <code>edge.color</code>, the user can specify colors using <a href='netplot-formulae.html'>netplot-formulae</a>.</p>
+    <p>When <code>x</code> is of class <a href='https://rdrr.io/r/base/matrix.html'>matrix</a>, it will be passed to <code><a href='https://rdrr.io/pkg/igraph/man/graph_from_adjacency_matrix.html'>igraph::graph_from_adjacency_matrix()</a></code>.</p>
+<p>In the case of <code>edge.color</code>, the user can specify colors using <a href='netplot-formulae.html'>netplot-formulae</a>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='nplot_base.html'>nplot_base</a></p></div>
@@ -376,7 +381,7 @@ of the figure.</p></li>
 
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='co'># ala igraph</span>
 </div><div class='img'><img src='nplot-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>nplot</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='co'># ala netplot</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in inherits(layout, which = c("matrix")): argument "what" is missing, with no default</span></div></pre>
+</div><div class='img'><img src='nplot-2.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

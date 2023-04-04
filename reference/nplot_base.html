@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">netplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2-1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2-0</span>
       </span>
     </div>
 
@@ -127,7 +127,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1><code>nplot</code> using base graphics</h1>
-    <small class="dont-index">Source: <a href='https://github.com/USCCANA/netplot/blob/master/R/netplot_base.r'><code>R/netplot_base.r</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/USCCANA/netplot/blob/master/R/netplot_base.R'><code>R/netplot_base.R</code></a></small>
     <div class="hidden name"><code>nplot_base.Rd</code></div>
     </div>
 
@@ -143,8 +143,8 @@
   vertex.nsides <span class='op'>=</span> <span class='fl'>10</span>,
   vertex.color <span class='op'>=</span> <span class='fu'>grDevices</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/grDevices/palettes.html'>hcl.colors</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>,
   vertex.size.range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.01</span>, <span class='fl'>0.03</span><span class='op'>)</span>,
-  vertex.frame.color <span class='op'>=</span> <span class='fu'>grDevices</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/grDevices/adjustcolor.html'>adjustcolor</a></span><span class='op'>(</span><span class='va'>vertex.color</span>, red.f <span class='op'>=</span> <span class='fl'>0.75</span>, green.f <span class='op'>=</span>
-    <span class='fl'>0.75</span>, blue.f <span class='op'>=</span> <span class='fl'>0.75</span><span class='op'>)</span>,
+  vertex.frame.color <span class='op'>=</span> <span class='fu'>grDevices</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/grDevices/adjustcolor.html'>adjustcolor</a></span><span class='op'>(</span><span class='va'>vertex.color</span>, red.f <span class='op'>=</span> <span class='fl'>0.75</span>, green.f <span class='op'>=</span> <span class='fl'>0.75</span>,
+    blue.f <span class='op'>=</span> <span class='fl'>0.75</span><span class='op'>)</span>,
   vertex.rot <span class='op'>=</span> <span class='fl'>0</span>,
   vertex.frame.prop <span class='op'>=</span> <span class='fl'>0.1</span>,
   edge.width <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -169,7 +169,8 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>An <code>igraph</code> object.</p></td>
+      <td><p>A graph. It supports networks stored as <code>igraph</code>, <code>network</code>, and
+matrices objects (see details).</p></td>
     </tr>
     <tr>
       <th>layout</th>
@@ -299,7 +300,7 @@ tip of the edges.</p></li>
 <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/igraph/man/sample_smallworld.html'>sample_smallworld</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>200</span>, <span class='fl'>5</span>, <span class='fl'>0.03</span><span class='op'>)</span>
 
 <span class='fu'>nplot_base</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='co'># ala netplot (using base)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in inherits(layout, which = c("matrix")): argument "what" is missing, with no default</span></div></pre>
+</div><div class='img'><img src='nplot_base-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
