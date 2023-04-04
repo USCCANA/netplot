@@ -16,7 +16,8 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 
 #' Plot a network
 #'
-#' @param x An `igraph` object.
+#' @param x A graph. It supports networks stored as `igraph`, `network`, and
+#' matrices objects (see details).
 #' @param bg.col Color of the background.
 #' @param layout Numeric two-column matrix with the graph layout.
 #' @param vertex.size Numeric vector of length `vcount(x)`. Absolute size of the vertex.
@@ -58,6 +59,8 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' @importFrom graphics lines par plot polygon rect segments plot.new plot.window
 #'
 #' @details
+#' When `x` is of class [matrix], it will be passed to [igraph::graph_from_adjacency_matrix()].
+#'
 #' In the case of `edge.color`, the user can specify colors using [netplot-formulae].
 #' @return An object of class `c("netplot", "gTree", "grob", "gDesc")`. The object
 #' has an additional set of attributes:
@@ -129,6 +132,18 @@ nplot.network <- function(
     vertex.size = vertex.size,
     vertex.label = vertex.label,
     skip.arrows = skip.arrows,
+    ...
+  )
+
+}
+
+#' @export
+#' @rdname nplot
+#' @importFrom igraph graph_from_adjacency_matrix
+nplot.matrix <- function(x, ...) {
+
+  nplot.igraph(
+    igraph::graph_from_adjacency_matrix(x),
     ...
   )
 
@@ -238,7 +253,7 @@ nplot.default <- function(
   netenv <- environment()
 
   # Checking layout
-  if (!inherits(layout, which = c("matrix")))
+  if (!inherits(layout, what = c("matrix")))
     stop(
       "-layout- should be of class 'matrix'. It currently is '",
       class(layout),
@@ -397,7 +412,7 @@ nplot.default <- function(
   class(ans) <- c("netplot", class(ans))
 
   # Passing edge color
-  if (length(vertex.color))
+  if (!skip.vertex && length(vertex.color))
     ans <- set_vertex_gpar(
       x       = ans,
       element = "core",
@@ -405,7 +420,7 @@ nplot.default <- function(
       col     = vertex.color
     )
 
-  if (length(vertex.frame.color))
+  if (!skip.vertex && length(vertex.frame.color))
     ans <- set_vertex_gpar(
       x       = ans,
       element = "frame",
@@ -413,14 +428,17 @@ nplot.default <- function(
       col     = vertex.frame.color
     )
 
-  if (length(edge.color)) {
+  if (!skip.edges && length(edge.color)) {
 
     ans <- set_edge_gpar(x = ans, element = "line", col = edge.color)
 
-    gp <- get_edge_gpar(x = ans, element = "line", "col", simplify=FALSE)$col
-    gp <- sapply(seq_along(gp), function(i) gp[[i]][netenv$edge.line.breaks[i]])
+    if (!skip.arrows) {
 
-    ans <- set_edge_gpar(x = ans, "arrow", fill = gp, col=gp)
+      gp <- get_edge_gpar(x = ans, element = "line", "col", simplify=FALSE)$col
+      gp <- sapply(seq_along(gp), function(i) gp[[i]][netenv$edge.line.breaks[i]])
+      ans <- set_edge_gpar(x = ans, "arrow", fill = gp, col=gp)
+
+    }
   }
 
 

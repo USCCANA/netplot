@@ -1,6 +1,14 @@
+netplot 0.2-0
 
+-   The arguments skip.vertex, skip.edges, and skip.arrows now work as
+    documented.
 
-NETPLOT 0.1-0
+-   New function nplot_legend() helps adding legends to the figure.
 
+-   New nplot() method for matrices.
+
+-   New feature: Gradients.
+
+netplot 0.1-0
 
 -   First CRAN release.

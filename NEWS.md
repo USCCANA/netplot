@@ -5,6 +5,10 @@
   
 *  New function `nplot_legend()` helps adding legends to the figure.
 
+*  New `nplot()` method for matrices.
+
+*  New feature: Gradients.
+
 
 # netplot 0.1-0
 

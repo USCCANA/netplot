@@ -103,6 +103,17 @@ nplot_legend(
   )
 ```
 
+Starting version 0.2-0, we can use gradients!
+
+```{r uk-faculty-gradient, fig.width=14, fig.height=14}
+ans |>
+  set_vertex_gpar(
+    element = "core",
+    fill = lapply(get_vertex_gpar(ans, "frame", "col")$col, \(i) {
+      radialGradient(c("white", i), cx1=.8, cy1=.8, r1=0)
+      }))
+```
+
 ### USairports
 
 ```{r us-airports, cache=FALSE}
@@ -129,19 +140,12 @@ net <- simplify(USairports, edge.attr.comb = list(
   "ignore"
 ))
 
-# Getting a pretty color
-
-f <- 1.5
-col <- adjustcolor(
-  rev(grDevices::hcl.colors(10, alpha = .5))[1],
-  red.f = f, blue.f = f, green.f = f
-  )
-
+# Pretty graph
 nplot(
   net,
   layout            = layout,
   edge.width        = E(net)$Passengers,
-  vertex.color      = col,
+  edge.color        = ~ ego(alpha = 0) + alter(col = "yellow", alpha = .75),
   skip.vertex       = TRUE,
   skip.arrows       = TRUE,
   edge.width.range  = c(.75, 4, 4), 

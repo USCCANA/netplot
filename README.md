@@ -115,6 +115,7 @@ ans
 <img src="man/figures/README-unnamed-chunk-1-1.png" width="85%" />
 
 ``` r
+
 # With a legend
 nplot_legend(
   ans, 
@@ -125,6 +126,19 @@ nplot_legend(
 ```
 
 <img src="man/figures/README-unnamed-chunk-1-2.png" width="85%" />
+
+Starting version 0.2-0, we can use gradients!
+
+``` r
+ans |>
+  set_vertex_gpar(
+    element = "core",
+    fill = lapply(get_vertex_gpar(ans, "frame", "col")$col, \(i) {
+      radialGradient(c("white", i), cx1=.8, cy1=.8, r1=0)
+      }))
+```
+
+<img src="man/figures/README-uk-faculty-gradient-1.png" width="85%" />
 
 ### USairports
 
@@ -152,19 +166,12 @@ net <- simplify(USairports, edge.attr.comb = list(
   "ignore"
 ))
 
-# Getting a pretty color
-
-f <- 1.5
-col <- adjustcolor(
-  rev(grDevices::hcl.colors(10, alpha = .5))[1],
-  red.f = f, blue.f = f, green.f = f
-  )
-
+# Pretty graph
 nplot(
   net,
   layout            = layout,
   edge.width        = E(net)$Passengers,
-  vertex.color      = col,
+  edge.color        = ~ ego(alpha = 0) + alter(col = "yellow", alpha = .75),
   skip.vertex       = TRUE,
   skip.arrows       = TRUE,
   edge.width.range  = c(.75, 4, 4), 

@@ -117,54 +117,82 @@ set_gpar <- function(x, type, element, idx, ...) {
   else
     unname(split(x$.edgelist[idx,], idx)) #lapply(idx, function(e) x$.edgelist[e, ])
 
-  # Converting
+  # Converting the arguments into list of length(n)
   listme <- function(...) {
 
-    x    <- list(...)
-    nill <- names(x)[which(sapply(x, is.null))]
-    for (p in nill)
-      x[p] <- NULL
+      x <- list(...)
+      nill <- names(x)[which(sapply(x, is.null))]
+      for (p in nill)
+        x[p] <- NULL
 
-    f <- function(...) {
-      structure(
-        c(list(...), rep(list(NULL), length(nill))),
-        names = c(names(x), nill)
-        )
-    }
+      f <- function(...) {
+        structure(
+          c(list(...), rep(list(NULL), length(nill))),
+          names = c(names(x), nill)
+          )
+      }
 
-    do.call(Map, c(list(f=f), x))
+      do.call(Map, c(list(f=f), x))
 
   }
 
   n <- ifelse(type == "edge", x$.M, x$.N)
-  dots <- c(list(placeholder=integer(n)), list(...))
+  dots <- list(...)
 
   for (d in names(dots))
     if (inherits(dots[[d]], "formula"))
       dots[[d]] <- netplot_edge_formulae(x, dots[[d]])
+
+  # Verifying the individual lists
+  for (i in names(dots)) {
+    if (inherits(dots[[i]], c("GridRadialGradient", "GridPattern"))) {
+      dots[[i]] <- replicate(n, list(dots[[i]]), simplify = FALSE)
+    }
+  }
 
   dots <- do.call(listme, dots)
 
   # Updating the
   for (i in seq_along(idx)) {
 
-    np_validate$gpar(dots[[i]][-1])
+    np_validate$gpar(dots[[i]])
 
     # Fabricating the name
     iname <- netplot_name$make(idx[[i]])
 
-    for (p in names(dots[[i]][-1])) {
-      if (!missing(element))
-        x$children$graph$children[[iname]]$children[[element]]$gp[[p]] <- dots[[i]][[p]]
-      else
-        x$children$graph$children[[iname]]$gp[[p]] <- dots[[i]][[p]]
-
+    if (element == "arrow") {
+      w <<- c("THIS IS ARROW")
     }
 
-    if (!missing(element))
-      class(x$children$graph$children[[iname]]$children[[element]]$gp) <- "gpar"
-    else
-      class(x$children$graph$children[[iname]]$gp) <- "gpar"
+    if (!missing(element)) {
+
+      x$children$graph$children[[iname]]$children[[element]] <-
+        grid::editGrob(
+          grob = x$children$graph$children[[iname]]$children[[element]],
+          gp = do.call(grid::gpar, dots[[i]])
+        )
+
+    } else {
+      x$children$graph$children[[iname]] <- grid::editGrob(
+        grob = x$children$graph$children[[iname]],
+        gp = do.call(grid::gpar, dots[[i]])
+      )
+      # $gp[[p]] <- dots[[i]][[p]]
+    }
+
+    # for (p in names(dots[[i]][-1])) {
+    #
+    #   if (!missing(element))
+    #     x$children$graph$children[[iname]]$children[[element]]$gp[[p]] <- dots[[i]][[p]]
+    #   else
+    #     x$children$graph$children[[iname]]$gp[[p]] <- dots[[i]][[p]]
+    #
+    # }
+
+    # if (!missing(element))
+    #   class(x$children$graph$children[[iname]]$children[[element]]$gp) <- "gpar"
+    # else
+    #   class(x$children$graph$children[[iname]]$gp) <- "gpar"
   }
 
   # Returning the grob

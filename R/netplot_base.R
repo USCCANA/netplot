@@ -57,7 +57,7 @@ nplot_base <- function(
 ) {
 
   # Checking layout
-  if (!inherits(layout, which = c("matrix")))
+  if (!inherits(layout, what = c("matrix")))
     stop(
       "-layout- should be of class 'matrix'. It currently is '",
       class(layout),
