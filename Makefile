@@ -40,6 +40,7 @@ docker:
 
 checkd:
 	apt update && \
+		tlmgr install amsmath && \
 		install2.r igraph gridGraphics gridBase gridExtra magrittr tinytest sna \
 		ggraph rmarkdown knitr intergraph igraphdata pkgdown markdown && \
 		apt install libglpk-dev --no-install-recommends -y && \

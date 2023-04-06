@@ -12,3 +12,5 @@
 netplot\._.*\.tar\.gz
 ^Makefile$
 ^Rplots\.pdf$
+^doc$
+^Meta$
