@@ -97,6 +97,8 @@ nplot_legend <- function(
 }
 
 #' @export
+#' @param x An object of class `netplot_legend`.
+#' @param y Ignored.
 #' @rdname nplot_legend
 print.netplot_legend <- function(x, y = NULL, newpage = TRUE, ...) {
 

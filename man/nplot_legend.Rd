@@ -29,6 +29,10 @@ nplot_legend(
 
 \item{packgrob.args}{List of arguments passed to \code{\link[grid:grid.pack]{grid::packGrob()}}.}
 
+\item{x}{An object of class \code{netplot_legend}.}
+
+\item{y}{Ignored.}
+
 \item{newpage}{Logical scalar. When \code{TRUE} it calls \code{\link[grid:grid.newpage]{grid::grid.newpage()}}.}
 }
 \value{
