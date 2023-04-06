@@ -6,12 +6,12 @@
 # See https://github.com/r-lib/actions/tree/master/examples#readme for
 # additional example workflows available for the R community.
 
-name: R CI 
+name: R CI
 
 on: [push, pull_request]
 
 env:
-  REPO: usccana/netplot
+  REPO: ghcr.io/rocker-org/r-ver
 
 
 jobs:
@@ -20,12 +20,12 @@ jobs:
     strategy:
       matrix:
         include:
-        - name: release
-          cmd : R
-          cntr: ${REPO}:release
- 
+        - name: latest
+          cmd : make
+          cntr: ${REPO}:latest
+
         - name: dev
-          cmd : R
+          cmd : make
           cntr: ${REPO}:devel
 
     steps:
@@ -37,9 +37,6 @@ jobs:
       - name: SessionInfo
         run: docker run --rm -i -v ${PWD}:/mnt -w /mnt ${{ matrix.cntr }} ${{ matrix.cmd }} -q -e 'sessionInfo()'
 
-      - name: Build
-        run: docker run --rm -i -v ${PWD}:/mnt -w /mnt ${{ matrix.cntr }} ${{ matrix.cmd }} CMD build --no-build-vignettes --no-manual .
-
-      - name: Check
-        run: docker run --rm -i -v ${PWD}:/mnt -w /mnt -e CI=true ${{ matrix.cntr }} ${{ matrix.cmd }} CMD check --no-vignettes --no-manual netplot_*.tar.gz
+      - name: Build & check
+        run: docker run --rm -i -v ${PWD}:/mnt -w /mnt ${{ matrix.cntr }} ${{ matrix.cmd }} checkd
 

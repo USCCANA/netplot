@@ -37,3 +37,9 @@ man: R/*
 
 docker:
 	docker run -v$(pwd):/pkg/ -w/pkg --rm -i uscbiostats/fmcmc:latest make check
+
+checkd:
+	install2.r igraph gridgraphics gridbase gridextra magrittr tinytest sna \
+		ggraph rmarkdown knitr intergraph igraphdata pkgdown && \
+		R CMD build . && \
+		R CMD check $(PKGNAME)_$(VERSION).tar.gz
