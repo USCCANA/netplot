@@ -180,6 +180,10 @@ color_formula <- function(x, col, alpha, env, type, mix = 1, postfix = NULL) {
     stop("`col` has the wrong length (", length(col), "). When passing a ",
          "vector it should be of length ", n, ".", call. = FALSE)
 
+  # If all are NA, then it is replaced
+  if (all(is.na(col)))
+    col[] <- grDevices::hcl.colors(1)
+
   # Checking alpha
   alpha <- if (missing(alpha))
     rep(.8, n)

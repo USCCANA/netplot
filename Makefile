@@ -40,10 +40,9 @@ docker:
 
 checkd:
 	apt update && \
-		apt install texlive-fonts-recommended -y --no-install-recommends && \
 		tlmgr install amsmath && \
 		install2.r igraph gridGraphics gridBase gridExtra magrittr tinytest sna \
 		ggraph rmarkdown knitr intergraph igraphdata pkgdown markdown && \
 		apt install libglpk-dev --no-install-recommends -y && \
 		R CMD build . && \
-		R CMD check $(PKGNAME)_$(VERSION).tar.gz
+		R CMD check --no-manual $(PKGNAME)_$(VERSION).tar.gz
