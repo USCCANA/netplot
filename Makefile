@@ -40,6 +40,7 @@ docker:
 
 checkd:
 	apt update && \
+		apt install texlive-fonts-recommended -y && \
 		tlmgr install amsmath && \
 		install2.r igraph gridGraphics gridBase gridExtra magrittr tinytest sna \
 		ggraph rmarkdown knitr intergraph igraphdata pkgdown markdown && \
