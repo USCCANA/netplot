@@ -11,7 +11,7 @@ name: R CI
 on: [push, pull_request]
 
 env:
-  REPO: rocker/r-ver
+  REPO: rocker/verse
 
 
 jobs:
