@@ -39,7 +39,8 @@ docker:
 	docker run -v$(pwd):/pkg/ -w/pkg --rm -i uscbiostats/fmcmc:latest make check
 
 checkd:
-	install2.r igraph gridGraphics gridBase gridExtra magrittr tinytest sna \
+	apt update && \
+		install2.r igraph gridGraphics gridBase gridExtra magrittr tinytest sna \
 		ggraph rmarkdown knitr intergraph igraphdata pkgdown && \
 		apt install libglpk-dev --no-install-recommends -y && \
 		R CMD build . && \
