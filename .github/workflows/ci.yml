@@ -11,7 +11,7 @@ name: R CI
 on: [push, pull_request]
 
 env:
-  REPO: ghcr.io/rocker-org/r-ver
+  REPO: rocker/r-ver
 
 
 jobs:
@@ -35,7 +35,7 @@ jobs:
         run: docker pull ${{ matrix.cntr }}
 
       - name: SessionInfo
-        run: docker run --rm -i -v ${PWD}:/mnt -w /mnt ${{ matrix.cntr }} ${{ matrix.cmd }} -q -e 'sessionInfo()'
+        run: docker run --rm -i -v ${PWD}:/mnt -w /mnt ${{ matrix.cntr }} Rscript --vanilla -e 'sessionInfo()'
 
       - name: Build & check
         run: docker run --rm -i -v ${PWD}:/mnt -w /mnt ${{ matrix.cntr }} ${{ matrix.cmd }} checkd
