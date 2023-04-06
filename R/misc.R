@@ -39,6 +39,3 @@ calc_degree <- function(x, mode. = "in") {
     stop_unsopported_graph(x)
 }
 
-
-
-

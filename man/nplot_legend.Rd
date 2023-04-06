@@ -9,7 +9,7 @@ nplot_legend(
   g,
   labels,
   pch,
-  gp = gpar(),
+  gp = grid::gpar(),
   ...,
   packgrob.args = list(side = "left")
 )

@@ -57,6 +57,7 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' @importFrom igraph layout_with_fr degree vcount ecount
 #' @importFrom grDevices adjustcolor rgb
 #' @importFrom graphics lines par plot polygon rect segments plot.new plot.window
+#' @import grid
 #'
 #' @details
 #' When `x` is of class [matrix], it will be passed to [igraph::graph_from_adjacency_matrix()].

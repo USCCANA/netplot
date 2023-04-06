@@ -60,7 +60,7 @@ nplot_legend <- function(
     g,
     labels,
     pch,
-    gp = gpar(),
+    gp = grid::gpar(),
     ...,
     packgrob.args = list(side = "left")
     ) {
@@ -81,12 +81,12 @@ nplot_legend <- function(
   # Setting the right names
   gf$children[[1]] <- editGrob(
     gf$children[[1]],
-    name = grobName(gf$children[[1]], "graph")
+    name = grid::grobName(gf$children[[1]], "graph")
     )
 
   gf$children[[2]] <- editGrob(
     gf$children[[2]],
-    name = grobName(gf$children[[2]], "legend")
+    name = grid::grobName(gf$children[[2]], "legend")
   )
 
   structure(

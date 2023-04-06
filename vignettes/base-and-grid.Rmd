@@ -9,15 +9,11 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, fig.width = 6, fig.height = 5)
-```
-
 Working with grid graphics provides a lot of flexibility that it is simply harder to get when using base graphics. Nevertheless, a lot of users may still be more comfortable with base graphics, and so this document shows a few examples on how to mix both of them using the [`gridBase`](https://cran.r-project.org/package=gridBase) package.
 
 First, we load igraph to simulate a small network and complement that with an uninteresting correlated data:
 
-```{r data-sim, warning=FALSE, message=FALSE}
+```{r data-sim, warning=FALSE, message=FALSE, fig.width = 6, fig.height = 5}
 library(igraph)
 
 # Simulation parameters
@@ -34,19 +30,18 @@ net <- sample_smallworld(1, n, 4, .1)
 
 And here we can create the `netplot` object, we use the [`magrittr`](https://cran.r-project.org/package=magrittr) package to make the workflow nicer:
 
-```{r netplot}
+```{r netplot, fig.width = 6, fig.height = 5}
 library(netplot)
 library(magrittr)
 
 np <- nplot(net, bg.col = "gray70") %>%
   set_edge_gpar("line", col = "gray50", alpha = .7) %>%
   set_vertex_gpar("frame", fill = "black", col = "black")
-
 ```
 
 Imagine that we would like to include a plot of the network in the following plot
 
-```{r baseplot}
+```{r baseplot, fig.width = 6, fig.height = 5}
 plot(x0, x1)
 ```
  
@@ -74,7 +69,7 @@ grid.draw(np)
 ```
 Which yields
 
-```{r alltogether, echo=FALSE}
+```{r alltogether, echo=FALSE, fig.width = 6, fig.height = 5}
 library(gridBase)
 library(grid)
 
@@ -90,7 +85,7 @@ grid.draw(np)
 
 Or suppose that you actually want to frame it into a rectangle to the topright corner of the entire device that uses 3/10 x 3/10 of the area, then:
 
-```{r topright}
+```{r topright, fig.width = 6, fig.height = 5}
 plot(x0, x1)
 # vp <- baseViewports() 
 # pushViewport(vp$figure)
@@ -101,7 +96,7 @@ grid.draw(np)
 Notice that we didn't need to extract the viewports of the base plot. Since we are just using the entire device, a simple viewport did the job. Now, image that you are feeling playful and would like to draw it a bit tilted, say -20 degrees:
 
 
-```{r tilted}
+```{r tilted, fig.width = 6, fig.height = 5}
 plot(x0, x1)
 pushViewport(
   viewport(x = .8, y = .8, width = .3, height = .3, angle = -20)
