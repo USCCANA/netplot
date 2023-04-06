@@ -41,5 +41,6 @@ docker:
 checkd:
 	install2.r igraph gridGraphics gridBase gridExtra magrittr tinytest sna \
 		ggraph rmarkdown knitr intergraph igraphdata pkgdown && \
+		apt install libglpk-dev --no-install-recommends -y && \
 		R CMD build . && \
 		R CMD check $(PKGNAME)_$(VERSION).tar.gz
