@@ -55,7 +55,7 @@ nplot(...)
   edge.width = 1,
   edge.width.range = c(1, 2),
   edge.arrow.size = NULL,
-  edge.color = ~ego(alpha = 0.25) + alter,
+  edge.color = ~ego(alpha = 0.25, col = "gray") + alter,
   edge.curvature = pi/3,
   edge.line.lty = "solid",
   edge.line.breaks = 5,

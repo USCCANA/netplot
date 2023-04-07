@@ -117,25 +117,6 @@ set_gpar <- function(x, type, element, idx, ...) {
   else
     unname(split(x$.edgelist[idx,], idx)) #lapply(idx, function(e) x$.edgelist[e, ])
 
-  # # Converting the arguments into list of length(n)
-  # listme <- function(...) {
-  #
-  #     x <- list(...)
-  #     nill <- names(x)[which(sapply(x, is.null))]
-  #     for (p in nill)
-  #       x[p] <- NULL
-  #
-  #     f <- function(...) {
-  #       structure(
-  #         c(list(...), rep(list(NULL), length(nill))),
-  #         names = c(names(x), nill)
-  #         )
-  #     }
-  #
-  #     do.call(Map, c(list(f=f), x))
-  #
-  # }
-
   n <- ifelse(type == "edge", x$.M, x$.N)
   dots <- extend_parameter(x = x, n = n, ...)
 
@@ -156,26 +137,14 @@ set_gpar <- function(x, type, element, idx, ...) {
           )
 
     } else {
+
       x$children$graph$children[[iname]] <- grid::editGrob(
         grob = x$children$graph$children[[iname]],
         gp = do.call(grid::gpar, dots[[i]])
       )
-      # $gp[[p]] <- dots[[i]][[p]]
+
     }
 
-    # for (p in names(dots[[i]][-1])) {
-    #
-    #   if (!missing(element))
-    #     x$children$graph$children[[iname]]$children[[element]]$gp[[p]] <- dots[[i]][[p]]
-    #   else
-    #     x$children$graph$children[[iname]]$gp[[p]] <- dots[[i]][[p]]
-    #
-    # }
-
-    # if (!missing(element))
-    #   class(x$children$graph$children[[iname]]$children[[element]]$gp) <- "gpar"
-    # else
-    #   class(x$children$graph$children[[iname]]$gp) <- "gpar"
   }
 
   # Returning the grob

@@ -236,7 +236,7 @@ nplot.default <- function(
   edge.width              = 1,
   edge.width.range        = c(1, 2),
   edge.arrow.size         = NULL,
-  edge.color              = ~ ego(alpha = .25) + alter,
+  edge.color              = ~ ego(alpha = .1, col = "gray") + alter,
   edge.curvature          = pi/3,
   edge.line.lty           = "solid",
   edge.line.breaks        = 5,
@@ -393,7 +393,11 @@ nplot.default <- function(
   background <- grid::rectGrob(
     gp = grid::gpar(
       fill = bg.col,
-      col  = grDevices::adjustcolor(bg.col, red.f = .75, green.f = .75, blue.f = .75)
+      col  = if (inherits(bg.col, c("GridRadialGradient", "GridPattern"))) {
+        grDevices::adjustcolor("gray", red.f = .75, green.f = .75, blue.f = .75)
+      } else {
+        grDevices::adjustcolor(bg.col, red.f = .75, green.f = .75, blue.f = .75)
+      }
     ),
     name = "background",
     vp   = grid::viewport(name = "background-vp")
