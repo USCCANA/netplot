@@ -171,7 +171,8 @@ nplot(
   net,
   layout            = layout,
   edge.width        = E(net)$Passengers,
-  edge.color        = ~ ego(alpha = 0) + alter(col = "yellow", alpha = .75),
+  edge.color        = 
+    ~ ego(col = "white", alpha = 0) + alter(col = "yellow", alpha = .75),
   skip.vertex       = TRUE,
   skip.arrows       = TRUE,
   edge.width.range  = c(.75, 4, 4), 
