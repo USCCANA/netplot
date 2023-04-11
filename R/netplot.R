@@ -261,9 +261,44 @@ nplot.default <- function(
       "'"
       )
 
-
   netenv$N <- nrow(layout)
   netenv$M <- nrow(edgelist)
+
+  # Sampling edges -------------------------------------------------------------
+  if (sample.edges < 1) {
+
+    sample.edges <- sample.int(
+      netenv$M, floor(netenv$M * sample.edges),
+      replace = FALSE
+      )
+
+    sample.edges <- sort(sample.edges)
+
+    edgelist <- edgelist[sample.edges, , drop=FALSE]
+
+    # Do we need to resize the edgepars?
+    epars <- c(
+      "edge.width",
+      "edge.width.range",
+      "edge.arrow.size",
+      "edge.color",
+      "edge.curvature",
+      "edge.line.lty",
+      "edge.line.breaks"
+      )
+
+    for (epar in epars) {
+
+      if (length(netenv[[epar]]) == netenv$M)
+        netenv[[epar]] <- netenv[[epar]][sample.edges]
+
+    }
+
+    netenv$M <- length(sample.edges)
+
+  }
+
+  # end ------------------------------------------------------------------------
 
   # This function will repeat a patter taking into account the number of columns
   .rep <- function(x, .times) {

@@ -9,6 +9,8 @@
 
 *  New feature: Gradients.
 
+*  The argument `sample.edges` now works as expected.
+
 
 # netplot 0.1-0
 
