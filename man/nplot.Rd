@@ -55,7 +55,7 @@ nplot(...)
   edge.width = 1,
   edge.width.range = c(1, 2),
   edge.arrow.size = NULL,
-  edge.color = ~ego(alpha = 0.25, col = "gray") + alter,
+  edge.color = ~ego(alpha = 0.1, col = "gray") + alter,
   edge.curvature = pi/3,
   edge.line.lty = "solid",
   edge.line.breaks = 5,
@@ -74,13 +74,13 @@ nplot(...)
 \item{x}{A graph. It supports networks stored as \code{igraph}, \code{network}, and
 matrices objects (see details).}
 
-\item{layout}{Numeric two-column matrix with the graph layout.}
+\item{layout}{Numeric two-column matrix with the graph layout in x/y positions of the vertices.}
 
-\item{vertex.size}{Numeric vector of length \code{vcount(x)}. Absolute size of the vertex.}
+\item{vertex.size}{Numeric vector of length \code{vcount(x)}. Absolute size of the vertex from 0 to 1.}
 
 \item{vertex.label}{Character vector of length \code{vcount(x)}. Labels.}
 
-\item{edge.width}{Vector of length \code{ecount(x)}.}
+\item{edge.width}{Vector of length \code{ecount(x)} from 0 to 1. All edges will be the same size.}
 
 \item{edgelist}{An edgelist.}
 
@@ -89,13 +89,13 @@ matrices objects (see details).}
 \item{vertex.nsides}{Numeric vector of length \code{vcount(x)}. Number of sizes of
 the vertex. E.g. three is a triangle, and 100 approximates a circle.}
 
-\item{vertex.color}{Vector of length \code{vcount(x)}. Vertex colors.}
+\item{vertex.color}{Vector of length \code{vcount(x)}. Vertex HEX or built in colors.}
 
-\item{vertex.size.range}{Vector of length \code{vcount(x)}.}
+\item{vertex.size.range}{Vector of length \code{vcount(x)} from 0 to 1.}
 
-\item{vertex.frame.color}{Vector of length \code{vcount(x)}.}
+\item{vertex.frame.color}{Vector of length \code{vcount(x)}. Border of vertex in HEX or built in colors.}
 
-\item{vertex.rot}{Vector of length \code{vcount(x)}. Passed to \link{npolygon},
+\item{vertex.rot}{Vector of length \code{vcount(x)} in Radians. Passed to \link{npolygon},
 elevation degree from which the polygon is drawn.}
 
 \item{vertex.frame.prop}{Vector of length \code{vcount(x)}. What proportion of the
@@ -115,17 +115,17 @@ top ranking according to \code{vertex.size}.}
 \item{vertex.label.range}{Numeric vector of size 2 or 3. Relative scale of
 \code{vertex.label.fontsize} in points (see \link[grid:gpar]{grid::gpar}).}
 
-\item{edge.width.range}{Vector of length \code{ecount(x)}.}
+\item{edge.width.range}{Vector of length \code{ecount(x)} from 0 to 1. Adjusting width according to weight.}
 
-\item{edge.arrow.size}{Vector of length \code{ecount(x)}.}
+\item{edge.arrow.size}{Vector of length \code{ecount(x)} from 0 to 1.}
 
-\item{edge.color}{A vector of length \code{ecount(x)}. Can be \code{NULL} in which case
+\item{edge.color}{A vector of length \code{ecount(x)}. In HEX or built in colors. Can be \code{NULL} in which case
 the color is picked as a mixture between ego and alters' \code{vertex.color} values.}
 
 \item{edge.curvature}{Numeric vector of length \code{ecount(x)}. Curvature of edges
 in terms of radians.}
 
-\item{edge.line.lty}{Vector of length \code{ecount(x)}.}
+\item{edge.line.lty}{Vector of length \code{ecount(x)}. Line types in R (e.g.- 1 = Solid, 2 = Dashed, etc)}
 
 \item{edge.line.breaks}{Vector of length \code{ecount(x)}. Number of vertices to
 draw (approximate) the arc (edge).}
@@ -172,7 +172,7 @@ of the figure.
 }
 }
 \description{
-Plot a network
+This is a description.
 }
 \details{
 When \code{x} is of class \link{matrix}, it will be passed to \code{\link[igraph:graph_from_adjacency_matrix]{igraph::graph_from_adjacency_matrix()}}.
