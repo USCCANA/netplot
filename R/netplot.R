@@ -16,16 +16,18 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 
 #' Plot a network
 #'
+#' This is a description.
+#'
 #' @param x A graph. It supports networks stored as `igraph`, `network`, and
 #' matrices objects (see details).
 #' @param bg.col Color of the background.
 #' @param layout Numeric two-column matrix with the graph layout.
-#' @param vertex.size Numeric vector of length `vcount(x)`. Absolute size of the vertex.
+#' @param vertex.size Numeric vector of length `vcount(x)`. Absolute size of the vertex from 0 to 1.
 #' @param vertex.nsides Numeric vector of length `vcount(x)`. Number of sizes of
 #' the vertex. E.g. three is a triangle, and 100 approximates a circle.
-#' @param vertex.color Vector of length `vcount(x)`. Vertex colors.
-#' @param vertex.size.range Vector of length `vcount(x)`.
-#' @param vertex.frame.color Vector of length `vcount(x)`.
+#' @param vertex.color Vector of length `vcount(x)`. Vertex HEX or built in colors.
+#' @param vertex.size.range Vector of length `vcount(x)` from 0 to 1.
+#' @param vertex.frame.color Vector of length `vcount(x)`. Border of vertex in HEX or built in colors.
 #' @param vertex.frame.prop Vector of length `vcount(x)`. What proportion of the
 #' vertex does the frame occupy (values between 0 and 1).
 #' @param vertex.rot Vector of length `vcount(x)`. Passed to [npolygon],
@@ -39,14 +41,14 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' top ranking according to `vertex.size`.
 #' @param vertex.label.range Numeric vector of size 2 or 3. Relative scale of
 #' `vertex.label.fontsize` in points (see [grid::gpar]).
-#' @param edge.color A vector of length `ecount(x)`. Can be `NULL` in which case
+#' @param edge.color A vector of length `ecount(x)`. In HEX or built in colors. Can be `NULL` in which case
 #' the color is picked as a mixture between ego and alters' `vertex.color` values.
-#' @param edge.width Vector of length `ecount(x)`.
-#' @param edge.width.range Vector of length `ecount(x)`.
-#' @param edge.arrow.size Vector of length `ecount(x)`.
+#' @param edge.width Vector of length `ecount(x)` from 0 to 1. All edges will be the same size.
+#' @param edge.width.range Vector of length `ecount(x)` from 0 to 1. Adjusting width according to weight.
+#' @param edge.arrow.size Vector of length `ecount(x)` from 0 to 1.
 #' @param edge.curvature Numeric vector of length `ecount(x)`. Curvature of edges
 #' in terms of radians.
-#' @param edge.line.lty Vector of length `ecount(x)`.
+#' @param edge.line.lty Vector of length `ecount(x)`. Line types in R (e.g.- 1 = Solid, 2 = Dashed, etc)
 #' @param edge.line.breaks Vector of length `ecount(x)`. Number of vertices to
 #' draw (approximate) the arc (edge).
 #' @param sample.edges Numeric scalar between 0 and 1. Proportion of edges to sample.
