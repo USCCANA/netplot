@@ -21,7 +21,7 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' @param x A graph. It supports networks stored as `igraph`, `network`, and
 #' matrices objects (see details).
 #' @param bg.col Color of the background.
-#' @param layout Numeric two-column matrix with the graph layout.
+#' @param layout Numeric two-column matrix with the graph layout in x/y positions of the vertices.
 #' @param vertex.size Numeric vector of length `vcount(x)`. Absolute size of the vertex from 0 to 1.
 #' @param vertex.nsides Numeric vector of length `vcount(x)`. Number of sizes of
 #' the vertex. E.g. three is a triangle, and 100 approximates a circle.
@@ -30,7 +30,7 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' @param vertex.frame.color Vector of length `vcount(x)`. Border of vertex in HEX or built in colors.
 #' @param vertex.frame.prop Vector of length `vcount(x)`. What proportion of the
 #' vertex does the frame occupy (values between 0 and 1).
-#' @param vertex.rot Vector of length `vcount(x)`. Passed to [npolygon],
+#' @param vertex.rot Vector of length `vcount(x)` in Radians. Passed to [npolygon],
 #' elevation degree from which the polygon is drawn.
 #' @param vertex.label Character vector of length `vcount(x)`. Labels.
 #' @param vertex.label.fontsize Numeric vector.
