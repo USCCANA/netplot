@@ -174,11 +174,11 @@ matrices objects (see details).</p></td>
     </tr>
     <tr>
       <th>layout</th>
-      <td><p>Numeric two-column matrix with the graph layout.</p></td>
+      <td><p>Numeric two-column matrix with the graph layout in x/y positions of the vertices.</p></td>
     </tr>
     <tr>
       <th>vertex.size</th>
-      <td><p>Numeric vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gorder.html'>vcount(x)</a></code>. Absolute size of the vertex.</p></td>
+      <td><p>Numeric vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gorder.html'>vcount(x)</a></code>. Absolute size of the vertex from 0 to 1.</p></td>
     </tr>
     <tr>
       <th>bg.col</th>
@@ -191,19 +191,19 @@ the vertex. E.g. three is a triangle, and 100 approximates a circle.</p></td>
     </tr>
     <tr>
       <th>vertex.color</th>
-      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gorder.html'>vcount(x)</a></code>. Vertex colors.</p></td>
+      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gorder.html'>vcount(x)</a></code>. Vertex HEX or built in colors.</p></td>
     </tr>
     <tr>
       <th>vertex.size.range</th>
-      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gorder.html'>vcount(x)</a></code>.</p></td>
+      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gorder.html'>vcount(x)</a></code> from 0 to 1.</p></td>
     </tr>
     <tr>
       <th>vertex.frame.color</th>
-      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gorder.html'>vcount(x)</a></code>.</p></td>
+      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gorder.html'>vcount(x)</a></code>. Border of vertex in HEX or built in colors.</p></td>
     </tr>
     <tr>
       <th>vertex.rot</th>
-      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gorder.html'>vcount(x)</a></code>. Passed to <a href='npolygon.html'>npolygon</a>,
+      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gorder.html'>vcount(x)</a></code> in Radians. Passed to <a href='npolygon.html'>npolygon</a>,
 elevation degree from which the polygon is drawn.</p></td>
     </tr>
     <tr>
@@ -213,19 +213,19 @@ vertex does the frame occupy (values between 0 and 1).</p></td>
     </tr>
     <tr>
       <th>edge.width</th>
-      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code>.</p></td>
+      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code> from 0 to 1. All edges will be the same size.</p></td>
     </tr>
     <tr>
       <th>edge.width.range</th>
-      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code>.</p></td>
+      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code> from 0 to 1. Adjusting width according to weight.</p></td>
     </tr>
     <tr>
       <th>edge.arrow.size</th>
-      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code>.</p></td>
+      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code> from 0 to 1.</p></td>
     </tr>
     <tr>
       <th>edge.color</th>
-      <td><p>A vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code>. Can be <code>NULL</code> in which case
+      <td><p>A vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code>. In HEX or built in colors. Can be <code>NULL</code> in which case
 the color is picked as a mixture between ego and alters' <code>vertex.color</code> values.</p></td>
     </tr>
     <tr>
@@ -245,7 +245,7 @@ in terms of radians.</p></td>
     </tr>
     <tr>
       <th>edge.line.lty</th>
-      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code>.</p></td>
+      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code>. Line types in R (e.g.- 1 = Solid, 2 = Dashed, etc)</p></td>
     </tr>
     <tr>
       <th>edge.line.breaks</th>
