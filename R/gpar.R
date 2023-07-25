@@ -181,27 +181,44 @@ set_edge_gpar <- function(x, element, idx, ...) {
 #' @export
 set_vertex_gpar <- function(x, element, idx, ...) {
 
-  dots <- list(...)
-
-  # Check for formula
-  if(is.formula(dots$col)) {
-    color_var <- all.vars(dots$col)[1]
-    dots$col <- color_nodes(x, color_var)
-  }
-
-  if(is.formula(dots$fill)) {
-    fill_var <- all.vars(dots$fill)[1]
-    dots$fill <- color_nodes(x, fill_var)
-  }
-
   if (missing(element))
     element <- c("core", "frame")
 
   if (missing(idx))
     idx <- seq_len(x$.N)
 
-  # Call original set_gpar()
-  set_gpar(x, type = "vertex", element = element, idx = idx, ...)
+  # Step 0: Check whether col or fill was passed through ...
+  dots <- list(...)
+
+  # Step 1: Check if col/fill is a formula
+  if(is.formula(dots$col) || is.formula(dots$fill)) {
+
+    # Step 2: Extract RHS of formula using terms()
+    if(!missing(dots$col)) {
+      color_var <- attr(terms(dots$col), "term.labels")
+    }
+    if(!missing(dots$fill)) {
+      fill_var <- attr(terms(dots$fill), "term.labels")
+    }
+
+    # Step 3: Call color_nodes() with graph and attribute
+    if(!missing(dots$col)) {
+      dots$col <- color_nodes(x, color_var)
+    }
+    if(!missing(dots$fill)) {
+      dots$fill <- color_nodes(x, fill_var)
+    }
+
+  }
+
+  do.call(
+    set_gpar,
+    c(
+      list(x = x, type = "vertex", element = element, idx = idx),
+      dots
+    )
+  )
+
 }
 
 #' @rdname set_gpar
@@ -287,3 +304,4 @@ get_gpar <- function(x, type, element, ..., idx, simplify=TRUE) {
   ans
 
 }
+
