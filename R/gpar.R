@@ -190,20 +190,26 @@ set_vertex_gpar <- function(x, element, idx, ...) {
   # Step 0: Check whether col or fill was passed through ...
   dots <- list(...)
 
-  # if it was passed:
-  # {
-    # Step 1: Check whether it is a formula. If it is not, continue
+  # Step 1: Check if col/fill is a formula
+  if(is.formula(dots$col) || is.formula(dots$fill)) {
 
-    # Step 2: If it is a formula, in form of ~ group, need to extract the RHS
-    # And to do that, take a look at the function "terms": attr(terms(~ ego + alter), "term.labels")
+    # Step 2: Extract RHS of formula using terms()
+    if(!missing(dots$col)) {
+      color_var <- attr(terms(dots$col), "term.labels")
+    }
+    if(!missing(dots$fill)) {
+      fill_var <- attr(terms(dots$fill), "term.labels")
+    }
 
-    # Step 3: Call color_nodes passing the graph and the attribute
+    # Step 3: Call color_nodes() with graph and attribute
+    if(!missing(dots$col)) {
+      dots$col <- color_nodes(x, color_var)
+    }
+    if(!missing(dots$fill)) {
+      dots$fill <- color_nodes(x, fill_var)
+    }
 
-    # Step 4: Modify the dots so col and or fill are whatever the output from
-    # color_nodes is, e.g., dots$fill <- ...
-
-  #}
-  # Try it out using the example for set_vertex_gpar from the manual.
+  }
 
   do.call(
     set_gpar,
@@ -214,6 +220,7 @@ set_vertex_gpar <- function(x, element, idx, ...) {
   )
 
 }
+
 
 #' @rdname set_gpar
 #' @details
