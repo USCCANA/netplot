@@ -10,7 +10,7 @@
 \alias{print.netplot}
 \title{Plot a network}
 \usage{
-nplot(...)
+nplot(x, ..., edgelist)
 
 \method{nplot}{igraph}(
   x,
@@ -19,7 +19,8 @@ nplot(...)
   vertex.label = igraph::vertex_attr(x, "name"),
   edge.width = igraph::edge_attr(x, "weight"),
   skip.arrows = !igraph::is_directed(x),
-  ...
+  ...,
+  edgelist = NULL
 )
 
 \method{nplot}{network}(
@@ -28,13 +29,14 @@ nplot(...)
   vertex.size = sna::degree(x, cmode = "indegree"),
   vertex.label = network::get.vertex.attribute(x, "vertex.names"),
   skip.arrows = !network::is.directed(x),
-  ...
+  ...,
+  edgelist = NULL
 )
 
-\method{nplot}{matrix}(x, ...)
+\method{nplot}{matrix}(x, ..., edgelist = NULL)
 
 \method{nplot}{default}(
-  edgelist,
+  x,
   layout,
   vertex.size = 1,
   bg.col = "transparent",
@@ -65,7 +67,8 @@ nplot(...)
   skip.arrows = skip.edges,
   add = FALSE,
   zero.margins = TRUE,
-  ...
+  ...,
+  edgelist
 )
 
 \method{print}{netplot}(x, y = NULL, newpage = TRUE, ...)
@@ -74,6 +77,8 @@ nplot(...)
 \item{x}{A graph. It supports networks stored as \code{igraph}, \code{network}, and
 matrices objects (see details).}
 
+\item{edgelist}{An edgelist.}
+
 \item{layout}{Numeric two-column matrix with the graph layout in x/y positions of the vertices.}
 
 \item{vertex.size}{Numeric vector of length \code{vcount(x)}. Absolute size of the vertex from 0 to 1.}
@@ -81,8 +86,6 @@ matrices objects (see details).}
 \item{vertex.label}{Character vector of length \code{vcount(x)}. Labels.}
 
 \item{edge.width}{Vector of length \code{ecount(x)} from 0 to 1. All edges will be the same size.}
-
-\item{edgelist}{An edgelist.}
 
 \item{bg.col}{Color of the background.}
 

@@ -191,22 +191,22 @@ set_vertex_gpar <- function(x, element, idx, ...) {
   dots <- list(...)
 
   # Step 1: Check if col/fill is a formula
-  if(is.formula(dots$col) || is.formula(dots$fill)) {
+  if(inherits(dots$col, "formula") || inherits(dots$fill, "formula")) {
 
     # Step 2: Extract RHS of formula using terms()
-    if(!missing(dots$col)) {
+    if (inherits(dots$col, "formula")) {
       color_var <- attr(terms(dots$col), "term.labels")
     }
-    if(!missing(dots$fill)) {
+    if (inherits(dots$fill, "formula")) {
       fill_var <- attr(terms(dots$fill), "term.labels")
     }
 
     # Step 3: Call color_nodes() with graph and attribute
-    if(!missing(dots$col)) {
-      dots$col <- color_nodes(x, color_var)
+    if (inherits(dots$col, "formula")) {
+      dots$col <- color_nodes(x$.graph, color_var)
     }
-    if(!missing(dots$fill)) {
-      dots$fill <- color_nodes(x, fill_var)
+    if (inherits(dots$fill, "formula")) {
+      dots$fill <- color_nodes(x$.graph, fill_var)
     }
 
   }

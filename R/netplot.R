@@ -87,7 +87,7 @@ NULL
 
 #' @export
 #' @rdname nplot
-nplot <- function(...) UseMethod("nplot")
+nplot <- function(x, ..., edgelist) UseMethod("nplot")
 
 #' @export
 #' @rdname nplot
@@ -98,13 +98,15 @@ nplot.igraph <- function(
   vertex.label = igraph::vertex_attr(x, "name"),
   edge.width   = igraph::edge_attr(x, "weight"),
   skip.arrows  = !igraph::is_directed(x),
-  ...
+  ...,
+  edgelist     = NULL
   ) {
 
   if (!length(edge.width))
     edge.width <- 1L
 
   nplot.default(
+    x            = x,
     edgelist     = igraph::as_edgelist(x, names = FALSE),
     layout       = layout,
     vertex.size  = vertex.size,
@@ -126,16 +128,18 @@ nplot.network <- function(
   vertex.size  = sna::degree(x, cmode="indegree"),
   vertex.label = network::get.vertex.attribute(x, "vertex.names"),
   skip.arrows  = !network::is.directed(x),
-  ...
+  ...,
+  edgelist = NULL
 ) {
 
   nplot.default(
-    edgelist    = network::as.edgelist(x),
+    x           = x,
     layout      = layout,
     vertex.size = vertex.size,
     vertex.label = vertex.label,
     skip.arrows = skip.arrows,
-    ...
+    ...,
+    edgelist    = network::as.edgelist(x)
   )
 
 }
@@ -143,11 +147,12 @@ nplot.network <- function(
 #' @export
 #' @rdname nplot
 #' @importFrom igraph graph_from_adjacency_matrix
-nplot.matrix <- function(x, ...) {
+nplot.matrix <- function(x, ..., edgelist = NULL) {
 
   nplot.igraph(
-    igraph::graph_from_adjacency_matrix(x),
-    ...
+    x = igraph::graph_from_adjacency_matrix(x),
+    ...,
+    edgelist = NULL
   )
 
 }
@@ -218,7 +223,7 @@ netplot_theme <- (function() {
 #' of the figure.
 #' @seealso [nplot_base]
 nplot.default <- function(
-  edgelist,
+  x,
   layout,
   vertex.size             = 1,
   bg.col                  = "transparent",
@@ -248,9 +253,9 @@ nplot.default <- function(
   skip.arrows             = skip.edges,
   add                     = FALSE,
   zero.margins            = TRUE,
-  ...
+  ...,
+  edgelist
   ) {
-
 
   # listing objects
   netenv <- environment()
@@ -265,6 +270,7 @@ nplot.default <- function(
 
   netenv$N <- nrow(layout)
   netenv$M <- nrow(edgelist)
+  netenv$graph_class <- class(x)
 
   # Sampling edges -------------------------------------------------------------
   if (sample.edges < 1) {
@@ -441,14 +447,16 @@ nplot.default <- function(
   )
 
   ans <- grid::gTree(
-    children  = grid::gList(background, ans),
-    name      = netplot_name$new(),
-    .xlim     = netenv$xlim,
-    .ylim     = netenv$ylim,
-    .layout   = netenv$layout,
-    .edgelist = netenv$edgelist,
-    .N        = netenv$N,
-    .M        = netenv$M
+    children     = grid::gList(background, ans),
+    name         = netplot_name$new(),
+    .xlim        = netenv$xlim,
+    .ylim        = netenv$ylim,
+    .layout      = netenv$layout,
+    .edgelist    = netenv$edgelist,
+    .N           = netenv$N,
+    .M           = netenv$M,
+    .graph       = netenv$x,
+    .graph_class = netenv$graph_class
   )
 
   class(ans) <- c("netplot", class(ans))
