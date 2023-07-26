@@ -135,7 +135,7 @@
     <p>This is a description.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>nplot</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>nplot</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span>, <span class='va'>edgelist</span><span class='op'>)</span>
 
 <span class='co'># S3 method for igraph</span>
 <span class='fu'>nplot</span><span class='op'>(</span>
@@ -145,7 +145,8 @@
   vertex.label <span class='op'>=</span> <span class='fu'>igraph</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/igraph/man/vertex_attr.html'>vertex_attr</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>"name"</span><span class='op'>)</span>,
   edge.width <span class='op'>=</span> <span class='fu'>igraph</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/igraph/man/edge_attr.html'>edge_attr</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>"weight"</span><span class='op'>)</span>,
   skip.arrows <span class='op'>=</span> <span class='op'>!</span><span class='fu'>igraph</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/igraph/man/is_directed.html'>is_directed</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
-  <span class='va'>...</span>
+  <span class='va'>...</span>,
+  edgelist <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span>
 
 <span class='co'># S3 method for network</span>
@@ -155,15 +156,16 @@
   vertex.size <span class='op'>=</span> <span class='fu'>sna</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/sna/man/degree.html'>degree</a></span><span class='op'>(</span><span class='va'>x</span>, cmode <span class='op'>=</span> <span class='st'>"indegree"</span><span class='op'>)</span>,
   vertex.label <span class='op'>=</span> <span class='fu'>network</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/network/man/attribute.methods.html'>get.vertex.attribute</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>"vertex.names"</span><span class='op'>)</span>,
   skip.arrows <span class='op'>=</span> <span class='op'>!</span><span class='fu'>network</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/network/man/network.indicators.html'>is.directed</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
-  <span class='va'>...</span>
+  <span class='va'>...</span>,
+  edgelist <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span>
 
 <span class='co'># S3 method for matrix</span>
-<span class='fu'>nplot</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'>nplot</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span>, edgelist <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
 <span class='co'># S3 method for default</span>
 <span class='fu'>nplot</span><span class='op'>(</span>
-  <span class='va'>edgelist</span>,
+  <span class='va'>x</span>,
   <span class='va'>layout</span>,
   vertex.size <span class='op'>=</span> <span class='fl'>1</span>,
   bg.col <span class='op'>=</span> <span class='st'>"transparent"</span>,
@@ -194,7 +196,8 @@
   skip.arrows <span class='op'>=</span> <span class='va'>skip.edges</span>,
   add <span class='op'>=</span> <span class='cn'>FALSE</span>,
   zero.margins <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  <span class='va'>...</span>
+  <span class='va'>...</span>,
+  <span class='va'>edgelist</span>
 <span class='op'>)</span>
 
 <span class='co'># S3 method for netplot</span>
@@ -207,6 +210,10 @@
       <th>x</th>
       <td><p>A graph. It supports networks stored as <code>igraph</code>, <code>network</code>, and
 matrices objects (see details).</p></td>
+    </tr>
+    <tr>
+      <th>edgelist</th>
+      <td><p>An edgelist.</p></td>
     </tr>
     <tr>
       <th>layout</th>
@@ -223,10 +230,6 @@ matrices objects (see details).</p></td>
     <tr>
       <th>edge.width</th>
       <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code> from 0 to 1. All edges will be the same size.</p></td>
-    </tr>
-    <tr>
-      <th>edgelist</th>
-      <td><p>An edgelist.</p></td>
     </tr>
     <tr>
       <th>bg.col</th>
@@ -381,7 +384,7 @@ of the figure.</p></li>
 
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='co'># ala igraph</span>
 </div><div class='img'><img src='nplot-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>nplot</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='co'># ala netplot</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in is.formula(dots$col): could not find function "is.formula"</span></div></pre>
+</div><div class='img'><img src='nplot-2.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -393,7 +396,7 @@ of the figure.</p></li>
 
       <footer>
       <div class="copyright">
-  <p>Developed by George Vega Yon.</p>
+  <p>Developed by George Vega Yon, Porter Bischoff.</p>
 </div>
 
 <div class="pkgdown">

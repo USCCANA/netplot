@@ -211,7 +211,7 @@ figure ar passed through the <code>gp</code> argument (see examples).</p>
   vertex.color  <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/igraph/man/V.html'>V</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>$</span><span class='va'>nsides</span> <span class='op'>==</span> <span class='fl'>4</span>, <span class='st'>"red"</span>, <span class='st'>"steelblue"</span><span class='op'>)</span>,
   edge.line.breaks <span class='op'>=</span> <span class='fl'>5</span>
   <span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in is.formula(dots$col): could not find function "is.formula"</span></div><div class='input'>
+
 <span class='fu'>nplot_legend</span><span class='op'>(</span>
   <span class='va'>g</span>,
   labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"circle"</span>, <span class='st'>"diamond"</span>, <span class='st'>"edge"</span><span class='op'>)</span>,
@@ -222,8 +222,8 @@ figure ar passed through the <code>gp</code> argument (see examples).</p>
     col  <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>NA</span>, <span class='cn'>NA</span>, <span class='st'>"purple"</span><span class='op'>)</span>
     <span class='op'>)</span>
   <span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in is.grob(grob): object 'g' not found</span></div><div class='input'><span class='fu'>grid.text</span><span class='op'>(</span><span class='st'>"Legend to the left (default)"</span>, y <span class='op'>=</span> <span class='fu'>unit</span><span class='op'>(</span><span class='fl'>.95</span>, <span class='st'>"npc"</span><span class='op'>)</span>, just <span class='op'>=</span> <span class='st'>"bottom"</span><span class='op'>)</span>
-</div><div class='input'>
+</div><div class='input'><span class='fu'>grid.text</span><span class='op'>(</span><span class='st'>"Legend to the left (default)"</span>, y <span class='op'>=</span> <span class='fu'>unit</span><span class='op'>(</span><span class='fl'>.95</span>, <span class='st'>"npc"</span><span class='op'>)</span>, just <span class='op'>=</span> <span class='st'>"bottom"</span><span class='op'>)</span>
+</div><div class='img'><img src='nplot_legend-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='fu'>nplot_legend</span><span class='op'>(</span>
   <span class='va'>g</span>,
   labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"circle"</span>, <span class='st'>"diamond"</span>, <span class='st'>"edge"</span><span class='op'>)</span>,
@@ -237,8 +237,8 @@ figure ar passed through the <code>gp</code> argument (see examples).</p>
   packgrob.args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>side <span class='op'>=</span> <span class='st'>"bottom"</span><span class='op'>)</span>,
   ncol <span class='op'>=</span> <span class='fl'>3</span>
   <span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in is.grob(grob): object 'g' not found</span></div><div class='input'><span class='fu'>grid.text</span><span class='op'>(</span><span class='st'>"Legend bottom"</span>, y <span class='op'>=</span> <span class='fu'>unit</span><span class='op'>(</span><span class='fl'>.95</span>, <span class='st'>"npc"</span><span class='op'>)</span>, just <span class='op'>=</span> <span class='st'>"bottom"</span><span class='op'>)</span>
-</div><div class='img'><img src='nplot_legend-1.png' alt='' width='700' height='433' /></div><div class='input'>
+</div><div class='input'><span class='fu'>grid.text</span><span class='op'>(</span><span class='st'>"Legend bottom"</span>, y <span class='op'>=</span> <span class='fu'>unit</span><span class='op'>(</span><span class='fl'>.95</span>, <span class='st'>"npc"</span><span class='op'>)</span>, just <span class='op'>=</span> <span class='st'>"bottom"</span><span class='op'>)</span>
+</div><div class='img'><img src='nplot_legend-2.png' alt='' width='700' height='433' /></div><div class='input'>
 
 </div></pre>
   </div>
@@ -252,7 +252,7 @@ figure ar passed through the <code>gp</code> argument (see examples).</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by George Vega Yon.</p>
+  <p>Developed by George Vega Yon, Porter Bischoff.</p>
 </div>
 
 <div class="pkgdown">
