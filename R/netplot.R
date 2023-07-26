@@ -7,10 +7,14 @@
 #' @noRd
 edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 
-  grDevices::adjustcolor(grDevices::rgb(
-    colorRamp2(vcols[c(i,j)], alpha = FALSE)(p),
-    maxColorValue = 255
-  ), alpha = alpha)
+  alphacolor(
+    sprintf(
+      "%sFF", grDevices::rgb(
+        colorRamp2(vcols[c(i,j)], alpha = FALSE)(p),
+        maxColorValue = 255
+        )
+      ), alpha.f = alpha
+    )
 
 }
 

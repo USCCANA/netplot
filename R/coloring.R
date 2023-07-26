@@ -31,8 +31,8 @@ new_edge_coloring <- function(
       # Applying alpha levels and getting mix
       col <- colorRamp2(
         x = c(
-          grDevices::adjustcolor(col = col_i, alpha.f = alpha_i),
-          grDevices::adjustcolor(col = col_j, alpha.f = alpha_j)
+          alphacolor(col = col_i, alpha.f = alpha_i),
+          alphacolor(col = col_j, alpha.f = alpha_j)
         )
       )(seq(0, 1, length.out = n))
 
@@ -47,13 +47,13 @@ new_edge_coloring <- function(
       alpha_j <- vertex_alpha_j[j]
 
       # Edge level params
-      col_ij   <- grDevices::adjustcolor(col = edge_color[e], alpha.f = edge_alpha[e])
+      col_ij   <- alphacolor(col = edge_color[e], alpha.f = edge_alpha[e])
 
       # Applying alpha levels and getting mix
       col <- colorRamp2(x=
         c(
-          grDevices::adjustcolor(col = col_ij, alpha.f = alpha_i),
-          grDevices::adjustcolor(col = col_ij, alpha.f = alpha_j)
+          alphacolor(col = col_ij, alpha.f = alpha_i),
+          alphacolor(col = col_ij, alpha.f = alpha_j)
         )
       )(seq(0, 1, length.out = n))
 

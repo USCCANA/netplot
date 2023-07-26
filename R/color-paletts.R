@@ -102,6 +102,17 @@ colorRamp2 <- function(x, alpha = TRUE, thresholds=NULL) {
 
 }
 
+alphacolor <- function(col, alpha.f) {
+  val <- strtoi(substring(col, 8L), base = 16L)
+  substring(col, 8) <- sprintf("%02X", floor(val * alpha.f))
+  return(col)
+}
+
+# microbenchmark::microbenchmark(
+#   alphacolor("#0000FF80", .5),
+#   adjustcolor("#0000FF80", .5), times = 1e3, check = "identical"
+# )
+
 #' Draw segments colored by gradients
 #' @param x,y Coordinates passed to [grDevices::xy.coords].
 #' @param col Color ramp function (see [grDevices::colorRamp]).
