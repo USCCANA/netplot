@@ -261,6 +261,13 @@ nplot.default <- function(
   edgelist
   ) {
 
+  # We turn off the device if not need
+  if (length(dev.list()) == 0L) {
+    on.exit(
+      grDevices::dev.off(grDevices::dev.cur())
+    )
+  }
+
   # listing objects
   netenv <- environment()
 
@@ -382,7 +389,9 @@ nplot.default <- function(
 
   # Creating layout
   # Solution from this answer https://stackoverflow.com/a/48084527
+
   asp <- grDevices::dev.size()
+
   lo  <- grid::grid.layout(
     widths  = grid::unit(1, "null"),
     heights = grid::unit(asp[2]/asp[1], "null"),
@@ -467,7 +476,7 @@ nplot.default <- function(
 
   # Passing edge color
   if (!skip.vertex && length(vertex.color)) {
-    
+
     ans <- set_vertex_gpar(
       x       = ans,
       element = "core",
@@ -516,10 +525,7 @@ nplot.default <- function(
     }
   }
 
-
-
   ans
-
 
 }
 
@@ -565,7 +571,7 @@ print.netplot <- function(x, y = NULL, newpage = TRUE, ...) {
 }
 
 
-locate_vertex <- function(x) {
+locate_vertex <- function(x = .Last.netplot$get()) {
 
   # Trying to fecth the
   on.exit(grid::upViewport(0L))
@@ -576,10 +582,10 @@ locate_vertex <- function(x) {
 
   loc <- grid::grid.locator()
   loc <- as.vector(unlist(loc))
-  loc <- matrix(loc, ncol = 2, nrow = nrow(x$layout), byrow = TRUE)
+  loc <- matrix(loc, ncol = 2, nrow = x$.N, byrow = TRUE)
 
   # Which is the closests one
-  v <- which.min(abs(x$layout - loc))
+  v <- which.min(abs(x$.layout - loc))
 
   list(
     name = sprintf("vertex.%i", v),
