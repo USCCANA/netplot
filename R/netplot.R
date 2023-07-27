@@ -570,8 +570,41 @@ print.netplot <- function(x, y = NULL, newpage = TRUE, ...) {
 
 }
 
-
-locate_vertex <- function(x = .Last.netplot$get()) {
+#' Find a vertex in the current plot
+#' 
+#' This function is a wrapper of [grid::grid.locator()], and provides a way to 
+#' find the coordinates of a vertex in the current plot. It is useful to
+#' identify the vertex that is being clicked in a plot.
+#' 
+#' @param x An object of class `netplot`
+#' @return A list with the name of the vertex, the x and y coordinates and the
+#'  viewport where it is located.
+#' @details This function only works in interactive mode. Once it is called, 
+#' the user can click on a vertex in the plot. The function will return the
+#' name of the vertex, the x and y coordinates and the viewport where it is
+#' located. If `x` is not specified, the last plotted `netplot` object will be
+#' used.
+#' 
+#' @export
+#' @examples
+#' library(igraph)
+#' library(netplot)
+#' set.seed(1)
+#' x <- sample_smallworld(1, 200, 5, 0.03)
+#' 
+#' # Plotting
+#' nplot(x)
+#' 
+#' # Clicking (only works in interactive mode)
+#' if (interactive()) {
+#'  res <- locate_vertex()
+#'  print(res)
+#' }
+#' 
+locate_vertex <- function(x = NULL) {
+  
+  if (is.null(x))
+    x <- .Last.netplot$get()
 
   # Trying to fecth the
   on.exit(grid::upViewport(0L))

@@ -11,6 +11,10 @@
 
 *  The argument `sample.edges` now works as expected.
 
+*  `vertex.color` now accepts formulas to color vertices by a vertex attribute.
+
+*  New function: `locate_vertex()`.
+
 
 # netplot 0.1-0
 
