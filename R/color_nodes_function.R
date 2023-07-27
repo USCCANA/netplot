@@ -89,7 +89,7 @@ color_nodes.default <- function(
 
     value <- cpal[as.integer(value)]
 
-  }  else if (attr_type == "numeric") { # Handle numerics
+  }  else if ("numeric" %in% attr_type) { # Handle numerics
 
     # Find min and max
     attr_min <- min(value)
@@ -110,7 +110,7 @@ color_nodes.default <- function(
     # Color nodes based on attribute value
     value <- grDevices::rgb(value, maxColorValue = 255)
 
-  } else if (attr_type == "logical") { # Handle logicals
+  } else if ("logical" %in% attr_type) { # Handle logicals
 
 
     # Creating mapping to recover colors
@@ -119,6 +119,23 @@ color_nodes.default <- function(
 
     # Color nodes
     value <- cpal[as.integer(value) + 1]
+  
+  } else if ("integer" %in% attr_type) {
+      
+      # Find min and max
+      attr_min <- min(value, na.rm = TRUE)
+      attr_max <- max(value, na.rm = TRUE)
+  
+      # Create color scale
+      cpal <- grDevices::colorRampPalette(palette)(
+        length(attr_min:attr_max)
+      )
+  
+      names(cpal) <- as.character(c(attr_min:attr_max))
+  
+      # Color nodes based on attribute value
+      value <- cpal[as.character(value)]
+
   }
 
   # Handle other types (characters, dates)
@@ -130,11 +147,11 @@ color_nodes.default <- function(
 
   structure(
     value,
-    class = "netplot_color_nodes",
+    class     = "netplot_color_nodes",
     attr_type = attr_type,
-    palette = palette,
-    na_color = na_color,
-    map      = cpal
+    palette   = palette,
+    na_color  = na_color,
+    map       = cpal
   )
 
 }

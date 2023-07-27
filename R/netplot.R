@@ -234,7 +234,7 @@ nplot.default <- function(
   vertex.nsides           = 10,
   vertex.color            = grDevices::hcl.colors(1),
   vertex.size.range       = c(.01, .03),
-  vertex.frame.color      = grDevices::adjustcolor(vertex.color, red.f = .75, green.f = .75, blue.f = .75),
+  vertex.frame.color      = NULL,
   vertex.rot              = 0,
   vertex.frame.prop       = .2,
   vertex.label            = NULL,
@@ -466,7 +466,8 @@ nplot.default <- function(
   class(ans) <- c("netplot", class(ans))
 
   # Passing edge color
-  if (!skip.vertex && length(vertex.color))
+  if (!skip.vertex && length(vertex.color)) {
+    
     ans <- set_vertex_gpar(
       x       = ans,
       element = "core",
@@ -474,7 +475,27 @@ nplot.default <- function(
       col     = vertex.color
     )
 
-  if (!skip.vertex && length(vertex.frame.color))
+    vertex.color <- get_vertex_gpar(
+      x = ans, element = "core", "fill"
+      )$fill
+
+  }
+
+  if (!skip.vertex && !length(vertex.frame.color)) {
+
+    if (inherits(vertex.color, "character")) {
+
+      vertex.frame.color <- grDevices::adjustcolor(
+        vertex.color,
+        red.f = .75, green.f = .75, blue.f = .75
+        )
+
+    } else 
+      vertex.frame.color <- .rep("darkgray", N)
+
+  }
+
+  if (!skip.vertex)
     ans <- set_vertex_gpar(
       x       = ans,
       element = "frame",
