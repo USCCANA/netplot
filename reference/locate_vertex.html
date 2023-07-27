@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • netplot</title>
+<title>Find a vertex in the current plot — locate_vertex • netplot</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,10 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Find a vertex in the current plot — locate_vertex" />
+<meta property="og:description" content="This function is a wrapper of grid::grid.locator(), and provides a way to
+find the coordinates of a vertex in the current plot. It is useful to
+identify the vertex that is being clicked in a plot." />
 
 
 
@@ -58,7 +61,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -123,109 +126,66 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Find a vertex in the current plot</h1>
+    <small class="dont-index">Source: <a href='https://github.com/USCCANA/netplot/blob/master/R/netplot.R'><code>R/netplot.R</code></a></small>
+    <div class="hidden name"><code>locate_vertex.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>This function is a wrapper of <code><a href='https://rdrr.io/r/grid/grid.locator.html'>grid::grid.locator()</a></code>, and provides a way to
+find the coordinates of a vertex in the current plot. It is useful to
+identify the vertex that is being clicked in a plot.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>locate_vertex</span><span class='op'>(</span>x <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="colorRamp2.html">colorRamp2()</a></code> </p>
-        </td>
-        <td><p>A faster implementation of <a href='https://rdrr.io/r/grDevices/colorRamp.html'>grDevices::colorRamp</a> for linear interpolation.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="colorkey.html">colorkey()</a></code> </p>
-        </td>
-        <td><p>Function to create a color key</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="locate_vertex.html">locate_vertex()</a></code> </p>
-        </td>
-        <td><p>Find a vertex in the current plot</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="make_colors.html">make_colors()</a></code> <code><a href="make_colors.html">make_edges_colors()</a></code> <code><a href="make_colors.html">make_vertex_colors()</a></code> </p>
-        </td>
-        <td><p>Create a vector of colors for vertices and edges</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="netplot-formulae.html">color_formula()</a></code> <code><a href="netplot-formulae.html">ego()</a></code> <code><a href="netplot-formulae.html">alter()</a></code> </p>
-        </td>
-        <td><p>Formulas in <code>netplot</code></p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="nplot.html">nplot()</a></code> <code><a href="nplot.html">print(<i>&lt;netplot&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Plot a network</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="nplot_base.html">nplot_base()</a></code> </p>
-        </td>
-        <td><p><code>nplot</code> using base graphics</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="nplot_legend.html">nplot_legend()</a></code> <code><a href="nplot_legend.html">print(<i>&lt;netplot_legend&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Add legend to a netplot object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="npolygon.html">npolygon()</a></code> </p>
-        </td>
-        <td><p>n-sided polygons
-Calculate the coordinates for an nsided polygon</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="piechart.html">piechart()</a></code> </p>
-        </td>
-        <td><p>A flexible piechart.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="segments_gradient.html">segments_gradient()</a></code> </p>
-        </td>
-        <td><p>Draw segments colored by gradients</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="set_gpar.html">set_gpar()</a></code> <code><a href="set_gpar.html">set_edge_gpar()</a></code> <code><a href="set_gpar.html">set_vertex_gpar()</a></code> <code><a href="set_gpar.html">get_vertex_gpar()</a></code> <code><a href="set_gpar.html">get_edge_gpar()</a></code> <code><a href="set_gpar.html">get_gpar()</a></code> </p>
-        </td>
-        <td><p>Set/retrieve graphical parameters of a <code>netplot</code> object</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>An object of class <code>netplot</code></p></td>
+    </tr>
     </table>
-  </div>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A list with the name of the vertex, the x and y coordinates and the
+viewport where it is located.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>This function only works in interactive mode. Once it is called,
+the user can click on a vertex in the plot. The function will return the
+name of the vertex, the x and y coordinates and the viewport where it is
+located. If <code>x</code> is not specified, the last plotted <code>netplot</code> object will be
+used.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://igraph.org'>igraph</a></span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘igraph’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:netplot’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    ego</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:stats’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    decompose, spectrum</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:base’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    union</span></div><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/USCCANA/netplot'>netplot</a></span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/igraph/man/sample_smallworld.html'>sample_smallworld</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>200</span>, <span class='fl'>5</span>, <span class='fl'>0.03</span><span class='op'>)</span>
+
+<span class='co'># Plotting</span>
+<span class='fu'><a href='nplot.html'>nplot</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+</div><div class='img'><img src='locate_vertex-1.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='co'># Clicking (only works in interactive mode)</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+ <span class='va'>res</span> <span class='op'>&lt;-</span> <span class='fu'>locate_vertex</span><span class='op'>(</span><span class='op'>)</span>
+ <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>res</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+</div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
