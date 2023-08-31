@@ -7,8 +7,19 @@
 #' @noRd
 grob_vertex <- function(netenv, v) {
 
+  sides_lookup <- list(
+    triangle = list(sides = 3, rot = 0),
+    square   = list(sides = 4, rot = pi/2),
+    diamond  = list(sides = 4, rot = 0),
+    pentagon = list(sides = 5, rot = 0),
+    hexagon  = list(sides = 6, rot = 0),
+    heptagon = list(sides = 7, rot = 0),
+    octagon  = list(sides = 8, rot = 0),
+    circle   = list(sides = 25, rot = 0)
+  )
+
   # Add formula handling
-  if(is.formula(netenv$vertex.nsides)) {
+  if(inherits(netenv$vertex.nsides, "formula")) {
     var_name <- all.vars(netenv$vertex.nsides)[1]
     netenv$vertex.nsides <- eval(netenv$vertex.nsides, envir = data)
   }
@@ -33,18 +44,7 @@ grob_vertex <- function(netenv, v) {
 
   }
 
-  validate_netenv(netenv)
-  validate_params(v)
-  sides_lookup <- c(
-    triangle = list(sides = 3, rot = 0),
-    circle   = list(sides = 4, rot = 0),
-    diamond  = list(sides = 4, rot = 90),
-    pentagon = list(sides = 5, rot = 0),
-    hexagon  = list(sides = 6, rot = 0),
-    heptagon = list(sides = 7, rot = 0),
-    octagon  = list(sides = 8, rot = 0),
-    circle   = list(sides = 25, rot = 0)
-  )
+
 
   if (netenv$skip.vertex)
     return(
@@ -62,18 +62,18 @@ grob_vertex <- function(netenv, v) {
   coords <- npolygon(
     x = netenv$layout[v, 1],
     y = netenv$layout[v, 2],
-    n = netenv$vertex.nsides[v],
+    n = as.integer(netenv$vertex.nsides[v]),
     r = netenv$vertex.size[v]*(1 - netenv$vertex.frame.prop[v]),
-    d = netenv$vertex.rot[v]
+    d = as.integer(netenv$vertex.rot[v])
   )
 
   # Frame coordinates
   framecoords <- npolygon(
     x = netenv$layout[v, 1],
     y = netenv$layout[v, 2],
-    n = netenv$vertex.nsides[v],
+    n = as.integer(netenv$vertex.nsides[v]),
     r = netenv$vertex.size[v],
-    d = netenv$vertex.rot[v]
+    d = as.integer(netenv$vertex.rot[v])
   )
 
   # Create color palette

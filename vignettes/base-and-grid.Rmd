@@ -34,7 +34,7 @@ And here, we can create the `netplot` object. We use the [`magrittr`](https://cr
 library(netplot)
 library(magrittr)
 
-np <- nplot(net, bg.col = "gray70") %>%
+np <- nplot(net, bg.col = "gray70", vertex.nsides = "square") %>%
   set_edge_gpar("line", col = "gray50", alpha = .7) %>%
   set_vertex_gpar("frame", fill = "black", col = "black")
 ```
