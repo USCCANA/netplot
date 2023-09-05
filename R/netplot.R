@@ -332,6 +332,11 @@ nplot.default <- function(
     if (length(netenv[[p]]) > 0 && length(netenv[[p]]) < netenv$N)
       netenv[[p]] <- .rep(netenv[[p]], netenv$N)
 
+  # New: Handling vertex shape
+  if (!is.character(nsides) && !is.numeric(nsides)) {
+    stop("nsides parameter must be a character string or a numeric value")
+  }
+
   # Checking defaults for edges
   edge_par <- ls(pattern = "^edge\\.", envir = netenv)
   for (p in edge_par)
@@ -411,11 +416,11 @@ nplot.default <- function(
   if (!skip.vertex) {
     grob.vertex <- vector("list", netenv$N)
     for (v in 1:netenv$N)
-      grob.vertex[[v]] <- grob_vertex(netenv, v)
+      grob.vertex[[v]] <- grob_vertex(netenv, v, nsides = nsides)  # Pass nsides parameter
   } else
     grob.vertex <- NULL
 
-  if (!skip.edges | !skip.arrows) {
+  if (!skip.edges || !skip.arrows) {
 
     grob.edge <- vector("list", netenv$M)
     for (e in 1:netenv$M)
@@ -423,7 +428,6 @@ nplot.default <- function(
 
   } else
     grob.edge <- NULL
-
   # Agregated grob -------------------------------------------------------------
   ans <- do.call(
     grid::gTree,
@@ -499,7 +503,7 @@ nplot.default <- function(
         red.f = .75, green.f = .75, blue.f = .75
         )
 
-    } else 
+    } else
       vertex.frame.color <- .rep("darkgray", N)
 
   }
@@ -571,38 +575,38 @@ print.netplot <- function(x, y = NULL, newpage = TRUE, ...) {
 }
 
 #' Find a vertex in the current plot
-#' 
-#' This function is a wrapper of [grid::grid.locator()], and provides a way to 
+#'
+#' This function is a wrapper of [grid::grid.locator()], and provides a way to
 #' find the coordinates of a vertex in the current plot. It is useful to
 #' identify the vertex that is being clicked in a plot.
-#' 
+#'
 #' @param x An object of class `netplot`
 #' @return A list with the name of the vertex, the x and y coordinates and the
 #'  viewport where it is located.
-#' @details This function only works in interactive mode. Once it is called, 
+#' @details This function only works in interactive mode. Once it is called,
 #' the user can click on a vertex in the plot. The function will return the
 #' name of the vertex, the x and y coordinates and the viewport where it is
 #' located. If `x` is not specified, the last plotted `netplot` object will be
 #' used.
-#' 
+#'
 #' @export
 #' @examples
 #' library(igraph)
 #' library(netplot)
 #' set.seed(1)
 #' x <- sample_smallworld(1, 200, 5, 0.03)
-#' 
+#'
 #' # Plotting
 #' nplot(x)
-#' 
+#'
 #' # Clicking (only works in interactive mode)
 #' if (interactive()) {
 #'  res <- locate_vertex()
 #'  print(res)
 #' }
-#' 
+#'
 locate_vertex <- function(x = NULL) {
-  
+
   if (is.null(x))
     x <- .Last.netplot$get()
 
