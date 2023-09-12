@@ -205,5 +205,3 @@ map_attribute_to_shape <- function(x) {
 
 }
 
-
-

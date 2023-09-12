@@ -283,6 +283,31 @@ nplot.default <- function(
   netenv$M <- nrow(edgelist)
   netenv$graph_class <- class(x)
 
+  # Mapping attributes ---------------------------------------------------------
+
+  # Nsides
+  if (length(vertex.nsides) && inherits(vertex.nsides, "formula")) {
+
+    rhs <- as.character(vertex.nsides[[2]])
+    vertex.nsides <- map_attribute_to_shape(
+      get_graph_attribute(graph = x, attribute = rhs)
+    )
+
+  }
+
+  # And size
+  if (length(vertex.size) && inherits(vertex.size, "formula")) {
+
+    rhs <- as.character(vertex.size[[2]])
+    vertex.size <- get_graph_attribute(graph = x, attribute = rhs)
+
+    # Now check if it is numeric. If not, it should return an error
+    if (!is.numeric(vertex.size)) {
+      stop("vertex.size must be numeric")
+    }
+
+  }
+
   # Sampling edges -------------------------------------------------------------
   if (sample.edges < 1) {
 
@@ -331,11 +356,6 @@ nplot.default <- function(
   for (p in vertex_par)
     if (length(netenv[[p]]) > 0 && length(netenv[[p]]) < netenv$N)
       netenv[[p]] <- .rep(netenv[[p]], netenv$N)
-
-  # New: Handling vertex shape
-  if (!is.character(nsides) && !is.numeric(nsides)) {
-    stop("nsides parameter must be a character string or a numeric value")
-  }
 
   # Checking defaults for edges
   edge_par <- ls(pattern = "^edge\\.", envir = netenv)
@@ -413,19 +433,10 @@ nplot.default <- function(
   )
 
   # Generating grobs -----------------------------------------------------------
-  if (length(vertex.nsides) && inherits(vertex.nsides, "formula")) {
-
-    rhs <- as.character(vertex.nsides[[2]])
-    vertex.nsides <- map_attribute_to_shape(
-      get_graph_attribute(graph = x, attribute = rhs)
-    )
-
-  }
-
   if (!skip.vertex) {
     grob.vertex <- vector("list", netenv$N)
     for (v in 1:netenv$N)
-      grob.vertex[[v]] <- grob_vertex(netenv, v, nsides = nsides)  # Pass nsides parameter
+      grob.vertex[[v]] <- grob_vertex(netenv, v) 
   } else
     grob.vertex <- NULL
 
