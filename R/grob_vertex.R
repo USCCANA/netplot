@@ -1,3 +1,15 @@
+  sides_lookup <- list(
+    line     = list(sides = 2, rot = 0),    # 1
+    triangle = list(sides = 3, rot = 0),    # 2
+    square   = list(sides = 4, rot = pi/2), # 3
+    diamond  = list(sides = 4, rot = 0),    # 4
+    pentagon = list(sides = 5, rot = 0),    # 5
+    hexagon  = list(sides = 6, rot = 0),    # 6
+    heptagon = list(sides = 7, rot = 0),    # 7
+    octagon  = list(sides = 8, rot = 0),    # 8
+    circle   = list(sides = 25, rot = 0)    # 9
+  )
+
 #' Functions to calculate graph polygons coordinates
 #' @param netenv An object of class network environment.
 #' @param v,e Integer scalars. vertex or edge index.
@@ -6,17 +18,6 @@
 #' Generating coordinates
 #' @noRd
 grob_vertex <- function(netenv, v) {
-
-  sides_lookup <- list(
-    triangle = list(sides = 3, rot = 0),
-    square   = list(sides = 4, rot = pi/2),
-    diamond  = list(sides = 4, rot = 0),
-    pentagon = list(sides = 5, rot = 0),
-    hexagon  = list(sides = 6, rot = 0),
-    heptagon = list(sides = 7, rot = 0),
-    octagon  = list(sides = 8, rot = 0),
-    circle   = list(sides = 25, rot = 0)
-  )
 
   # Add formula handling
   if(inherits(netenv$vertex.nsides, "formula")) {

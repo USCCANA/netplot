@@ -64,7 +64,7 @@ data("UKfaculty", package = "igraphdata")
 l <- layout_with_fr(UKfaculty)
 
 plot(UKfaculty, layout = l) # ala igraph
-nplot(UKfaculty, layout = l) # ala netplot
+nplot(UKfaculty, layout = l, vertex.nsides = ~ Group) # ala netplot
 sna::gplot(intergraph::asNetwork(UKfaculty), coord=l)
 ```
 

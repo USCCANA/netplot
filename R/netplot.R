@@ -408,6 +408,15 @@ nplot.default <- function(
   )
 
   # Generating grobs -----------------------------------------------------------
+  if (length(vertex.nsides) && inherits(vertex.nsides, "formula")) {
+
+    rhs <- as.character(vertex.nsides[[2]])
+    vertex.nsides <- map_attribute_to_shape(
+      get_graph_attribute(graph = x, attribute = rhs)
+    )
+
+  }
+
   if (!skip.vertex) {
     grob.vertex <- vector("list", netenv$N)
     for (v in 1:netenv$N)

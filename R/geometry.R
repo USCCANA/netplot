@@ -177,3 +177,33 @@ arrow_fancy <- function(x, alpha = 0, l=.25, a=pi/6, b = pi/1.5) {
 
 
 }
+
+#' Takes a graph attribute and maps it to a shape
+#' @param x Is (any) vector to be mapped.
+#' @return 
+#' A vector of shapes (encoded as integers) from 2 to 8.
+#' @noRd
+map_attribute_to_shape <- function(x) {
+
+  # Get the unique values of x, if it is more than 9
+  # then we will throw an error.
+  nunique <- length(unique(x))
+  if (nunique > length(sides_lookup)) {
+    stop(
+      "The number of unique values of the attribute is greater than the number of shapes available. ",
+      "Please, use a different attribute or a different shape."
+    )
+  }
+
+  # If the variable already contains the values
+  if (all(x %in% names(sides_lookup)))
+    return(x)
+
+  # We can now turn this x into a factor, and then
+  # numbers to be used as indices
+  names(sides_lookup)[as.numeric(factor(x))]
+
+}
+
+
+
