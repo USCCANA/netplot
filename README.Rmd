@@ -66,7 +66,7 @@ l <- layout_with_fr(UKfaculty)
 plot(UKfaculty, layout = l) # ala igraph
 
 V(UKfaculty)$ss <- runif(vcount(UKfaculty))
-nplot(UKfaculty, layout = l, vertex.nsides = ~ Group, vertex.size = ~ ss) # ala netplot
+nplot(UKfaculty, layout = l) # ala netplot
 sna::gplot(intergraph::asNetwork(UKfaculty), coord=l)
 ```
 
