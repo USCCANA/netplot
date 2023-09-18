@@ -209,6 +209,10 @@ set_vertex_gpar <- function(x, element, idx, ...) {
       dots$fill <- color_nodes(x$.graph, fill_var)
     }
 
+    # Adding information for the legend
+    x$.legend_vertex_col <- dots$col
+    x$.legend_vertex_fill <- dots$fill
+
   }
 
   do.call(

@@ -19,11 +19,11 @@
 #' @noRd
 grob_vertex <- function(netenv, v) {
 
-  # Add formula handling
-  if(inherits(netenv$vertex.nsides, "formula")) {
-    var_name <- all.vars(netenv$vertex.nsides)[1]
-    netenv$vertex.nsides <- eval(netenv$vertex.nsides, envir = data)
-  }
+  # # Add formula handling
+  # if(inherits(netenv$vertex.nsides, "formula")) {
+  #   var_name <- all.vars(netenv$vertex.nsides)[1]
+  #   netenv$vertex.nsides <- eval(netenv$vertex.nsides, envir = data)
+  # }
 
   # Relax vertex.nsides validation
   if(!is.numeric(netenv$vertex.nsides[v]) & !is.character(netenv$vertex.nsides[v])) {
@@ -80,8 +80,8 @@ grob_vertex <- function(netenv, v) {
   # Create color palette
   nsides <- unique(netenv$vertex.nsides)
   ncolors <- length(nsides)
-  colors <- hsv(h = seq(0, 1, length.out = ncolors), v = 1, a = 1)
-  pal <- setNames(colors, nsides)
+  colors <- grDevices::hsv(h = seq(0, 1, length.out = ncolors), v = 1, a = 1)
+  pal <- stats::setNames(colors, nsides)
 
   # Lookup color for this vertex based on number of sides
   col <- pal[as.character(netenv$vertex.nsides[v])]

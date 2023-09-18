@@ -262,7 +262,7 @@ nplot.default <- function(
   ) {
 
   # We turn off the device if not need
-  if (length(dev.list()) == 0L) {
+  if (length(grDevices::dev.list()) == 0L) {
     on.exit(
       grDevices::dev.off(grDevices::dev.cur())
     )
@@ -279,9 +279,9 @@ nplot.default <- function(
       "'"
       )
 
-  netenv$N <- nrow(layout)
-  netenv$M <- nrow(edgelist)
-  netenv$graph_class <- class(x)
+  N <- nrow(layout)
+  M <- nrow(edgelist)
+  graph_class <- class(x)
 
   # Mapping attributes ---------------------------------------------------------
 
@@ -290,7 +290,7 @@ nplot.default <- function(
 
     rhs <- as.character(vertex.nsides[[2]])
     vertex.nsides <- map_attribute_to_shape(
-      get_graph_attribute(graph = x, attribute = rhs)
+      get_vertex_attribute(graph = x, attribute = rhs)
     )
 
   }
@@ -299,11 +299,24 @@ nplot.default <- function(
   if (length(vertex.size) && inherits(vertex.size, "formula")) {
 
     rhs <- as.character(vertex.size[[2]])
-    vertex.size <- get_graph_attribute(graph = x, attribute = rhs)
+    vertex.size <- get_vertex_attribute(graph = x, attribute = rhs)
 
     # Now check if it is numeric. If not, it should return an error
     if (!is.numeric(vertex.size)) {
       stop("vertex.size must be numeric")
+    }
+
+  }
+
+  # Edges width
+  if (length(edge.width) && inherits(edge.width, "formula")) {
+
+    rhs <- as.character(edge.width[[2]])
+    edge.width <- get_edge_attribute(graph = x, attribute = rhs)
+
+    # Now check if it is numeric. If not, it should return an error
+    if (!is.numeric(edge.width)) {
+      stop("edge.width must be numeric")
     }
 
   }
@@ -574,10 +587,11 @@ nplot.default <- function(
 
 
 #' @rdname nplot
+#' @param legend Logical scalar. When `TRUE` it adds a legend.
 #' @export
 #' @param newpage Logical scalar. When `TRUE` calls [grid::grid.newpage].
 #' @param y,... Ignored
-print.netplot <- function(x, y = NULL, newpage = TRUE, ...) {
+print.netplot <- function(x, y = NULL, newpage = TRUE, legend = TRUE, ...) {
 
   # Drawing
   if (newpage) {
@@ -585,6 +599,13 @@ print.netplot <- function(x, y = NULL, newpage = TRUE, ...) {
   }
 
   grid::grid.draw(x)
+
+  # If legend
+  if (legend) {
+
+    color_nodes_legend(x)
+
+  }
 
   # Storing the value
   .Last.netplot$set(x)

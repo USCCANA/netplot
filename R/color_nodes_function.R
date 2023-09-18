@@ -1,40 +1,3 @@
-#' Extract a graph attribute
-#' @param graph A graph object of class igraph or network.
-#' @param attribute A character string specifying the name of the attribute.
-#' @return A vector of the attribute values. If the attribute does not exist, an error is thrown.
-#' @noRd
-get_graph_attribute <- function(graph, attribute) UseMethod("get_graph_attribute")
-
-get_graph_attribute.igraph <- function(graph, attribute) {
-
-  # Check if the attribute exists
-  if (!(attribute %in% igraph::vertex_attr_names(graph))) {
-    stop("Attribute does not exist in graph")
-  }
-
-  # Extract the attribute
-  igraph::vertex_attr(graph, name = attribute)
-
-}
-
-get_graph_attribute.network <- function(graph, attribute) {
-
-  # Check if the attribute exists
-  if (!(attribute %in% network::list.vertex.attributes(graph))) {
-    stop("Attribute does not exist in graph")
-  }
-
-  # Extract the attribute
-  network::get.vertex.attribute(graph, attribute)
-
-}
-
-get_graph_attribute.default <- function(graph, attribute) {
-
-  stop("Graph type not supported")
-
-}
-
 color_nodes <- function(...) UseMethod("color_nodes")
 
 color_nodes.formula <- function(formula, ...) {
@@ -64,7 +27,7 @@ color_nodes.default <- function(
   ) {
 
   # Extracting the attribute from the graph
-  value <- get_graph_attribute(graph, attribute)
+  value <- get_vertex_attribute(graph, attribute)
   attr_type <- class(value)
 
   # Identifying NAs
@@ -76,7 +39,24 @@ color_nodes.default <- function(
     value <- as.factor(value)
     attr_type <- "factor"
 
+  } else if (inherits(value, "numeric")) {
+
+    # Checking if it is numeric, but if it can be converted to int
+    test_int <- abs(as.integer(value) - value) < .Machine$double.eps^.5
+
+    if (all(test_int, na.rm = TRUE)) {
+
+      value <- as.integer(value)
+      attr_type <- "integer"
+
+    }
+
   }
+
+  
+
+  # Saving the original
+  value_orig <- value
 
   # Handle factors
   if (attr_type == "factor") {
@@ -97,21 +77,18 @@ color_nodes.default <- function(
 
     # Create color scale
     value <- grDevices::colorRamp(palette)(
-      (attr_min:attr_max - attr_min)/(attr_max - attr_min)
+      (value - attr_min)/(attr_max - attr_min)
     )
 
-    cpal <- grDevices::rgb(
-      grDevices::colorRamp(palette)(c(0, 1)),
+    cpal <- function(val) {grDevices::rgb(
+      grDevices::colorRamp(palette)(val),
       maxColorValue = 255
-    )
-
-    names(cpal) <- c(attr_min, attr_max)
+    )}
 
     # Color nodes based on attribute value
     value <- grDevices::rgb(value, maxColorValue = 255)
 
   } else if ("logical" %in% attr_type) { # Handle logicals
-
 
     # Creating mapping to recover colors
     cpal <- palette[1:2]
@@ -151,10 +128,49 @@ color_nodes.default <- function(
     attr_type = attr_type,
     palette   = palette,
     na_color  = na_color,
-    map       = cpal
+    cpal      = cpal,
+    value     = value_orig,
+    attr_name = attribute
   )
 
 }
+
+#' @noRd 
+#' @importFrom stats quantile
+color_nodes_legend <- function(object) {
+
+  # Extracting the fill legend
+  x <- object$.legend_vertex_fill
+
+  if (!length(x))
+    return(invisible(NULL))
+
+  if (!inherits(x, "netplot_color_nodes")) {
+    stop("Object is not of class netplot_color_nodes")
+  }
+
+  # Acts depending on the type
+  values <- if (attr(x, "attr_type") %in% c("logical", "factor", "integer")) {
+    attr(x, "cpal")
+  } else {
+
+    # Generating values
+    structure(
+      attr(x, "cpal")(c(0, .25, .5, .75, 1)),
+      names = stats::quantile(attr(x, "value"), probs = c(0, .25, .5, .75, 1))
+      )
+
+  }
+
+  print(nplot_legend(
+    object,
+    labels = names(values),
+    pch    = 21,
+    gp     = grid::gpar(fill = values)
+  ))
+
+}
+
 
 if (FALSE) {
 

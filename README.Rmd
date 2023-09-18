@@ -81,7 +81,7 @@ nam <- sample(babynames::babynames$name, vcount(UKfaculty))
 ans <- nplot(
   UKfaculty,
   layout                = l,
-  vertex.color          = grDevices::hcl.colors(5, "Plasma")[V(UKfaculty)$Group + 1],
+  vertex.color          = ~ Group,
   vertex.label          = nam,
   vertex.size.range     = c(.01, .04, 4),
   vertex.label.col      =  "black",
@@ -95,14 +95,6 @@ ans <- nplot(
 
 # Plot it!
 ans
-
-# With a legend
-nplot_legend(
-  ans, 
-  labels = paste("Group", 1:4),
-  pch    = c(21, 21, 21),
-  gp     = grid::gpar(fill = grDevices::hcl.colors(5, "Plasma")[2:4])
-  )
 ```
 
 Starting version 0.2-0, we can use gradients!
@@ -146,7 +138,7 @@ net <- simplify(USairports, edge.attr.comb = list(
 nplot(
   net,
   layout            = layout,
-  edge.width        = E(net)$Passengers,
+  edge.width        = ~ Passengers,
   edge.color        = 
     ~ ego(col = "white", alpha = 0) + alter(col = "yellow", alpha = .75),
   skip.vertex       = TRUE,

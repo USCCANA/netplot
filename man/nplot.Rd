@@ -70,7 +70,7 @@ nplot(x, ..., edgelist)
   edgelist
 )
 
-\method{print}{netplot}(x, y = NULL, newpage = TRUE, ...)
+\method{print}{netplot}(x, y = NULL, newpage = TRUE, legend = TRUE, ...)
 }
 \arguments{
 \item{x}{A graph. It supports networks stored as \code{igraph}, \code{network}, and
@@ -144,6 +144,8 @@ is not plotted.}
 \item{y, ...}{Ignored}
 
 \item{newpage}{Logical scalar. When \code{TRUE} calls \link[grid:grid.newpage]{grid::grid.newpage}.}
+
+\item{legend}{Logical scalar. When \code{TRUE} it adds a legend.}
 }
 \value{
 An object of class \code{c("netplot", "gTree", "grob", "gDesc")}. The object

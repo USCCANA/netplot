@@ -11,7 +11,9 @@
 
 *  The argument `sample.edges` now works as expected.
 
-*  `vertex.color` now accepts formulas to color vertices by a vertex attribute.
+*  `vertex.color`, `vertex.size`, and `vertex.nsides` now accepts formulas.
+
+*  `edge.width` now accepts formulas.
 
 *  New function: `locate_vertex()`.
 
