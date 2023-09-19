@@ -68,6 +68,9 @@ library(netplot)
 set.seed(1)
 data("UKfaculty", package = "igraphdata")
 l <- layout_with_fr(UKfaculty)
+#> This graph was created by an old(er) igraph version.
+#>   Call upgrade_graph() on it to use with the current igraph version
+#>   For now we convert it on the fly...
 
 plot(UKfaculty, layout = l) # ala igraph
 ```
@@ -75,6 +78,8 @@ plot(UKfaculty, layout = l) # ala igraph
 <img src="man/figures/README-example-1.png" width="85%" />
 
 ``` r
+
+V(UKfaculty)$ss <- runif(vcount(UKfaculty))
 nplot(UKfaculty, layout = l) # ala netplot
 ```
 
@@ -96,7 +101,7 @@ nam <- sample(babynames::babynames$name, vcount(UKfaculty))
 ans <- nplot(
   UKfaculty,
   layout                = l,
-  vertex.color          = grDevices::hcl.colors(5, "Plasma")[V(UKfaculty)$Group + 1],
+  vertex.color          = ~ Group,
   vertex.label          = nam,
   vertex.size.range     = c(.01, .04, 4),
   vertex.label.col      =  "black",
@@ -112,20 +117,7 @@ ans <- nplot(
 ans
 ```
 
-<img src="man/figures/README-unnamed-chunk-1-1.png" width="85%" />
-
-``` r
-
-# With a legend
-nplot_legend(
-  ans, 
-  labels = paste("Group", 1:4),
-  pch    = c(21, 21, 21),
-  gp     = grid::gpar(fill = grDevices::hcl.colors(5, "Plasma")[2:4])
-  )
-```
-
-<img src="man/figures/README-unnamed-chunk-1-2.png" width="85%" />
+<img src="man/figures/README-unnamed-chunk-1-1.png" width="85%" /><img src="man/figures/README-unnamed-chunk-1-2.png" width="85%" />
 
 Starting version 0.2-0, we can use gradients!
 
@@ -138,7 +130,7 @@ ans |>
       }))
 ```
 
-<img src="man/figures/README-uk-faculty-gradient-1.png" width="85%" />
+<img src="man/figures/README-uk-faculty-gradient-1.png" width="85%" /><img src="man/figures/README-uk-faculty-gradient-2.png" width="85%" />
 
 ### USairports
 
@@ -148,6 +140,9 @@ data(USairports, package="igraphdata")
 
 # Generating a layout naively
 layout   <- V(USairports)$Position
+#> This graph was created by an old(er) igraph version.
+#>   Call upgrade_graph() on it to use with the current igraph version
+#>   For now we convert it on the fly...
 layout   <- do.call(rbind, lapply(layout, function(x) strsplit(x, " ")[[1]]))
 layout[] <- stringr::str_remove(layout, "^[a-zA-Z]+")
 layout   <- matrix(as.numeric(layout[]), ncol=2)
@@ -170,7 +165,7 @@ net <- simplify(USairports, edge.attr.comb = list(
 nplot(
   net,
   layout            = layout,
-  edge.width        = E(net)$Passengers,
+  edge.width        = ~ Passengers,
   edge.color        = 
     ~ ego(col = "white", alpha = 0) + alter(col = "yellow", alpha = .75),
   skip.vertex       = TRUE,
