@@ -139,11 +139,16 @@
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"UKfaculty"</span>, package <span class="op">=</span> <span class="st">"igraphdata"</span><span class="op">)</span>
 <span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/layout_with_fr.html">layout_with_fr</a></span><span class="op">(</span><span class="va">UKfaculty</span><span class="op">)</span>
+<span class="co">#&gt; This graph was created by an old(er) igraph version.</span>
+<span class="co">#&gt;   Call upgrade_graph() on it to use with the current igraph version</span>
+<span class="co">#&gt;   For now we convert it on the fly...</span>
 
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">UKfaculty</span>, layout <span class="op">=</span> <span class="va">l</span><span class="op">)</span> <span class="co"># ala igraph</span></code></pre></div>
 <p><img src="reference/figures/README-example-1.png" width="85%"></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/nplot.html">nplot</a></span><span class="op">(</span><span class="va">UKfaculty</span>, layout <span class="op">=</span> <span class="va">l</span><span class="op">)</span> <span class="co"># ala netplot</span></code></pre></div>
+<code class="sourceCode R">
+<span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">UKfaculty</span><span class="op">)</span><span class="op">$</span><span class="va">ss</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/gorder.html">vcount</a></span><span class="op">(</span><span class="va">UKfaculty</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="reference/nplot.html">nplot</a></span><span class="op">(</span><span class="va">UKfaculty</span>, layout <span class="op">=</span> <span class="va">l</span><span class="op">)</span> <span class="co"># ala netplot</span></code></pre></div>
 <p><img src="reference/figures/README-example-2.png" width="85%"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">sna</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sna/man/gplot.html">gplot</a></span><span class="op">(</span><span class="fu">intergraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/intergraph/man/asNetwork.html">asNetwork</a></span><span class="op">(</span><span class="va">UKfaculty</span><span class="op">)</span>, coord<span class="op">=</span><span class="va">l</span><span class="op">)</span></code></pre></div>
@@ -159,7 +164,7 @@
 <span class="va">ans</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/nplot.html">nplot</a></span><span class="op">(</span>
   <span class="va">UKfaculty</span>,
   layout                <span class="op">=</span> <span class="va">l</span>,
-  vertex.color          <span class="op">=</span> <span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html">hcl.colors</a></span><span class="op">(</span><span class="fl">5</span>, <span class="st">"Plasma"</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">UKfaculty</span><span class="op">)</span><span class="op">$</span><span class="va">Group</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span>,
+  vertex.color          <span class="op">=</span> <span class="op">~</span> <span class="va">Group</span>,
   vertex.label          <span class="op">=</span> <span class="va">nam</span>,
   vertex.size.range     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.01</span>, <span class="fl">.04</span>, <span class="fl">4</span><span class="op">)</span>,
   vertex.label.col      <span class="op">=</span>  <span class="st">"black"</span>,
@@ -173,36 +178,29 @@
 
 <span class="co"># Plot it!</span>
 <span class="va">ans</span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-1-1.png" width="85%"></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="co"># With a legend</span>
-<span class="fu"><a href="reference/nplot_legend.html">nplot_legend</a></span><span class="op">(</span>
-  <span class="va">ans</span>, 
-  labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"Group"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span>,
-  pch    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">21</span>, <span class="fl">21</span>, <span class="fl">21</span><span class="op">)</span>,
-  gp     <span class="op">=</span> <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/palettes.html">hcl.colors</a></span><span class="op">(</span><span class="fl">5</span>, <span class="st">"Plasma"</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span><span class="op">)</span>
-  <span class="op">)</span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-1-2.png" width="85%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-1-1.png" width="85%"><img src="reference/figures/README-unnamed-chunk-1-2.png" width="85%"></p>
 <p>Starting version 0.2-0, we can use gradients!</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ans</span> |&gt;
   <span class="fu"><a href="reference/set_gpar.html">set_vertex_gpar</a></span><span class="op">(</span>
     element <span class="op">=</span> <span class="st">"core"</span>,
     fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="fu"><a href="reference/set_gpar.html">get_vertex_gpar</a></span><span class="op">(</span><span class="va">ans</span>, <span class="st">"frame"</span>, <span class="st">"col"</span><span class="op">)</span><span class="op">$</span><span class="va">col</span>, \<span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span>
       <span class="fu">radialGradient</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"white"</span>, <span class="va">i</span><span class="op">)</span>, cx1<span class="op">=</span><span class="fl">.8</span>, cy1<span class="op">=</span><span class="fl">.8</span>, r1<span class="op">=</span><span class="fl">0</span><span class="op">)</span>
       <span class="op">}</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="reference/figures/README-uk-faculty-gradient-1.png" width="85%"></p>
+<p><img src="reference/figures/README-uk-faculty-gradient-1.png" width="85%"><img src="reference/figures/README-uk-faculty-gradient-2.png" width="85%"></p>
 </div>
 <div id="usairports" class="section level3">
 <h3 class="hasAnchor">
 <a href="#usairports" class="anchor"></a>USairports</h3>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Loading the data</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">USairports</span>, package<span class="op">=</span><span class="st">"igraphdata"</span><span class="op">)</span>
 
 <span class="co"># Generating a layout naively</span>
 <span class="va">layout</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">USairports</span><span class="op">)</span><span class="op">$</span><span class="va">Position</span>
+<span class="co">#&gt; This graph was created by an old(er) igraph version.</span>
+<span class="co">#&gt;   Call upgrade_graph() on it to use with the current igraph version</span>
+<span class="co">#&gt;   For now we convert it on the fly...</span>
 <span class="va">layout</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">layout</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">" "</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
 <span class="va">layout</span><span class="op">[</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span><span class="op">(</span><span class="va">layout</span>, <span class="st">"^[a-zA-Z]+"</span><span class="op">)</span>
 <span class="va">layout</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">layout</span><span class="op">[</span><span class="op">]</span><span class="op">)</span>, ncol<span class="op">=</span><span class="fl">2</span><span class="op">)</span>
@@ -225,7 +223,7 @@
 <span class="fu"><a href="reference/nplot.html">nplot</a></span><span class="op">(</span>
   <span class="va">net</span>,
   layout            <span class="op">=</span> <span class="va">layout</span>,
-  edge.width        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">net</span><span class="op">)</span><span class="op">$</span><span class="va">Passengers</span>,
+  edge.width        <span class="op">=</span> <span class="op">~</span> <span class="va">Passengers</span>,
   edge.color        <span class="op">=</span> 
     <span class="op">~</span> <span class="fu"><a href="reference/netplot-formulae.html">ego</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"white"</span>, alpha <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="reference/netplot-formulae.html">alter</a></span><span class="op">(</span>col <span class="op">=</span> <span class="st">"yellow"</span>, alpha <span class="op">=</span> <span class="fl">.75</span><span class="op">)</span>,
   skip.vertex       <span class="op">=</span> <span class="cn">TRUE</span>,
