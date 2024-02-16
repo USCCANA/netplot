@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">netplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2-0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2-9999</span>
       </span>
     </div>
 
@@ -88,7 +88,7 @@
       <h1 data-toc-skip>Graph drawing with netplot</h1>
                         <h4 class="author">George G. Vega Yon</h4>
             
-            <h4 class="date">2024-02-15</h4>
+            <h4 class="date">2024-02-16</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/USCCANA/netplot/blob/master/vignettes/examples.Rmd"><code>vignettes/examples.Rmd</code></a></small>
       <div class="hidden name"><code>examples.Rmd</code></div>
@@ -133,7 +133,7 @@
 <span class="va">ig</span> <span class="op">&lt;-</span> <span class="fu">map_base_to_grid</span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">UKfaculty</span>, main <span class="op">=</span> <span class="st">"igraph"</span><span class="op">)</span><span class="op">)</span>
 <span class="va">nw</span> <span class="op">&lt;-</span> <span class="fu">map_base_to_grid</span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/pkg/sna/man/gplot.html">gplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/as_adjacency_matrix.html">as_adj</a></span><span class="op">(</span><span class="va">UKfaculty</span><span class="op">)</span><span class="op">)</span>, coord <span class="op">=</span> <span class="va">l_ukf</span>, main <span class="op">=</span> <span class="st">"sna"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/nplot.html">nplot</a></span><span class="op">(</span><span class="va">UKfaculty</span>, layout <span class="op">=</span> <span class="va">l_ukf</span>, main<span class="op">=</span><span class="st">"netplot"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/nplot.html">nplot</a></span><span class="op">(</span><span class="va">UKfaculty</span>, layout <span class="op">=</span> <span class="va">l_ukf</span><span class="op">)</span>
 <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.text.html">grid.text</a></span><span class="op">(</span><span class="st">"netplot"</span>, x <span class="op">=</span> <span class="fl">.05</span>, y<span class="op">=</span><span class="fl">.9</span><span class="op">)</span>
 <span class="va">np</span> <span class="op">&lt;-</span> <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.grab.html">grid.grab</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>Here is an example with <a href="https://cran.r-project.org/package=ggraph"><code>ggraph</code></a></p>
