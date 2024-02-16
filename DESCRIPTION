@@ -1,13 +1,13 @@
 Package: netplot
 Title: Beautiful Graph Drawing
-Version: 0.2-0
+Version: 0.2-9999
 Authors@R: c(
   person("George", "Vega Yon", email = "g.vegayon@gmail.com", role = c("aut", "cre"),
     comment = c(ORCID = "0000-0002-3171-0844")),
   person("Porter", "Bischoff", email = "portergbischoff@gmail.com", role = c("aut"), comment = c(ORCID = "0009-0004-6742-6281"))
   )
-Description: A graph visualization engine that puts an emphasis on 
-  aesthetics at the same time of providing default parameters that yield
+Description: A graph visualization engine that emphasizes on 
+  aesthetics at the same time providing default parameters that yield
   out-of-the-box-nice visualizations. The package is built on top of
   'The Grid Graphics Package' and seamlessly work with 'igraph' and 
   'network' objects.
