@@ -2,6 +2,8 @@
 
 *  Unvalid arguments passed to `nplot()` now raise an error.
 
+*  Figures with legends are not drawn twice.
+
 
 # netplot 0.2-0
 

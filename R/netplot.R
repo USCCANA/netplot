@@ -615,19 +615,20 @@ nplot.default <- function(
 #' @param y,... Ignored
 print.netplot <- function(x, y = NULL, newpage = TRUE, legend = TRUE, ...) {
 
+  # If legend, then we avoid drawing twice
+  if (length(x$.legend_vertex_fill) && legend) {
+
+    color_nodes_legend(x)
+    return(invisible(x))
+
+  }
+
   # Drawing
   if (newpage) {
     grid::grid.newpage()
   }
 
   grid::grid.draw(x)
-
-  # If legend
-  if (legend) {
-
-    color_nodes_legend(x)
-
-  }
 
   # Storing the value
   .Last.netplot$set(x)
