@@ -91,7 +91,40 @@ NULL
 
 #' @export
 #' @rdname nplot
-nplot <- function(x, ..., edgelist) {
+nplot <- function(
+  x,
+  layout,
+  vertex.size             = 1,
+  bg.col                  = "transparent",
+  vertex.nsides           = 10,
+  vertex.color            = grDevices::hcl.colors(1),
+  vertex.size.range       = c(.01, .03),
+  vertex.frame.color      = NULL,
+  vertex.rot              = 0,
+  vertex.frame.prop       = .2,
+  vertex.label            = NULL,
+  vertex.label.fontsize   = NULL,
+  vertex.label.color      = "black",
+  vertex.label.fontfamily = "HersheySans",
+  vertex.label.fontface   = "bold",
+  vertex.label.show       = .3,
+  vertex.label.range      = c(5, 15),
+  edge.width              = 1,
+  edge.width.range        = c(1, 2),
+  edge.arrow.size         = NULL,
+  edge.color              = ~ ego(alpha = .1, col = "gray") + alter,
+  edge.curvature          = pi/3,
+  edge.line.lty           = "solid",
+  edge.line.breaks        = 5,
+  sample.edges            = 1,
+  skip.vertex             = FALSE,
+  skip.edges              = FALSE,
+  skip.arrows             = skip.edges,
+  add                     = FALSE,
+  zero.margins            = TRUE,
+  ...,
+  edgelist
+  ) {
 
   # Checking if the passed arguments match the default class
   res <- sapply(
