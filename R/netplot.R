@@ -142,13 +142,37 @@ nplot <- function(
 #' @rdname nplot
 nplot.igraph <- function(
   x,
-  layout       = igraph::layout_nicely(x),
-  vertex.size  = igraph::degree(x, mode="in"),
-  vertex.label = igraph::vertex_attr(x, "name"),
-  edge.width   = igraph::edge_attr(x, "weight"),
-  skip.arrows  = !igraph::is_directed(x),
+  layout                  = igraph::layout_nicely(x),
+  vertex.size             = igraph::degree(x, mode="in"),
+  bg.col                  = "transparent",
+  vertex.nsides           = 10,
+  vertex.color            = grDevices::hcl.colors(1),
+  vertex.size.range       = c(.01, .03),
+  vertex.frame.color      = NULL,
+  vertex.rot              = 0,
+  vertex.frame.prop       = .2,
+  vertex.label            = igraph::vertex_attr(x, "name"),
+  vertex.label.fontsize   = NULL,
+  vertex.label.color      = "black",
+  vertex.label.fontfamily = "HersheySans",
+  vertex.label.fontface   = "bold",
+  vertex.label.show       = .3,
+  vertex.label.range      = c(5, 15),
+  edge.width              = igraph::edge_attr(x, "weight"),
+  edge.width.range        = c(1, 2),
+  edge.arrow.size         = NULL,
+  edge.color              = ~ ego(alpha = .1, col = "gray") + alter,
+  edge.curvature          = pi/3,
+  edge.line.lty           = "solid",
+  edge.line.breaks        = 5,
+  sample.edges            = 1,
+  skip.vertex             = FALSE,
+  skip.edges              = FALSE,
+  skip.arrows             = !igraph::is_directed(x),
+  add                     = FALSE,
+  zero.margins            = TRUE,
   ...,
-  edgelist     = NULL
+  edgelist
   ) {
 
   if (!length(edge.width))
@@ -173,12 +197,37 @@ nplot.igraph <- function(
 #' @importFrom sna gplot.layout.kamadakawai
 nplot.network <- function(
   x,
-  layout       = sna::gplot.layout.kamadakawai(x, NULL),
-  vertex.size  = sna::degree(x, cmode="indegree"),
-  vertex.label = network::get.vertex.attribute(x, "vertex.names"),
-  skip.arrows  = !network::is.directed(x),
+  layout                  = sna::gplot.layout.kamadakawai(x, NULL),
+  vertex.size             =  sna::degree(x, cmode="indegree"),
+  bg.col                  = "transparent",
+  vertex.nsides           = 10,
+  vertex.color            = grDevices::hcl.colors(1),
+  vertex.size.range       = c(.01, .03),
+  vertex.frame.color      = NULL,
+  vertex.rot              = 0,
+  vertex.frame.prop       = .2,
+  vertex.label            =  network::get.vertex.attribute(x, "vertex.names"),
+  vertex.label.fontsize   = NULL,
+  vertex.label.color      = "black",
+  vertex.label.fontfamily = "HersheySans",
+  vertex.label.fontface   = "bold",
+  vertex.label.show       = .3,
+  vertex.label.range      = c(5, 15),
+  edge.width              = 1,
+  edge.width.range        = c(1, 2),
+  edge.arrow.size         = NULL,
+  edge.color              = ~ ego(alpha = .1, col = "gray") + alter,
+  edge.curvature          = pi/3,
+  edge.line.lty           = "solid",
+  edge.line.breaks        = 5,
+  sample.edges            = 1,
+  skip.vertex             = FALSE,
+  skip.edges              = FALSE,
+  skip.arrows             =  !network::is.directed(x),
+  add                     = FALSE,
+  zero.margins            = TRUE,
   ...,
-  edgelist = NULL
+  edgelist
 ) {
 
   nplot.default(
@@ -196,7 +245,40 @@ nplot.network <- function(
 #' @export
 #' @rdname nplot
 #' @importFrom igraph graph_from_adjacency_matrix
-nplot.matrix <- function(x, ..., edgelist = NULL) {
+nplot.matrix <- function(
+  x,
+  layout,
+  vertex.size             = 1,
+  bg.col                  = "transparent",
+  vertex.nsides           = 10,
+  vertex.color            = grDevices::hcl.colors(1),
+  vertex.size.range       = c(.01, .03),
+  vertex.frame.color      = NULL,
+  vertex.rot              = 0,
+  vertex.frame.prop       = .2,
+  vertex.label            = NULL,
+  vertex.label.fontsize   = NULL,
+  vertex.label.color      = "black",
+  vertex.label.fontfamily = "HersheySans",
+  vertex.label.fontface   = "bold",
+  vertex.label.show       = .3,
+  vertex.label.range      = c(5, 15),
+  edge.width              = 1,
+  edge.width.range        = c(1, 2),
+  edge.arrow.size         = NULL,
+  edge.color              = ~ ego(alpha = .1, col = "gray") + alter,
+  edge.curvature          = pi/3,
+  edge.line.lty           = "solid",
+  edge.line.breaks        = 5,
+  sample.edges            = 1,
+  skip.vertex             = FALSE,
+  skip.edges              = FALSE,
+  skip.arrows             = skip.edges,
+  add                     = FALSE,
+  zero.margins            = TRUE,
+  ...,
+  edgelist
+  ) {
 
   nplot.igraph(
     x = igraph::graph_from_adjacency_matrix(x),

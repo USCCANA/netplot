@@ -1,5 +1,7 @@
+#' @keywords internal
 color_nodes <- function(...) UseMethod("color_nodes")
 
+#' @keywords internal
 color_nodes.formula <- function(formula, ...) {
 
   # Extract the LHS of the formula
@@ -18,6 +20,7 @@ color_nodes.formula <- function(formula, ...) {
 
 }
 
+#' @keywords internal
 color_nodes.default <- function(
   graph,
   attribute,
@@ -137,6 +140,7 @@ color_nodes.default <- function(
 
 #' @noRd 
 #' @importFrom stats quantile
+#' @keywords internal
 color_nodes_legend <- function(object) {
 
   # Extracting the fill legend
