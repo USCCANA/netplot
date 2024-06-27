@@ -1,6 +1,6 @@
 Package: netplot
 Title: Beautiful Graph Drawing
-Version: 0.2-9999
+Version: 0.3-0
 Authors@R: c(
   person("George", "Vega Yon", email = "g.vegayon@gmail.com", role = c("aut", "cre"),
     comment = c(ORCID = "0000-0002-3171-0844")),
@@ -25,8 +25,7 @@ Imports:
     igraph,
     network,
     sna,
-    stats,
-    methods
+    stats
 Suggests: 
     knitr,
     rmarkdown,

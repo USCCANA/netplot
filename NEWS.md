@@ -1,4 +1,4 @@
-# netplot 0.2-9999
+# netplot 0.3-0
 
 * Invalid arguments passed to `nplot()` now raise an error.
 
@@ -6,6 +6,8 @@
 
 * Values supported by `nplot()` are now included in all methods (helps with
   argument completion).
+
+* Changed some default values for better results.
 
 
 # netplot 0.2-0
