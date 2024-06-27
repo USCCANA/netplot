@@ -195,11 +195,14 @@ the vertex. E.g. three is a triangle, and 100 approximates a circle.</p></td>
     </tr>
     <tr>
       <th>vertex.size.range</th>
-      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gorder.html'>vcount(x)</a></code> from 0 to 1.</p></td>
+      <td><p>Numeric vector of length 3. Relative size for the
+minimum and maximum of the plot, and curvature of the scale. The third number
+is used as <code>size^rel[3]</code>.</p></td>
     </tr>
     <tr>
       <th>vertex.frame.color</th>
-      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gorder.html'>vcount(x)</a></code>. Border of vertex in HEX or built in colors.</p></td>
+      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gorder.html'>vcount(x)</a></code>. Border of vertex in
+HEX or built in colors.</p></td>
     </tr>
     <tr>
       <th>vertex.rot</th>
@@ -213,11 +216,13 @@ vertex does the frame occupy (values between 0 and 1).</p></td>
     </tr>
     <tr>
       <th>edge.width</th>
-      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code> from 0 to 1. All edges will be the same size.</p></td>
+      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code> from 0 to 1. All edges will be
+the same size.</p></td>
     </tr>
     <tr>
       <th>edge.width.range</th>
-      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code> from 0 to 1. Adjusting width according to weight.</p></td>
+      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code> from 0 to 1. Adjusting
+width according to weight.</p></td>
     </tr>
     <tr>
       <th>edge.arrow.size</th>
@@ -225,7 +230,8 @@ vertex does the frame occupy (values between 0 and 1).</p></td>
     </tr>
     <tr>
       <th>edge.color</th>
-      <td><p>A vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code>. In HEX or built in colors. Can be <code>NULL</code> in which case
+      <td><p>A vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code>. In HEX or built in colors.
+Can be <code>NULL</code> in which case
 the color is picked as a mixture between ego and alters' <code>vertex.color</code> values.</p></td>
     </tr>
     <tr>
@@ -245,7 +251,8 @@ in terms of radians.</p></td>
     </tr>
     <tr>
       <th>edge.line.lty</th>
-      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code>. Line types in R (e.g.- 1 = Solid, 2 = Dashed, etc)</p></td>
+      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code>. Line types in R
+(e.g.- 1 = Solid, 2 = Dashed, etc).</p></td>
     </tr>
     <tr>
       <th>edge.line.breaks</th>
@@ -254,12 +261,13 @@ draw (approximate) the arc (edge).</p></td>
     </tr>
     <tr>
       <th>sample.edges</th>
-      <td><p>Numeric scalar between 0 and 1. Proportion of edges to sample.</p></td>
+      <td><p>Numeric scalar between 0 and 1. Proportion of edges to
+sample.</p></td>
     </tr>
     <tr>
       <th>skip.vertex, skip.edges, skip.arrows</th>
-      <td><p>Logical scalar. When <code>TRUE</code> the object
-is not plotted.</p></td>
+      <td><p>Logical scalar. When <code>TRUE</code> the
+object is not plotted.</p></td>
     </tr>
     <tr>
       <th>add</th>

@@ -142,15 +142,15 @@
   bg.col <span class='op'>=</span> <span class='st'>"transparent"</span>,
   vertex.nsides <span class='op'>=</span> <span class='fl'>10</span>,
   vertex.color <span class='op'>=</span> <span class='fu'>grDevices</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/grDevices/palettes.html'>hcl.colors</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>,
-  vertex.size.range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.01</span>, <span class='fl'>0.03</span><span class='op'>)</span>,
+  vertex.size.range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.01</span>, <span class='fl'>0.03</span>, <span class='fl'>4</span><span class='op'>)</span>,
   vertex.frame.color <span class='op'>=</span> <span class='cn'>NULL</span>,
   vertex.rot <span class='op'>=</span> <span class='fl'>0</span>,
   vertex.frame.prop <span class='op'>=</span> <span class='fl'>0.2</span>,
   vertex.label <span class='op'>=</span> <span class='cn'>NULL</span>,
   vertex.label.fontsize <span class='op'>=</span> <span class='cn'>NULL</span>,
-  vertex.label.color <span class='op'>=</span> <span class='st'>"black"</span>,
-  vertex.label.fontfamily <span class='op'>=</span> <span class='st'>"HersheySans"</span>,
-  vertex.label.fontface <span class='op'>=</span> <span class='st'>"bold"</span>,
+  vertex.label.color <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/adjustcolor.html'>adjustcolor</a></span><span class='op'>(</span><span class='st'>"black"</span>, alpha.f <span class='op'>=</span> <span class='fl'>0.8</span><span class='op'>)</span>,
+  vertex.label.fontfamily <span class='op'>=</span> <span class='st'>"sans"</span>,
+  vertex.label.fontface <span class='op'>=</span> <span class='st'>"plain"</span>,
   vertex.label.show <span class='op'>=</span> <span class='fl'>0.3</span>,
   vertex.label.range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>15</span><span class='op'>)</span>,
   edge.width <span class='op'>=</span> <span class='fl'>1</span>,
@@ -166,7 +166,6 @@
   skip.arrows <span class='op'>=</span> <span class='va'>skip.edges</span>,
   add <span class='op'>=</span> <span class='cn'>FALSE</span>,
   zero.margins <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  <span class='va'>...</span>,
   <span class='va'>edgelist</span>
 <span class='op'>)</span>
 
@@ -178,15 +177,15 @@
   bg.col <span class='op'>=</span> <span class='st'>"transparent"</span>,
   vertex.nsides <span class='op'>=</span> <span class='fl'>10</span>,
   vertex.color <span class='op'>=</span> <span class='fu'>grDevices</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/grDevices/palettes.html'>hcl.colors</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>,
-  vertex.size.range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.01</span>, <span class='fl'>0.03</span><span class='op'>)</span>,
+  vertex.size.range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.01</span>, <span class='fl'>0.03</span>, <span class='fl'>4</span><span class='op'>)</span>,
   vertex.frame.color <span class='op'>=</span> <span class='cn'>NULL</span>,
   vertex.rot <span class='op'>=</span> <span class='fl'>0</span>,
   vertex.frame.prop <span class='op'>=</span> <span class='fl'>0.2</span>,
   vertex.label <span class='op'>=</span> <span class='fu'>igraph</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/igraph/man/vertex_attr.html'>vertex_attr</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>"name"</span><span class='op'>)</span>,
   vertex.label.fontsize <span class='op'>=</span> <span class='cn'>NULL</span>,
-  vertex.label.color <span class='op'>=</span> <span class='st'>"black"</span>,
-  vertex.label.fontfamily <span class='op'>=</span> <span class='st'>"HersheySans"</span>,
-  vertex.label.fontface <span class='op'>=</span> <span class='st'>"bold"</span>,
+  vertex.label.color <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/adjustcolor.html'>adjustcolor</a></span><span class='op'>(</span><span class='st'>"black"</span>, alpha.f <span class='op'>=</span> <span class='fl'>0.8</span><span class='op'>)</span>,
+  vertex.label.fontfamily <span class='op'>=</span> <span class='st'>"sans"</span>,
+  vertex.label.fontface <span class='op'>=</span> <span class='st'>"plain"</span>,
   vertex.label.show <span class='op'>=</span> <span class='fl'>0.3</span>,
   vertex.label.range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>15</span><span class='op'>)</span>,
   edge.width <span class='op'>=</span> <span class='fu'>igraph</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/igraph/man/edge_attr.html'>edge_attr</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>"weight"</span><span class='op'>)</span>,
@@ -202,7 +201,6 @@
   skip.arrows <span class='op'>=</span> <span class='op'>!</span><span class='fu'>igraph</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/igraph/man/is_directed.html'>is_directed</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
   add <span class='op'>=</span> <span class='cn'>FALSE</span>,
   zero.margins <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  <span class='va'>...</span>,
   <span class='va'>edgelist</span>
 <span class='op'>)</span>
 
@@ -214,15 +212,15 @@
   bg.col <span class='op'>=</span> <span class='st'>"transparent"</span>,
   vertex.nsides <span class='op'>=</span> <span class='fl'>10</span>,
   vertex.color <span class='op'>=</span> <span class='fu'>grDevices</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/grDevices/palettes.html'>hcl.colors</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>,
-  vertex.size.range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.01</span>, <span class='fl'>0.03</span><span class='op'>)</span>,
+  vertex.size.range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.01</span>, <span class='fl'>0.03</span>, <span class='fl'>4</span><span class='op'>)</span>,
   vertex.frame.color <span class='op'>=</span> <span class='cn'>NULL</span>,
   vertex.rot <span class='op'>=</span> <span class='fl'>0</span>,
   vertex.frame.prop <span class='op'>=</span> <span class='fl'>0.2</span>,
   vertex.label <span class='op'>=</span> <span class='fu'>network</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/network/man/attribute.methods.html'>get.vertex.attribute</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='st'>"vertex.names"</span><span class='op'>)</span>,
   vertex.label.fontsize <span class='op'>=</span> <span class='cn'>NULL</span>,
-  vertex.label.color <span class='op'>=</span> <span class='st'>"black"</span>,
-  vertex.label.fontfamily <span class='op'>=</span> <span class='st'>"HersheySans"</span>,
-  vertex.label.fontface <span class='op'>=</span> <span class='st'>"bold"</span>,
+  vertex.label.color <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/adjustcolor.html'>adjustcolor</a></span><span class='op'>(</span><span class='st'>"black"</span>, alpha.f <span class='op'>=</span> <span class='fl'>0.8</span><span class='op'>)</span>,
+  vertex.label.fontfamily <span class='op'>=</span> <span class='st'>"sans"</span>,
+  vertex.label.fontface <span class='op'>=</span> <span class='st'>"plain"</span>,
   vertex.label.show <span class='op'>=</span> <span class='fl'>0.3</span>,
   vertex.label.range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>15</span><span class='op'>)</span>,
   edge.width <span class='op'>=</span> <span class='fl'>1</span>,
@@ -238,7 +236,6 @@
   skip.arrows <span class='op'>=</span> <span class='op'>!</span><span class='fu'>network</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/network/man/network.indicators.html'>is.directed</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
   add <span class='op'>=</span> <span class='cn'>FALSE</span>,
   zero.margins <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  <span class='va'>...</span>,
   <span class='va'>edgelist</span>
 <span class='op'>)</span>
 
@@ -250,15 +247,15 @@
   bg.col <span class='op'>=</span> <span class='st'>"transparent"</span>,
   vertex.nsides <span class='op'>=</span> <span class='fl'>10</span>,
   vertex.color <span class='op'>=</span> <span class='fu'>grDevices</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/grDevices/palettes.html'>hcl.colors</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>,
-  vertex.size.range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.01</span>, <span class='fl'>0.03</span><span class='op'>)</span>,
+  vertex.size.range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.01</span>, <span class='fl'>0.03</span>, <span class='fl'>4</span><span class='op'>)</span>,
   vertex.frame.color <span class='op'>=</span> <span class='cn'>NULL</span>,
   vertex.rot <span class='op'>=</span> <span class='fl'>0</span>,
   vertex.frame.prop <span class='op'>=</span> <span class='fl'>0.2</span>,
   vertex.label <span class='op'>=</span> <span class='cn'>NULL</span>,
   vertex.label.fontsize <span class='op'>=</span> <span class='cn'>NULL</span>,
-  vertex.label.color <span class='op'>=</span> <span class='st'>"black"</span>,
-  vertex.label.fontfamily <span class='op'>=</span> <span class='st'>"HersheySans"</span>,
-  vertex.label.fontface <span class='op'>=</span> <span class='st'>"bold"</span>,
+  vertex.label.color <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/adjustcolor.html'>adjustcolor</a></span><span class='op'>(</span><span class='st'>"black"</span>, alpha.f <span class='op'>=</span> <span class='fl'>0.8</span><span class='op'>)</span>,
+  vertex.label.fontfamily <span class='op'>=</span> <span class='st'>"sans"</span>,
+  vertex.label.fontface <span class='op'>=</span> <span class='st'>"plain"</span>,
   vertex.label.show <span class='op'>=</span> <span class='fl'>0.3</span>,
   vertex.label.range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>15</span><span class='op'>)</span>,
   edge.width <span class='op'>=</span> <span class='fl'>1</span>,
@@ -274,7 +271,6 @@
   skip.arrows <span class='op'>=</span> <span class='va'>skip.edges</span>,
   add <span class='op'>=</span> <span class='cn'>FALSE</span>,
   zero.margins <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  <span class='va'>...</span>,
   <span class='va'>edgelist</span>
 <span class='op'>)</span>
 
@@ -286,15 +282,15 @@
   bg.col <span class='op'>=</span> <span class='st'>"transparent"</span>,
   vertex.nsides <span class='op'>=</span> <span class='fl'>10</span>,
   vertex.color <span class='op'>=</span> <span class='fu'>grDevices</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/grDevices/palettes.html'>hcl.colors</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>,
-  vertex.size.range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.01</span>, <span class='fl'>0.03</span><span class='op'>)</span>,
+  vertex.size.range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.01</span>, <span class='fl'>0.03</span>, <span class='fl'>4</span><span class='op'>)</span>,
   vertex.frame.color <span class='op'>=</span> <span class='cn'>NULL</span>,
   vertex.rot <span class='op'>=</span> <span class='fl'>0</span>,
   vertex.frame.prop <span class='op'>=</span> <span class='fl'>0.2</span>,
   vertex.label <span class='op'>=</span> <span class='cn'>NULL</span>,
   vertex.label.fontsize <span class='op'>=</span> <span class='cn'>NULL</span>,
-  vertex.label.color <span class='op'>=</span> <span class='st'>"black"</span>,
-  vertex.label.fontfamily <span class='op'>=</span> <span class='st'>"HersheySans"</span>,
-  vertex.label.fontface <span class='op'>=</span> <span class='st'>"bold"</span>,
+  vertex.label.color <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/grDevices/adjustcolor.html'>adjustcolor</a></span><span class='op'>(</span><span class='st'>"black"</span>, alpha.f <span class='op'>=</span> <span class='fl'>0.8</span><span class='op'>)</span>,
+  vertex.label.fontfamily <span class='op'>=</span> <span class='st'>"sans"</span>,
+  vertex.label.fontface <span class='op'>=</span> <span class='st'>"plain"</span>,
   vertex.label.show <span class='op'>=</span> <span class='fl'>0.3</span>,
   vertex.label.range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>15</span><span class='op'>)</span>,
   edge.width <span class='op'>=</span> <span class='fl'>1</span>,
@@ -348,11 +344,14 @@ the vertex. E.g. three is a triangle, and 100 approximates a circle.</p></td>
     </tr>
     <tr>
       <th>vertex.size.range</th>
-      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gorder.html'>vcount(x)</a></code> from 0 to 1.</p></td>
+      <td><p>Numeric vector of length 3. Relative size for the
+minimum and maximum of the plot, and curvature of the scale. The third number
+is used as <code>size^rel[3]</code>.</p></td>
     </tr>
     <tr>
       <th>vertex.frame.color</th>
-      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gorder.html'>vcount(x)</a></code>. Border of vertex in HEX or built in colors.</p></td>
+      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gorder.html'>vcount(x)</a></code>. Border of vertex in
+HEX or built in colors.</p></td>
     </tr>
     <tr>
       <th>vertex.rot</th>
@@ -396,11 +395,13 @@ top ranking according to <code>vertex.size</code>.</p></td>
     </tr>
     <tr>
       <th>edge.width</th>
-      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code> from 0 to 1. All edges will be the same size.</p></td>
+      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code> from 0 to 1. All edges will be
+the same size.</p></td>
     </tr>
     <tr>
       <th>edge.width.range</th>
-      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code> from 0 to 1. Adjusting width according to weight.</p></td>
+      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code> from 0 to 1. Adjusting
+width according to weight.</p></td>
     </tr>
     <tr>
       <th>edge.arrow.size</th>
@@ -408,7 +409,8 @@ top ranking according to <code>vertex.size</code>.</p></td>
     </tr>
     <tr>
       <th>edge.color</th>
-      <td><p>A vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code>. In HEX or built in colors. Can be <code>NULL</code> in which case
+      <td><p>A vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code>. In HEX or built in colors.
+Can be <code>NULL</code> in which case
 the color is picked as a mixture between ego and alters' <code>vertex.color</code> values.</p></td>
     </tr>
     <tr>
@@ -418,7 +420,8 @@ in terms of radians.</p></td>
     </tr>
     <tr>
       <th>edge.line.lty</th>
-      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code>. Line types in R (e.g.- 1 = Solid, 2 = Dashed, etc)</p></td>
+      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code>. Line types in R
+(e.g.- 1 = Solid, 2 = Dashed, etc).</p></td>
     </tr>
     <tr>
       <th>edge.line.breaks</th>
@@ -427,12 +430,13 @@ draw (approximate) the arc (edge).</p></td>
     </tr>
     <tr>
       <th>sample.edges</th>
-      <td><p>Numeric scalar between 0 and 1. Proportion of edges to sample.</p></td>
+      <td><p>Numeric scalar between 0 and 1. Proportion of edges to
+sample.</p></td>
     </tr>
     <tr>
       <th>skip.vertex, skip.edges, skip.arrows</th>
-      <td><p>Logical scalar. When <code>TRUE</code> the object
-is not plotted.</p></td>
+      <td><p>Logical scalar. When <code>TRUE</code> the
+object is not plotted.</p></td>
     </tr>
     <tr>
       <th>add</th>
