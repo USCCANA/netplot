@@ -102,6 +102,7 @@ ans <- nplot(
   UKfaculty,
   layout                = l,
   vertex.color          = ~ Group,
+  vertex.nsides         = ~ Group,
   vertex.label          = nam,
   vertex.size.range     = c(.01, .04, 4),
   vertex.label.col      =  "black",

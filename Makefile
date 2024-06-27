@@ -1,13 +1,14 @@
 VERSION:=$(shell Rscript -e 'x<-readLines("DESCRIPTION");cat(gsub(".+[:]\\s*", "", x[grepl("^Vers", x)]))')
 PKGNAME:=$(shell Rscript -e 'x<-readLines("DESCRIPTION");cat(gsub(".+[:]\\s*", "", x[grepl("^Package", x)]))')
 
-install: 
-	$(MAKE) clean && R CMD build . && \
+install: build
+	cd ../ && \
 		R CMD INSTALL $(PKGNAME)_$(VERSION).tar.gz
 		
+$(PKGNAME)_$(VERSION).tar.gz: 
+	cd ../ && R CMD build $(PKGNAME)/
 
-$(PKGNAME)_$(VERSION).tar.gz: R/*.R inst/NEWS README.md
-	R CMD build  . 
+build: $(PKGNAME)_$(VERSION).tar.gz
 
 inst/NEWS: NEWS.md
 	Rscript -e "rmarkdown::pandoc_convert('NEWS.md', 'plain', output='inst/NEWS')"&& \
@@ -29,7 +30,8 @@ checkv: $(PKGNAME)_$(VERSION).tar.gz
 	R CMD check --as-cran --use-valgrind $(PKGNAME)_$(VERSION).tar.gz
 
 clean:
-	rm -rf $(PKGNAME).Rcheck $(PKGNAME)_$(VERSION).tar.gz
+	cd ../ && \
+		rm -rf $(PKGNAME).Rcheck $(PKGNAME)_$(VERSION).tar.gz
 
 .PHONY: man docker
 man: R/* 

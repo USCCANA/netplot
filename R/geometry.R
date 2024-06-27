@@ -42,7 +42,7 @@ rescale_size <- function(size, rel=c(.01, .05, 1)) {
 #' @param adj Numeric vector of length 2.
 #' @noRd
 # @export
-fit_coords_to_dev <- function(coords, adj = grDevices::dev.size()) {
+fit_coords_to_dev <- function(coords, adj = dev_size()) {
 
   # Making it -1 to 1
   yran <- range(coords[,2], na.rm = TRUE)
