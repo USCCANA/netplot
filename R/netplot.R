@@ -323,8 +323,12 @@ nplot.matrix <- function(
   edgelist
   ) {
 
+  x <- igraph::graph_from_adjacency_matrix(x)
+  if (missing(layout))
+    layout <- igraph::layout_nicely(x)
+
   nplot.igraph(
-    x = igraph::graph_from_adjacency_matrix(x),
+    x = x,
     layout = layout,
     vertex.size = vertex.size,
     bg.col = bg.col,

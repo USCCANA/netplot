@@ -11,7 +11,7 @@ nplot_base(
   bg.col = "transparent",
   vertex.nsides = 10,
   vertex.color = grDevices::hcl.colors(1),
-  vertex.size.range = c(0.01, 0.03),
+  vertex.size.range = c(0.01, 0.03, 4),
   vertex.frame.color = grDevices::adjustcolor(vertex.color, red.f = 0.75, green.f = 0.75,
     blue.f = 0.75),
   vertex.rot = 0,
