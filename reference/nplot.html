@@ -135,7 +135,40 @@
     <p>This is a description.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>nplot</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span>, <span class='va'>edgelist</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>nplot</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  <span class='va'>layout</span>,
+  vertex.size <span class='op'>=</span> <span class='fl'>1</span>,
+  bg.col <span class='op'>=</span> <span class='st'>"transparent"</span>,
+  vertex.nsides <span class='op'>=</span> <span class='fl'>10</span>,
+  vertex.color <span class='op'>=</span> <span class='fu'>grDevices</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/grDevices/palettes.html'>hcl.colors</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>,
+  vertex.size.range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.01</span>, <span class='fl'>0.03</span><span class='op'>)</span>,
+  vertex.frame.color <span class='op'>=</span> <span class='cn'>NULL</span>,
+  vertex.rot <span class='op'>=</span> <span class='fl'>0</span>,
+  vertex.frame.prop <span class='op'>=</span> <span class='fl'>0.2</span>,
+  vertex.label <span class='op'>=</span> <span class='cn'>NULL</span>,
+  vertex.label.fontsize <span class='op'>=</span> <span class='cn'>NULL</span>,
+  vertex.label.color <span class='op'>=</span> <span class='st'>"black"</span>,
+  vertex.label.fontfamily <span class='op'>=</span> <span class='st'>"HersheySans"</span>,
+  vertex.label.fontface <span class='op'>=</span> <span class='st'>"bold"</span>,
+  vertex.label.show <span class='op'>=</span> <span class='fl'>0.3</span>,
+  vertex.label.range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>, <span class='fl'>15</span><span class='op'>)</span>,
+  edge.width <span class='op'>=</span> <span class='fl'>1</span>,
+  edge.width.range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>,
+  edge.arrow.size <span class='op'>=</span> <span class='cn'>NULL</span>,
+  edge.color <span class='op'>=</span> <span class='op'>~</span><span class='fu'><a href='netplot-formulae.html'>ego</a></span><span class='op'>(</span>alpha <span class='op'>=</span> <span class='fl'>0.1</span>, col <span class='op'>=</span> <span class='st'>"gray"</span><span class='op'>)</span> <span class='op'>+</span> <span class='va'>alter</span>,
+  edge.curvature <span class='op'>=</span> <span class='va'>pi</span><span class='op'>/</span><span class='fl'>3</span>,
+  edge.line.lty <span class='op'>=</span> <span class='st'>"solid"</span>,
+  edge.line.breaks <span class='op'>=</span> <span class='fl'>5</span>,
+  sample.edges <span class='op'>=</span> <span class='fl'>1</span>,
+  skip.vertex <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  skip.edges <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  skip.arrows <span class='op'>=</span> <span class='va'>skip.edges</span>,
+  add <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  zero.margins <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  <span class='va'>...</span>,
+  <span class='va'>edgelist</span>
+<span class='op'>)</span>
 
 <span class='co'># S3 method for igraph</span>
 <span class='fu'>nplot</span><span class='op'>(</span>
@@ -211,24 +244,12 @@
 matrices objects (see details).</p></td>
     </tr>
     <tr>
-      <th>edgelist</th>
-      <td><p>An edgelist.</p></td>
-    </tr>
-    <tr>
       <th>layout</th>
       <td><p>Numeric two-column matrix with the graph layout in x/y positions of the vertices.</p></td>
     </tr>
     <tr>
       <th>vertex.size</th>
       <td><p>Numeric vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gorder.html'>vcount(x)</a></code>. Absolute size of the vertex from 0 to 1.</p></td>
-    </tr>
-    <tr>
-      <th>vertex.label</th>
-      <td><p>Character vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gorder.html'>vcount(x)</a></code>. Labels.</p></td>
-    </tr>
-    <tr>
-      <th>edge.width</th>
-      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code> from 0 to 1. All edges will be the same size.</p></td>
     </tr>
     <tr>
       <th>bg.col</th>
@@ -262,6 +283,10 @@ elevation degree from which the polygon is drawn.</p></td>
 vertex does the frame occupy (values between 0 and 1).</p></td>
     </tr>
     <tr>
+      <th>vertex.label</th>
+      <td><p>Character vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gorder.html'>vcount(x)</a></code>. Labels.</p></td>
+    </tr>
+    <tr>
       <th>vertex.label.fontsize</th>
       <td><p>Numeric vector.</p></td>
     </tr>
@@ -286,6 +311,10 @@ top ranking according to <code>vertex.size</code>.</p></td>
       <th>vertex.label.range</th>
       <td><p>Numeric vector of size 2 or 3. Relative scale of
 <code>vertex.label.fontsize</code> in points (see <a href='https://rdrr.io/r/grid/gpar.html'>grid::gpar</a>).</p></td>
+    </tr>
+    <tr>
+      <th>edge.width</th>
+      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code> from 0 to 1. All edges will be the same size.</p></td>
     </tr>
     <tr>
       <th>edge.width.range</th>
@@ -330,6 +359,10 @@ is not plotted.</p></td>
     <tr>
       <th>zero.margins</th>
       <td><p>Logical scalar.</p></td>
+    </tr>
+    <tr>
+      <th>edgelist</th>
+      <td><p>An edgelist.</p></td>
     </tr>
     <tr>
       <th>y, ...</th>
