@@ -69,7 +69,7 @@ nplot_legend <- function(
   gf <- grid::packGrob(grid::frameGrob(), g)
 
   # Adding the legend
-  legend.args   <- do.call(
+  legend.args <- do.call(
     grid::legendGrob,
     c(list(labels = labels, pch = pch, gp = gp), list(...))
     )

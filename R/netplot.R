@@ -91,7 +91,19 @@ NULL
 
 #' @export
 #' @rdname nplot
-nplot <- function(x, ..., edgelist) UseMethod("nplot")
+nplot <- function(x, ..., edgelist) {
+
+  # Checking if the passed arguments match the default class
+  res <- sapply(
+    ...names(),
+    match.arg,
+    choices = formalArgs(nplot.default),
+    several.ok = FALSE
+    )
+    
+  UseMethod("nplot")
+
+}
 
 #' @export
 #' @rdname nplot
@@ -137,13 +149,13 @@ nplot.network <- function(
 ) {
 
   nplot.default(
-    x           = x,
-    layout      = layout,
-    vertex.size = vertex.size,
+    x            = x,
+    layout       = layout,
+    vertex.size  = vertex.size,
     vertex.label = vertex.label,
-    skip.arrows = skip.arrows,
+    skip.arrows  = skip.arrows,
     ...,
-    edgelist    = network::as.edgelist(x)
+    edgelist     = network::as.edgelist(x)
   )
 
 }
@@ -205,6 +217,18 @@ netplot_theme <- (function() {
 
 })()
 
+# Function to retrieve the dev.size only if there's an active device
+dev_size <- function(...) {
+
+  if (length(grDevices::dev.list())) {
+    
+    grDevices::dev.size(...)
+
+  } else
+    c(7, 7)
+
+}
+
 #' @export
 #' @rdname nplot
 #' @param edgelist An edgelist.
@@ -261,12 +285,12 @@ nplot.default <- function(
   edgelist
   ) {
 
-  # We turn off the device if not need
-  if (length(grDevices::dev.list()) == 0L) {
-    on.exit(
-      grDevices::dev.off(grDevices::dev.cur())
-    )
-  }
+  # # We turn off the device if not need
+  # if (length(grDevices::dev.list()) == 0L) {
+  #   on.exit(
+  #     grDevices::dev.off(grDevices::dev.cur())
+  #   )
+  # }
 
   # listing objects
   netenv <- environment()
@@ -424,11 +448,9 @@ nplot.default <- function(
   netenv$xlim <- range(netenv$layout[,1], na.rm=TRUE)
   netenv$ylim <- range(netenv$layout[,2], na.rm=TRUE)
 
-
   # Creating layout
   # Solution from this answer https://stackoverflow.com/a/48084527
-
-  asp <- grDevices::dev.size()
+  asp <- dev_size()
 
   lo  <- grid::grid.layout(
     widths  = grid::unit(1, "null"),
@@ -593,19 +615,20 @@ nplot.default <- function(
 #' @param y,... Ignored
 print.netplot <- function(x, y = NULL, newpage = TRUE, legend = TRUE, ...) {
 
+  # If legend, then we avoid drawing twice
+  if (length(x$.legend_vertex_fill) && legend) {
+
+    color_nodes_legend(x)
+    return(invisible(x))
+
+  }
+
   # Drawing
   if (newpage) {
     grid::grid.newpage()
   }
 
   grid::grid.draw(x)
-
-  # If legend
-  if (legend) {
-
-    color_nodes_legend(x)
-
-  }
 
   # Storing the value
   .Last.netplot$set(x)

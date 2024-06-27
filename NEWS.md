@@ -1,3 +1,10 @@
+# netplot 0.2-9999
+
+*  Unvalid arguments passed to `nplot()` now raise an error.
+
+*  Figures with legends are not drawn twice.
+
+
 # netplot 0.2-0
 
 *  The arguments `skip.vertex`, `skip.edges`, and `skip.arrows` now work as
