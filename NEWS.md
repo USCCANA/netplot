@@ -1,33 +1,33 @@
 # netplot 0.2-9999
 
-*  Invalid arguments passed to `nplot()` now raise an error.
+* Invalid arguments passed to `nplot()` now raise an error.
 
-*  Figures with legends are not drawn twice.
+* Figures with legends are not drawn twice.
 
-*  Values supported by `nplot()` are now included in all methods (helps with
-   argument completion).
+* Values supported by `nplot()` are now included in all methods (helps with
+  argument completion).
 
 
 # netplot 0.2-0
 
-*  The arguments `skip.vertex`, `skip.edges`, and `skip.arrows` now work as
-   documented.
-  
-*  New function `nplot_legend()` helps adding legends to the figure.
+* The arguments `skip.vertex`, `skip.edges`, and `skip.arrows` now work as
+  documented.
 
-*  New `nplot()` method for matrices.
+* New function `nplot_legend()` helps to add legends to the figure.
 
-*  New feature: Gradients.
+* New `nplot()` method for matrices.
 
-*  The argument `sample.edges` now works as expected.
+* New feature: Gradients.
 
-*  `vertex.color`, `vertex.size`, and `vertex.nsides` now accepts formulas.
+* The argument `sample.edges` now work as expected.
 
-*  `edge.width` now accepts formulas.
+* `vertex.color`, `vertex.size`, and `vertex.nsides` now accepts formulas.
 
-*  New function: `locate_vertex()`.
+* `edge.width` now accepts formulas.
+
+* New function: `locate_vertex()`.
 
 
 # netplot 0.1-0
 
-*  First CRAN release.
+* First CRAN release.

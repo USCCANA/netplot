@@ -2,7 +2,7 @@
 ^\.Rproj\.user$
 ^playground$
 ^LICENSE\.md$
-^README\.Rmd$
+^README\.qmd$
 ^docs$
 ^docker$
 ^\.travis\.yml$

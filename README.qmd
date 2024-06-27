@@ -1,7 +1,5 @@
 ---
-output:
-  github_document:
-    html_preview: false
+format: gfm
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -18,6 +16,7 @@ knitr::opts_chunk$set(
 [![CRAN
 status](https://www.r-pkg.org/badges/version/netplot)](https://cran.r-project.org/package=netplot)
 [![CRAN](https://cranlogs.r-pkg.org/badges/netplot)](https://cran.r-project.org/package=netplot)
+[![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/rgexf)](https://cran.r-project.org/package=rgexf)
 [![R](https://github.com/USCCANA/netplot/actions/workflows/ci.yml/badge.svg)](https://github.com/USCCANA/netplot/actions/workflows/ci.yml)
 [![Build status](https://ci.appveyor.com/api/projects/status/3k2m3oq6o99qcs0r?svg=true)](https://ci.appveyor.com/project/gvegayon/netplot)
 [![USC's Department of Preventive Medicine](https://raw.githubusercontent.com/USCbiostats/badges/master/tommy-uscprevmed-badge.svg)](https://preventivemedicine.usc.edu)
@@ -73,7 +72,10 @@ sna::gplot(intergraph::asNetwork(UKfaculty), coord=l)
 
 ### UKfaculty
 
-```{r, fig.width=14, fig.height=14}
+```{r}
+#| label: fig-uk-faculty
+#| fig-width: 14
+#| fig-height: 14
 # Random names
 set.seed(1)
 nam <- sample(babynames::babynames$name, vcount(UKfaculty))
@@ -100,7 +102,10 @@ ans
 
 Starting version 0.2-0, we can use gradients!
 
-```{r uk-faculty-gradient, fig.width=14, fig.height=14}
+```{r}
+#| label: fig-uk-faculty-gradient
+#| fig-width: 14
+#| fig-height: 14
 ans |>
   set_vertex_gpar(
     element = "core",
@@ -111,7 +116,8 @@ ans |>
 
 ### USairports
 
-```{r us-airports, cache=FALSE}
+```{r}
+#| label: fig-us-airports
 # Loading the data
 data(USairports, package="igraphdata")
 
@@ -140,8 +146,9 @@ nplot(
   net,
   layout            = layout,
   edge.width        = ~ Passengers,
-  edge.color        = 
-    ~ ego(col = "white", alpha = 0) + alter(col = "yellow", alpha = .75),
+  edge.color        = ~
+    ego(col = "white", alpha = 0) +
+    alter(col = "yellow", alpha = .75),
   skip.vertex       = TRUE,
   skip.arrows       = TRUE,
   edge.width.range  = c(.75, 4, 4), 

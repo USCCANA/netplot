@@ -122,18 +122,9 @@ nplot <- function(
   skip.arrows             = skip.edges,
   add                     = FALSE,
   zero.margins            = TRUE,
-  ...,
   edgelist
   ) {
 
-  # Checking if the passed arguments match the default class
-  res <- sapply(
-    ...names(),
-    match.arg,
-    choices = methods::formalArgs(nplot.default),
-    several.ok = FALSE
-    )
-    
   UseMethod("nplot")
 
 }
@@ -171,7 +162,6 @@ nplot.igraph <- function(
   skip.arrows             = !igraph::is_directed(x),
   add                     = FALSE,
   zero.margins            = TRUE,
-  ...,
   edgelist
   ) {
 
@@ -179,14 +169,37 @@ nplot.igraph <- function(
     edge.width <- 1L
 
   nplot.default(
-    x            = x,
-    edgelist     = igraph::as_edgelist(x, names = FALSE),
-    layout       = layout,
-    vertex.size  = vertex.size,
+    x = x,
+    layout = layout,
+    vertex.size = vertex.size,
+    bg.col = bg.col,
+    vertex.nsides = vertex.nsides,
+    vertex.color = vertex.color,
+    vertex.size.range = vertex.size.range,
+    vertex.frame.color = vertex.frame.color,
+    vertex.rot = vertex.rot,
+    vertex.frame.prop = vertex.frame.prop,
     vertex.label = vertex.label,
-    edge.width   = edge.width,
+    vertex.label.fontsize = vertex.label.fontsize,
+    vertex.label.color = vertex.label.color,
+    vertex.label.fontfamily = vertex.label.fontfamily,
+    vertex.label.fontface = vertex.label.fontface,
+    vertex.label.show = vertex.label.show,
+    vertex.label.range = vertex.label.range,
+    edge.width = edge.width,
+    edge.width.range = edge.width.range,
+    edge.arrow.size = edge.arrow.size,
+    edge.color = edge.color,
+    edge.curvature = edge.curvature,
+    edge.line.lty = edge.line.lty,
+    edge.line.breaks = edge.line.breaks,
+    sample.edges = sample.edges,
+    skip.vertex = skip.vertex,
+    skip.edges = skip.edges,
     skip.arrows = skip.arrows,
-    ...
+    add = add,
+    zero.margins = zero.margins,
+    edgelist = igraph::as_edgelist(x, names = FALSE)
   )
 
 }
@@ -226,18 +239,41 @@ nplot.network <- function(
   skip.arrows             =  !network::is.directed(x),
   add                     = FALSE,
   zero.margins            = TRUE,
-  ...,
   edgelist
 ) {
 
   nplot.default(
-    x            = x,
-    layout       = layout,
-    vertex.size  = vertex.size,
+    x = x,
+    layout = layout,
+    vertex.size = vertex.size,
+    bg.col = bg.col,
+    vertex.nsides = vertex.nsides,
+    vertex.color = vertex.color,
+    vertex.size.range = vertex.size.range,
+    vertex.frame.color = vertex.frame.color,
+    vertex.rot = vertex.rot,
+    vertex.frame.prop = vertex.frame.prop,
     vertex.label = vertex.label,
-    skip.arrows  = skip.arrows,
-    ...,
-    edgelist     = network::as.edgelist(x)
+    vertex.label.fontsize = vertex.label.fontsize,
+    vertex.label.color = vertex.label.color,
+    vertex.label.fontfamily = vertex.label.fontfamily,
+    vertex.label.fontface = vertex.label.fontface,
+    vertex.label.show = vertex.label.show,
+    vertex.label.range = vertex.label.range,
+    edge.width = edge.width,
+    edge.width.range = edge.width.range,
+    edge.arrow.size = edge.arrow.size,
+    edge.color = edge.color,
+    edge.curvature = edge.curvature,
+    edge.line.lty = edge.line.lty,
+    edge.line.breaks = edge.line.breaks,
+    sample.edges = sample.edges,
+    skip.vertex = skip.vertex,
+    skip.edges = skip.edges,
+    skip.arrows = skip.arrows,
+    add = add,
+    zero.margins = zero.margins,
+    edgelist = network::as.edgelist(x)
   )
 
 }
@@ -276,13 +312,40 @@ nplot.matrix <- function(
   skip.arrows             = skip.edges,
   add                     = FALSE,
   zero.margins            = TRUE,
-  ...,
   edgelist
   ) {
 
   nplot.igraph(
     x = igraph::graph_from_adjacency_matrix(x),
-    ...,
+    layout = layout,
+    vertex.size = vertex.size,
+    bg.col = bg.col,
+    vertex.nsides = vertex.nsides,
+    vertex.color = vertex.color,
+    vertex.size.range = vertex.size.range,
+    vertex.frame.color = vertex.frame.color,
+    vertex.rot = vertex.rot,
+    vertex.frame.prop = vertex.frame.prop,
+    vertex.label = vertex.label,
+    vertex.label.fontsize = vertex.label.fontsize,
+    vertex.label.color = vertex.label.color,
+    vertex.label.fontfamily = vertex.label.fontfamily,
+    vertex.label.fontface = vertex.label.fontface,
+    vertex.label.show = vertex.label.show,
+    vertex.label.range = vertex.label.range,
+    edge.width = edge.width,
+    edge.width.range = edge.width.range,
+    edge.arrow.size = edge.arrow.size,
+    edge.color = edge.color,
+    edge.curvature = edge.curvature,
+    edge.line.lty = edge.line.lty,
+    edge.line.breaks = edge.line.breaks,
+    sample.edges = sample.edges,
+    skip.vertex = skip.vertex,
+    skip.edges = skip.edges,
+    skip.arrows = skip.arrows,
+    add = add,
+    zero.margins = zero.margins,
     edgelist = NULL
   )
 
