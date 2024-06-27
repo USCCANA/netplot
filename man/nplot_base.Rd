@@ -48,9 +48,12 @@ the vertex. E.g. three is a triangle, and 100 approximates a circle.}
 
 \item{vertex.color}{Vector of length \code{vcount(x)}. Vertex HEX or built in colors.}
 
-\item{vertex.size.range}{Vector of length \code{vcount(x)} from 0 to 1.}
+\item{vertex.size.range}{Numeric vector of length 3. Relative size for the
+minimum and maximum of the plot, and curvature of the scale. The third number
+is used as \code{size^rel[3]}.}
 
-\item{vertex.frame.color}{Vector of length \code{vcount(x)}. Border of vertex in HEX or built in colors.}
+\item{vertex.frame.color}{Vector of length \code{vcount(x)}. Border of vertex in
+HEX or built in colors.}
 
 \item{vertex.rot}{Vector of length \code{vcount(x)} in Radians. Passed to \link{npolygon},
 elevation degree from which the polygon is drawn.}
@@ -58,13 +61,16 @@ elevation degree from which the polygon is drawn.}
 \item{vertex.frame.prop}{Vector of length \code{vcount(x)}. What proportion of the
 vertex does the frame occupy (values between 0 and 1).}
 
-\item{edge.width}{Vector of length \code{ecount(x)} from 0 to 1. All edges will be the same size.}
+\item{edge.width}{Vector of length \code{ecount(x)} from 0 to 1. All edges will be
+the same size.}
 
-\item{edge.width.range}{Vector of length \code{ecount(x)} from 0 to 1. Adjusting width according to weight.}
+\item{edge.width.range}{Vector of length \code{ecount(x)} from 0 to 1. Adjusting
+width according to weight.}
 
 \item{edge.arrow.size}{Vector of length \code{ecount(x)} from 0 to 1.}
 
-\item{edge.color}{A vector of length \code{ecount(x)}. In HEX or built in colors. Can be \code{NULL} in which case
+\item{edge.color}{A vector of length \code{ecount(x)}. In HEX or built in colors.
+Can be \code{NULL} in which case
 the color is picked as a mixture between ego and alters' \code{vertex.color} values.}
 
 \item{edge.color.mix}{Proportion of the mixing.}
@@ -76,15 +82,17 @@ details)}
 \item{edge.curvature}{Numeric vector of length \code{ecount(x)}. Curvature of edges
 in terms of radians.}
 
-\item{edge.line.lty}{Vector of length \code{ecount(x)}. Line types in R (e.g.- 1 = Solid, 2 = Dashed, etc)}
+\item{edge.line.lty}{Vector of length \code{ecount(x)}. Line types in R
+(e.g.- 1 = Solid, 2 = Dashed, etc).}
 
 \item{edge.line.breaks}{Vector of length \code{ecount(x)}. Number of vertices to
 draw (approximate) the arc (edge).}
 
-\item{sample.edges}{Numeric scalar between 0 and 1. Proportion of edges to sample.}
+\item{sample.edges}{Numeric scalar between 0 and 1. Proportion of edges to
+sample.}
 
-\item{skip.vertex, skip.edges, skip.arrows}{Logical scalar. When \code{TRUE} the object
-is not plotted.}
+\item{skip.vertex, skip.edges, skip.arrows}{Logical scalar. When \code{TRUE} the
+object is not plotted.}
 
 \item{add}{Logical scalar.}
 

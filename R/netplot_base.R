@@ -35,7 +35,7 @@ nplot_base <- function(
   bg.col              = "transparent",
   vertex.nsides       = 10,
   vertex.color        = grDevices::hcl.colors(1),
-  vertex.size.range   = c(.01, .03),
+  vertex.size.range   = c(.01, .03, 4),
   vertex.frame.color  = grDevices::adjustcolor(vertex.color, red.f = .75, green.f = .75, blue.f = .75),
   vertex.rot          = 0,
   vertex.frame.prop   = .1,

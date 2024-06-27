@@ -1,34 +1,27 @@
----
-format: markdown_github
----
+
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "85%"
-)
-```
-
 [![CRAN
-status](https://www.r-pkg.org/badges/version/netplot)](https://cran.r-project.org/package=netplot)
-[![CRAN](https://cranlogs.r-pkg.org/badges/netplot)](https://cran.r-project.org/package=netplot)
-[![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/rgexf)](https://cran.r-project.org/package=rgexf)
+status](https://www.r-pkg.org/badges/version/netplot.png)](https://cran.r-project.org/package=netplot)
+[![CRAN](https://cranlogs.r-pkg.org/badges/netplot.png)](https://cran.r-project.org/package=netplot)
+[![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/rgexf.png)](https://cran.r-project.org/package=rgexf)
 [![R](https://github.com/USCCANA/netplot/actions/workflows/ci.yml/badge.svg)](https://github.com/USCCANA/netplot/actions/workflows/ci.yml)
-[![Build status](https://ci.appveyor.com/api/projects/status/3k2m3oq6o99qcs0r?svg=true)](https://ci.appveyor.com/project/gvegayon/netplot)
-[![USC's Department of Preventive Medicine](https://raw.githubusercontent.com/USCbiostats/badges/master/tommy-uscprevmed-badge.svg)](https://preventivemedicine.usc.edu)
+[![Build
+status](https://ci.appveyor.com/api/projects/status/3k2m3oq6o99qcs0r?svg=true.png)](https://ci.appveyor.com/project/gvegayon/netplot)
+[![USC’s Department of Preventive
+Medicine](https://raw.githubusercontent.com/USCbiostats/badges/master/tommy-uscprevmed-badge.svg)](https://preventivemedicine.usc.edu)
 
 # netplot
 
-
-An alternative graph visualization tool that emphasizes aesthetics, providing default parameters that deliver out-of-the-box lovely visualizations.
+An alternative graph visualization tool that emphasizes aesthetics,
+providing default parameters that deliver out-of-the-box lovely
+visualizations.
 
 Some features:
 
-1.  Auto-scaling of vertices using sizes relative to the plotting device.
+1.  Auto-scaling of vertices using sizes relative to the plotting
+    device.
 2.  Embedded edge color mixer.
 3.  True curved edges drawing.
 4.  User-defined edge curvature.
@@ -39,9 +32,10 @@ The package uses the `grid` plotting system (just like `ggplot2`).
 
 ## Installation
 
-You can install the released version of netplot from [CRAN](https://CRAN.R-project.org) with:
+You can install the released version of netplot from
+[CRAN](https://CRAN.R-project.org) with:
 
-```r
+``` r
 install.packages("netplot")
 ```
 
@@ -51,31 +45,57 @@ And the development version from [GitHub](https://github.com/) with:
 # install.packages("devtools")
 devtools::install_github("USCCANA/netplot")
 ```
+
 ## Example
 
 This is a basic example which shows you how to solve a common problem:
 
-```{r example}
+``` r
 library(igraph)
+#> 
+#> Attaching package: 'igraph'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     decompose, spectrum
+#> The following object is masked from 'package:base':
+#> 
+#>     union
 library(netplot)
+#> Loading required package: grid
+#> 
+#> Attaching package: 'netplot'
+#> The following object is masked from 'package:igraph':
+#> 
+#>     ego
 set.seed(1)
 data("UKfaculty", package = "igraphdata")
 l <- layout_with_fr(UKfaculty)
+#> This graph was created by an old(er) igraph version.
+#>   Call upgrade_graph() on it to use with the current igraph version
+#>   For now we convert it on the fly...
 
 plot(UKfaculty, layout = l) # ala igraph
+```
+
+<img src="man/figures/README-example-1.png" style="width:85.0%" />
+
+``` r
 
 V(UKfaculty)$ss <- runif(vcount(UKfaculty))
 nplot(UKfaculty, layout = l) # ala netplot
+```
+
+<img src="man/figures/README-example-2.png" style="width:85.0%" />
+
+``` r
 sna::gplot(intergraph::asNetwork(UKfaculty), coord=l)
 ```
 
+<img src="man/figures/README-example-3.png" style="width:85.0%" />
 
 ### UKfaculty
 
-```{r}
-#| label: fig-uk-faculty
-#| fig-width: 14
-#| fig-height: 14
+``` r
 # Random names
 set.seed(1)
 nam <- sample(babynames::babynames$name, vcount(UKfaculty))
@@ -98,12 +118,12 @@ ans <- nplot(
 ans
 ```
 
+<img src="man/figures/README-fig-uk-faculty-1.png" id="fig-uk-faculty"
+style="width:85.0%" />
+
 Starting version 0.2-0, we can use gradients!
 
-```{r}
-#| label: fig-uk-faculty-gradient
-#| fig-width: 14
-#| fig-height: 14
+``` r
 ans |>
   set_vertex_gpar(
     element = "core",
@@ -112,15 +132,20 @@ ans |>
       }))
 ```
 
+<img src="man/figures/README-fig-uk-faculty-gradient-1.png"
+id="fig-uk-faculty-gradient" style="width:85.0%" />
+
 ### USairports
 
-```{r}
-#| label: fig-us-airports
+``` r
 # Loading the data
 data(USairports, package="igraphdata")
 
 # Generating a layout naively
 layout   <- V(USairports)$Position
+#> This graph was created by an old(er) igraph version.
+#>   Call upgrade_graph() on it to use with the current igraph version
+#>   For now we convert it on the fly...
 layout   <- do.call(rbind, lapply(layout, function(x) strsplit(x, " ")[[1]]))
 layout[] <- stringr::str_remove(layout, "^[a-zA-Z]+")
 layout   <- matrix(as.numeric(layout[]), ncol=2)
@@ -155,3 +180,5 @@ nplot(
   )
 ```
 
+<img src="man/figures/README-fig-us-airports-1.png" id="fig-us-airports"
+style="width:85.0%" />

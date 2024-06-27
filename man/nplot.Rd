@@ -17,15 +17,15 @@ nplot(
   bg.col = "transparent",
   vertex.nsides = 10,
   vertex.color = grDevices::hcl.colors(1),
-  vertex.size.range = c(0.01, 0.03),
+  vertex.size.range = c(0.01, 0.03, 4),
   vertex.frame.color = NULL,
   vertex.rot = 0,
   vertex.frame.prop = 0.2,
   vertex.label = NULL,
   vertex.label.fontsize = NULL,
-  vertex.label.color = "black",
-  vertex.label.fontfamily = "HersheySans",
-  vertex.label.fontface = "bold",
+  vertex.label.color = adjustcolor("black", alpha.f = 0.8),
+  vertex.label.fontfamily = "sans",
+  vertex.label.fontface = "plain",
   vertex.label.show = 0.3,
   vertex.label.range = c(5, 15),
   edge.width = 1,
@@ -41,7 +41,6 @@ nplot(
   skip.arrows = skip.edges,
   add = FALSE,
   zero.margins = TRUE,
-  ...,
   edgelist
 )
 
@@ -52,15 +51,15 @@ nplot(
   bg.col = "transparent",
   vertex.nsides = 10,
   vertex.color = grDevices::hcl.colors(1),
-  vertex.size.range = c(0.01, 0.03),
+  vertex.size.range = c(0.01, 0.03, 4),
   vertex.frame.color = NULL,
   vertex.rot = 0,
   vertex.frame.prop = 0.2,
   vertex.label = igraph::vertex_attr(x, "name"),
   vertex.label.fontsize = NULL,
-  vertex.label.color = "black",
-  vertex.label.fontfamily = "HersheySans",
-  vertex.label.fontface = "bold",
+  vertex.label.color = adjustcolor("black", alpha.f = 0.8),
+  vertex.label.fontfamily = "sans",
+  vertex.label.fontface = "plain",
   vertex.label.show = 0.3,
   vertex.label.range = c(5, 15),
   edge.width = igraph::edge_attr(x, "weight"),
@@ -76,7 +75,6 @@ nplot(
   skip.arrows = !igraph::is_directed(x),
   add = FALSE,
   zero.margins = TRUE,
-  ...,
   edgelist
 )
 
@@ -87,15 +85,15 @@ nplot(
   bg.col = "transparent",
   vertex.nsides = 10,
   vertex.color = grDevices::hcl.colors(1),
-  vertex.size.range = c(0.01, 0.03),
+  vertex.size.range = c(0.01, 0.03, 4),
   vertex.frame.color = NULL,
   vertex.rot = 0,
   vertex.frame.prop = 0.2,
   vertex.label = network::get.vertex.attribute(x, "vertex.names"),
   vertex.label.fontsize = NULL,
-  vertex.label.color = "black",
-  vertex.label.fontfamily = "HersheySans",
-  vertex.label.fontface = "bold",
+  vertex.label.color = adjustcolor("black", alpha.f = 0.8),
+  vertex.label.fontfamily = "sans",
+  vertex.label.fontface = "plain",
   vertex.label.show = 0.3,
   vertex.label.range = c(5, 15),
   edge.width = 1,
@@ -111,7 +109,6 @@ nplot(
   skip.arrows = !network::is.directed(x),
   add = FALSE,
   zero.margins = TRUE,
-  ...,
   edgelist
 )
 
@@ -122,15 +119,15 @@ nplot(
   bg.col = "transparent",
   vertex.nsides = 10,
   vertex.color = grDevices::hcl.colors(1),
-  vertex.size.range = c(0.01, 0.03),
+  vertex.size.range = c(0.01, 0.03, 4),
   vertex.frame.color = NULL,
   vertex.rot = 0,
   vertex.frame.prop = 0.2,
   vertex.label = NULL,
   vertex.label.fontsize = NULL,
-  vertex.label.color = "black",
-  vertex.label.fontfamily = "HersheySans",
-  vertex.label.fontface = "bold",
+  vertex.label.color = adjustcolor("black", alpha.f = 0.8),
+  vertex.label.fontfamily = "sans",
+  vertex.label.fontface = "plain",
   vertex.label.show = 0.3,
   vertex.label.range = c(5, 15),
   edge.width = 1,
@@ -146,7 +143,6 @@ nplot(
   skip.arrows = skip.edges,
   add = FALSE,
   zero.margins = TRUE,
-  ...,
   edgelist
 )
 
@@ -157,15 +153,15 @@ nplot(
   bg.col = "transparent",
   vertex.nsides = 10,
   vertex.color = grDevices::hcl.colors(1),
-  vertex.size.range = c(0.01, 0.03),
+  vertex.size.range = c(0.01, 0.03, 4),
   vertex.frame.color = NULL,
   vertex.rot = 0,
   vertex.frame.prop = 0.2,
   vertex.label = NULL,
   vertex.label.fontsize = NULL,
-  vertex.label.color = "black",
-  vertex.label.fontfamily = "HersheySans",
-  vertex.label.fontface = "bold",
+  vertex.label.color = adjustcolor("black", alpha.f = 0.8),
+  vertex.label.fontfamily = "sans",
+  vertex.label.fontface = "plain",
   vertex.label.show = 0.3,
   vertex.label.range = c(5, 15),
   edge.width = 1,
@@ -202,9 +198,12 @@ the vertex. E.g. three is a triangle, and 100 approximates a circle.}
 
 \item{vertex.color}{Vector of length \code{vcount(x)}. Vertex HEX or built in colors.}
 
-\item{vertex.size.range}{Vector of length \code{vcount(x)} from 0 to 1.}
+\item{vertex.size.range}{Numeric vector of length 3. Relative size for the
+minimum and maximum of the plot, and curvature of the scale. The third number
+is used as \code{size^rel[3]}.}
 
-\item{vertex.frame.color}{Vector of length \code{vcount(x)}. Border of vertex in HEX or built in colors.}
+\item{vertex.frame.color}{Vector of length \code{vcount(x)}. Border of vertex in
+HEX or built in colors.}
 
 \item{vertex.rot}{Vector of length \code{vcount(x)} in Radians. Passed to \link{npolygon},
 elevation degree from which the polygon is drawn.}
@@ -228,27 +227,32 @@ top ranking according to \code{vertex.size}.}
 \item{vertex.label.range}{Numeric vector of size 2 or 3. Relative scale of
 \code{vertex.label.fontsize} in points (see \link[grid:gpar]{grid::gpar}).}
 
-\item{edge.width}{Vector of length \code{ecount(x)} from 0 to 1. All edges will be the same size.}
+\item{edge.width}{Vector of length \code{ecount(x)} from 0 to 1. All edges will be
+the same size.}
 
-\item{edge.width.range}{Vector of length \code{ecount(x)} from 0 to 1. Adjusting width according to weight.}
+\item{edge.width.range}{Vector of length \code{ecount(x)} from 0 to 1. Adjusting
+width according to weight.}
 
 \item{edge.arrow.size}{Vector of length \code{ecount(x)} from 0 to 1.}
 
-\item{edge.color}{A vector of length \code{ecount(x)}. In HEX or built in colors. Can be \code{NULL} in which case
+\item{edge.color}{A vector of length \code{ecount(x)}. In HEX or built in colors.
+Can be \code{NULL} in which case
 the color is picked as a mixture between ego and alters' \code{vertex.color} values.}
 
 \item{edge.curvature}{Numeric vector of length \code{ecount(x)}. Curvature of edges
 in terms of radians.}
 
-\item{edge.line.lty}{Vector of length \code{ecount(x)}. Line types in R (e.g.- 1 = Solid, 2 = Dashed, etc)}
+\item{edge.line.lty}{Vector of length \code{ecount(x)}. Line types in R
+(e.g.- 1 = Solid, 2 = Dashed, etc).}
 
 \item{edge.line.breaks}{Vector of length \code{ecount(x)}. Number of vertices to
 draw (approximate) the arc (edge).}
 
-\item{sample.edges}{Numeric scalar between 0 and 1. Proportion of edges to sample.}
+\item{sample.edges}{Numeric scalar between 0 and 1. Proportion of edges to
+sample.}
 
-\item{skip.vertex, skip.edges, skip.arrows}{Logical scalar. When \code{TRUE} the object
-is not plotted.}
+\item{skip.vertex, skip.edges, skip.arrows}{Logical scalar. When \code{TRUE} the
+object is not plotted.}
 
 \item{add}{Logical scalar.}
 

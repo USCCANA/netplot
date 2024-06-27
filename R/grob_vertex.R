@@ -114,8 +114,10 @@ grob_vertex <- function(netenv, v) {
   )
 # If the users is drawing text
   if (length(netenv$vertex.label) && !is.na(netenv$vertex.label[v])) {
+
     # Only if it is big enough
-    if (netenv$label_threshold <= netenv$vertex.size[v])
+    if (netenv$label_threshold <= netenv$vertex.size[v]) {
+
       ans <- grid::addGrob(
         ans,
         grid::textGrob(
@@ -130,9 +132,12 @@ grob_vertex <- function(netenv, v) {
           ),
           vjust         = 0,
           default.units = "native",
-          name = "label"
+          name          = "label",
+          check.overlap = TRUE
         )
       )
+
+    }
   }
   ans
 }
