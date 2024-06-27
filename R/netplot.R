@@ -130,7 +130,7 @@ nplot <- function(
   res <- sapply(
     ...names(),
     match.arg,
-    choices = formalArgs(nplot.default),
+    choices = methods::formalArgs(nplot.default),
     several.ok = FALSE
     )
     

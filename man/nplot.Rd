@@ -10,7 +10,40 @@
 \alias{print.netplot}
 \title{Plot a network}
 \usage{
-nplot(x, ..., edgelist)
+nplot(
+  x,
+  layout,
+  vertex.size = 1,
+  bg.col = "transparent",
+  vertex.nsides = 10,
+  vertex.color = grDevices::hcl.colors(1),
+  vertex.size.range = c(0.01, 0.03),
+  vertex.frame.color = NULL,
+  vertex.rot = 0,
+  vertex.frame.prop = 0.2,
+  vertex.label = NULL,
+  vertex.label.fontsize = NULL,
+  vertex.label.color = "black",
+  vertex.label.fontfamily = "HersheySans",
+  vertex.label.fontface = "bold",
+  vertex.label.show = 0.3,
+  vertex.label.range = c(5, 15),
+  edge.width = 1,
+  edge.width.range = c(1, 2),
+  edge.arrow.size = NULL,
+  edge.color = ~ego(alpha = 0.1, col = "gray") + alter,
+  edge.curvature = pi/3,
+  edge.line.lty = "solid",
+  edge.line.breaks = 5,
+  sample.edges = 1,
+  skip.vertex = FALSE,
+  skip.edges = FALSE,
+  skip.arrows = skip.edges,
+  add = FALSE,
+  zero.margins = TRUE,
+  ...,
+  edgelist
+)
 
 \method{nplot}{igraph}(
   x,
@@ -76,15 +109,9 @@ nplot(x, ..., edgelist)
 \item{x}{A graph. It supports networks stored as \code{igraph}, \code{network}, and
 matrices objects (see details).}
 
-\item{edgelist}{An edgelist.}
-
 \item{layout}{Numeric two-column matrix with the graph layout in x/y positions of the vertices.}
 
 \item{vertex.size}{Numeric vector of length \code{vcount(x)}. Absolute size of the vertex from 0 to 1.}
-
-\item{vertex.label}{Character vector of length \code{vcount(x)}. Labels.}
-
-\item{edge.width}{Vector of length \code{ecount(x)} from 0 to 1. All edges will be the same size.}
 
 \item{bg.col}{Color of the background.}
 
@@ -103,6 +130,8 @@ elevation degree from which the polygon is drawn.}
 \item{vertex.frame.prop}{Vector of length \code{vcount(x)}. What proportion of the
 vertex does the frame occupy (values between 0 and 1).}
 
+\item{vertex.label}{Character vector of length \code{vcount(x)}. Labels.}
+
 \item{vertex.label.fontsize}{Numeric vector.}
 
 \item{vertex.label.color}{Vector of colors of length \code{vcount(x)}.}
@@ -116,6 +145,8 @@ top ranking according to \code{vertex.size}.}
 
 \item{vertex.label.range}{Numeric vector of size 2 or 3. Relative scale of
 \code{vertex.label.fontsize} in points (see \link[grid:gpar]{grid::gpar}).}
+
+\item{edge.width}{Vector of length \code{ecount(x)} from 0 to 1. All edges will be the same size.}
 
 \item{edge.width.range}{Vector of length \code{ecount(x)} from 0 to 1. Adjusting width according to weight.}
 
@@ -140,6 +171,8 @@ is not plotted.}
 \item{add}{Logical scalar.}
 
 \item{zero.margins}{Logical scalar.}
+
+\item{edgelist}{An edgelist.}
 
 \item{y, ...}{Ignored}
 
