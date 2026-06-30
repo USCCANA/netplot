@@ -1,26 +1,17 @@
-VERSION:=$(shell Rscript -e 'x<-readLines("DESCRIPTION");cat(gsub(".+[:]\\s*", "", x[grepl("^Vers", x)]))')
-PKGNAME:=$(shell Rscript -e 'x<-readLines("DESCRIPTION");cat(gsub(".+[:]\\s*", "", x[grepl("^Package", x)]))')
-
-install: build
-	cd ../ && \
-		R CMD INSTALL $(PKGNAME)_$(VERSION).tar.gz
-		
-$(PKGNAME)_$(VERSION).tar.gz: 
-	cd ../ && R CMD build $(PKGNAME)/
-
-build: $(PKGNAME)_$(VERSION).tar.gz
-
 inst/NEWS: NEWS.md
 	Rscript -e "rmarkdown::pandoc_convert('NEWS.md', 'plain', output='inst/NEWS')"&& \
 	head -n 80 inst/NEWS
 
-README.md: README.Rmd
-	Rscript -e 'rmarkdown::render("README.Rmd")'
+README.md: README.qmd
+	quarto render README.qmd
 
 .PHONY: checfull checkv clean
 
-check: $(PKGNAME)_$(VERSION).tar.gz
-	R CMD check --no-vignettes --no-manual $(PKGNAME)_$(VERSION).tar.gz
+check: 
+	Rscript -e "devtools::check()"
+
+install:
+	Rscript -e "devtools::install()"
 
 checkfull: R/*.R inst/NEWS README.md
 	R CMD build . \&& 

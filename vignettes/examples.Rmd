@@ -203,7 +203,7 @@ gridExtra::grid.arrange(
   nplot(x_w, layout = l_w, skip.arrows = TRUE,
         vertex.size.range = c(.05, .05),
         edge.width = E(x_w)$weight,
-        edge.width.range = c(1, 6)),
+        edge.width.range = c(1, 20)),
   ncol = 3, nrow = 1
 )
 ```
@@ -220,12 +220,5 @@ gridExtra::grid.arrange(
   set_edge_gpar(g, element = "line", lwd = 4),
   ncol = 2
 )
-```
-
-# Node labels
-
-```{r}
-data(UKfaculty, package = "igraphdata")
-# fakenames <- sample
 ```
 

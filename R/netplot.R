@@ -236,7 +236,7 @@ nplot.network <- function(
   vertex.label.fontface   = "plain",
   vertex.label.show       = .3,
   vertex.label.range      = c(5, 15),
-  edge.width              = 1,
+  edge.width              = network::get.edge.attribute(x, "weight"),
   edge.width.range        = c(1, 2),
   edge.arrow.size         = NULL,
   edge.color              = ~ ego(alpha = .1, col = "gray") + alter,
