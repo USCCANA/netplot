@@ -88,7 +88,7 @@
       <h1 data-toc-skip>Graph drawing with netplot</h1>
                         <h4 class="author">George G. Vega Yon</h4>
             
-            <h4 class="date">2024-11-15</h4>
+            <h4 class="date">2026-06-30</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/USCCANA/netplot/blob/master/vignettes/examples.Rmd"><code>vignettes/examples.Rmd</code></a></small>
       <div class="hidden name"><code>examples.Rmd</code></div>
@@ -255,11 +255,59 @@ Modifying <code>edge.curvature</code>: Each figure shows a different parameter f
 Changing the number of breaks in the edge (arc) and the type of line to be drawn.
 </p>
 </div>
+<div id="edge-width" class="section level2">
+<h2 class="hasAnchor">
+<a href="#edge-width" class="anchor"></a>Edge width</h2>
+<p>The <code>edge.width</code> parameter controls the relative width of each edge. Values are normalized and mapped to the range <code>[min, max]</code> specified by <code>edge.width.range</code> (in points). For <code>nplot.igraph</code>, this defaults to the <code>"weight"</code> edge attribute when present.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
+<span class="va">x_w</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/make_ring.html">make_ring</a></span><span class="op">(</span><span class="fl">8</span><span class="op">)</span>
+
+<span class="co"># Assign varying edge weights</span>
+<span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">x_w</span><span class="op">)</span><span class="op">$</span><span class="va">weight</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">1</span>, <span class="fl">6</span><span class="op">)</span>
+<span class="va">l_w</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/layout_in_circle.html">layout_in_circle</a></span><span class="op">(</span><span class="va">x_w</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html">grid.arrange</a></span><span class="op">(</span>
+  <span class="fu"><a href="../reference/nplot.html">nplot</a></span><span class="op">(</span><span class="va">x_w</span>, layout <span class="op">=</span> <span class="va">l_w</span>, skip.arrows <span class="op">=</span> <span class="cn">TRUE</span>,
+        vertex.size.range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.05</span>, <span class="fl">.05</span><span class="op">)</span>,
+        edge.width <span class="op">=</span> <span class="fl">1</span>,
+        edge.width.range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>,
+  <span class="fu"><a href="../reference/nplot.html">nplot</a></span><span class="op">(</span><span class="va">x_w</span>, layout <span class="op">=</span> <span class="va">l_w</span>, skip.arrows <span class="op">=</span> <span class="cn">TRUE</span>,
+        vertex.size.range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.05</span>, <span class="fl">.05</span><span class="op">)</span>,
+        edge.width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">x_w</span><span class="op">)</span><span class="op">$</span><span class="va">weight</span>,
+        edge.width.range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>,
+  <span class="fu"><a href="../reference/nplot.html">nplot</a></span><span class="op">(</span><span class="va">x_w</span>, layout <span class="op">=</span> <span class="va">l_w</span>, skip.arrows <span class="op">=</span> <span class="cn">TRUE</span>,
+        vertex.size.range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.05</span>, <span class="fl">.05</span><span class="op">)</span>,
+        edge.width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">x_w</span><span class="op">)</span><span class="op">$</span><span class="va">weight</span>,
+        edge.width.range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span>,
+  ncol <span class="op">=</span> <span class="fl">3</span>, nrow <span class="op">=</span> <span class="fl">1</span>
+<span class="op">)</span></code></pre></div>
+<div class="figure">
+<img src="examples_files/figure-html/edge-width-1.png" alt="Effect of `edge.width` and `edge.width.range`. Left: uniform width (default). Middle: widths reflect edge weights with the default range (1–2 pt). Right: widths reflect edge weights with a wider range (1–6 pt), making differences more visible." width="672"><p class="caption">
+Effect of <code>edge.width</code> and <code>edge.width.range</code>. Left: uniform width (default). Middle: widths reflect edge weights with the default range (1–2 pt). Right: widths reflect edge weights with a wider range (1–6 pt), making differences more visible.
+</p>
+</div>
+<p>You can also modify edge widths after the plot has been created using <code><a href="../reference/set_gpar.html">set_edge_gpar()</a></code>:</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nplot.html">nplot</a></span><span class="op">(</span><span class="va">x_w</span>, layout <span class="op">=</span> <span class="va">l_w</span>, skip.arrows <span class="op">=</span> <span class="cn">TRUE</span>,
+           vertex.size.range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.05</span>, <span class="fl">.05</span><span class="op">)</span><span class="op">)</span>
+
+<span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html">grid.arrange</a></span><span class="op">(</span>
+  <span class="fu"><a href="../reference/set_gpar.html">set_edge_gpar</a></span><span class="op">(</span><span class="va">g</span>, element <span class="op">=</span> <span class="st">"line"</span>, lwd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,
+  <span class="fu"><a href="../reference/set_gpar.html">set_edge_gpar</a></span><span class="op">(</span><span class="va">g</span>, element <span class="op">=</span> <span class="st">"line"</span>, lwd <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>,
+  ncol <span class="op">=</span> <span class="fl">2</span>
+<span class="op">)</span></code></pre></div>
+<div class="figure">
+<img src="examples_files/figure-html/edge-width-set-gpar-1.png" alt="Using `set_edge_gpar()` to change edge widths after plotting. Left: all edges set to 1 pt. Right: all edges set to 4 pt." width="672"><p class="caption">
+Using <code><a href="../reference/set_gpar.html">set_edge_gpar()</a></code> to change edge widths after plotting. Left: all edges set to 1 pt. Right: all edges set to 4 pt.
+</p>
+</div>
+</div>
 </div>
 <div id="node-labels" class="section level1">
 <h1 class="hasAnchor">
 <a href="#node-labels" class="anchor"></a>Node labels</h1>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">UKfaculty</span>, package <span class="op">=</span> <span class="st">"igraphdata"</span><span class="op">)</span>
 <span class="co"># fakenames &lt;- sample</span></code></pre></div>
 </div>
