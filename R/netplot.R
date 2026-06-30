@@ -47,9 +47,8 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' @param vertex.label.fontface See [grid::gpar]
 #' @param vertex.label.show Numeric scalar. Proportion of labels to show as the
 #' top ranking according to `vertex.size`.
-#' @param vertex.label.range Numeric vector of size 2 or 3, or `NULL`. Relative scale of
-#' `vertex.label.fontsize` in points (see [grid::gpar]). If `NULL`, scaling is
-#' suppressed.
+#' @param vertex.label.range Numeric vector of size 2 or 3. Relative scale of
+#' `vertex.label.fontsize` in points (see [grid::gpar]).
 #' @param edge.color A vector of length `ecount(x)`. In HEX or built in colors.
 #' Can be `NULL` in which case
 #' the color is picked as a mixture between ego and alters' `vertex.color` values.
@@ -635,11 +634,15 @@ nplot.default <- function(
     netenv$edge.arrow.size <- rep(0.0, length(netenv$edge.arrow.size))
 
   # Rescaling text
-  if (!length(netenv$vertex.label.fontsize))
+  if (!length(netenv$vertex.label.fontsize)) {
+    if (is.null(netenv$vertex.label.range))
+      netenv$vertex.label.range <- c(5, 15)
+
     netenv$vertex.label.fontsize <- rescale_size(
       netenv$vertex.size,
       rel = netenv$vertex.label.range
       )
+  }
 
   # Computing label threshold
   netenv$label_threshold <- stats::quantile(

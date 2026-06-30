@@ -225,9 +225,8 @@ vertex does the frame occupy (values between 0 and 1).}
 \item{vertex.label.show}{Numeric scalar. Proportion of labels to show as the
 top ranking according to \code{vertex.size}.}
 
-\item{vertex.label.range}{Numeric vector of size 2 or 3, or \code{NULL}. Relative scale of
-\code{vertex.label.fontsize} in points (see \link[grid:gpar]{grid::gpar}). If \code{NULL}, scaling is
-suppressed.}
+\item{vertex.label.range}{Numeric vector of size 2 or 3. Relative scale of
+\code{vertex.label.fontsize} in points (see \link[grid:gpar]{grid::gpar}).}
 
 \item{edge.width}{Numeric vector of length \code{ecount(x)}. Relative edge widths.
 Values are normalized and then mapped to the range specified by \code{edge.width.range},

@@ -55,6 +55,16 @@ if (requireNamespace("igraph", quietly = TRUE)) {
     info = "vertex.size.range = NULL should use vertex.size values as is"
   )
 
+  g_label <- nplot(x, layout = l, skip.arrows = TRUE,
+                   vertex.label = letters[seq_len(igraph::vcount(x))],
+                   vertex.label.range = NULL)
+
+  label_fontsizes <- get_vertex_gpar(g_label, element = "label", "fontsize")$fontsize
+  expect_true(
+    all(label_fontsizes >= 5 & label_fontsizes <= 15),
+    info = "vertex.label.range = NULL should fall back to visible default font sizes"
+  )
+
   base_raw <- nplot_base(x, layout = l, skip.arrows = TRUE,
                          vertex.size = rep(.05, 4),
                          vertex.size.range = NULL,
