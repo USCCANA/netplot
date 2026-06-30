@@ -55,6 +55,71 @@ if (requireNamespace("igraph", quietly = TRUE)) {
     info = "vertex.size.range = NULL should use vertex.size values as is"
   )
 
+  g_rot <- nplot(x, layout = l, skip.edges = TRUE, skip.arrows = TRUE,
+                 vertex.size = rep(.05, 4),
+                 vertex.size.range = NULL,
+                 vertex.frame.prop = 0,
+                 vertex.nsides = rep(3, 4),
+                 vertex.rot = pi/4)
+  core <- g_rot$children$graph$children$vertex.1$children$core
+  core_xy <- unname(cbind(as.numeric(core$x), as.numeric(core$y)))
+  expected_core_xy <- unname(npolygon(
+    g_rot$.layout[1, 1], g_rot$.layout[1, 2],
+    n = 3, r = .05, d = pi/4
+  ))
+
+  expect_equal(
+    core_xy,
+    expected_core_xy,
+    tolerance = 1e-8,
+    info = "vertex.rot should rotate grid vertex polygons using radians"
+  )
+
+  g_shape_rot <- nplot(x, layout = l, skip.edges = TRUE, skip.arrows = TRUE,
+                       vertex.size = rep(.05, 4),
+                       vertex.size.range = NULL,
+                       vertex.frame.prop = 0,
+                       vertex.nsides = "triangle",
+                       vertex.rot = pi/4)
+  shape_core <- g_shape_rot$children$graph$children$vertex.1$children$core
+  shape_core_xy <- unname(cbind(
+    as.numeric(shape_core$x),
+    as.numeric(shape_core$y)
+  ))
+  expected_shape_core_xy <- unname(npolygon(
+    g_shape_rot$.layout[1, 1], g_shape_rot$.layout[1, 2],
+    n = 3, r = .05, d = pi/4
+  ))
+
+  expect_equal(
+    shape_core_xy,
+    expected_shape_core_xy,
+    tolerance = 1e-8,
+    info = "vertex.rot should add to named-shape vertex rotations"
+  )
+
+  g_square <- nplot(x, layout = l, skip.edges = TRUE, skip.arrows = TRUE,
+                    vertex.size = rep(.05, 4),
+                    vertex.size.range = NULL,
+                    vertex.frame.prop = 0,
+                    vertex.nsides = "square")
+  square_core <- g_square$children$graph$children$vertex.1$children$core
+  square_core_xy <- unname(cbind(
+    as.numeric(square_core$x),
+    as.numeric(square_core$y)
+  ))
+  expected_square_core_xy <- unname(npolygon(
+    g_square$.layout[1, 1], g_square$.layout[1, 2],
+    n = 4, r = .05, d = pi/4
+  ))
+
+  expect_equal(
+    square_core_xy,
+    expected_square_core_xy,
+    tolerance = 1e-8,
+    info = "the named square shape should use a square orientation"
+  )
+
   g_label <- nplot(x, layout = l, skip.arrows = TRUE,
                    vertex.label = letters[seq_len(igraph::vcount(x))],
                    vertex.label.range = NULL)
@@ -75,6 +140,28 @@ if (requireNamespace("igraph", quietly = TRUE)) {
     base_raw$edge.width,
     igraph::E(x)$weight,
     info = "nplot_base should also suppress edge-width scaling for NULL range"
+  )
+
+  base_rot <- nplot_base(x, layout = l, skip.edges = TRUE, skip.arrows = TRUE,
+                         vertex.size = rep(.05, 4),
+                         vertex.size.range = NULL,
+                         vertex.frame.prop = .2,
+                         vertex.nsides = rep(3, 4),
+                         vertex.rot = pi/4)
+  layout_fit <- netplot:::fit_coords_to_dev(l)
+  frame_outer_xy <- unname(as.matrix(
+    base_rot$vertex.frame.coords[[1]][seq_len(3), ]
+  ))
+  expected_frame_outer_xy <- unname(npolygon(
+    layout_fit[1, 1], layout_fit[1, 2],
+    n = 3, r = .05, d = pi/4
+  ))
+
+  expect_equal(
+    frame_outer_xy,
+    expected_frame_outer_xy,
+    tolerance = 1e-8,
+    info = "nplot_base should rotate vertex frames with vertex.rot"
   )
 }
 

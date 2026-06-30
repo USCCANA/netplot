@@ -264,6 +264,8 @@ nplot_base <- function(
         edges  = vertex.nsides[i],
         radius = vertex.size[i],
         doughnut = vertex.size[i]*vertex.frame.prop[i],
+        init.angle = vertex.rot[i]*180/pi,
+        last.angle = 360 + vertex.rot[i]*180/pi,
         rescale = FALSE,
         add     = TRUE,
         skip.plot.slices = TRUE
