@@ -176,15 +176,17 @@ Comparison of default <code>igraph</code>, <code>sna</code>, <code>ggraph</code>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html">grid.arrange</a></span><span class="op">(</span>
-  <span class="fu"><a href="../reference/nplot.html">nplot</a></span><span class="op">(</span><span class="va">UKfaculty</span>, layout <span class="op">=</span> <span class="va">l_ukf</span>, vertex.size.range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.025</span>, <span class="fl">.025</span><span class="op">)</span><span class="op">)</span>,
+  <span class="fu"><a href="../reference/nplot.html">nplot</a></span><span class="op">(</span><span class="va">UKfaculty</span>, layout <span class="op">=</span> <span class="va">l_ukf</span>,
+        vertex.size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">.025</span>, <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/gorder.html">vcount</a></span><span class="op">(</span><span class="va">UKfaculty</span><span class="op">)</span><span class="op">)</span>,
+        vertex.size.range <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>,
   <span class="fu"><a href="../reference/nplot.html">nplot</a></span><span class="op">(</span><span class="va">UKfaculty</span>, layout <span class="op">=</span> <span class="va">l_ukf</span>, vertex.size.range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.01</span>, <span class="fl">.025</span><span class="op">)</span><span class="op">)</span>,
   <span class="fu"><a href="../reference/nplot.html">nplot</a></span><span class="op">(</span><span class="va">UKfaculty</span>, layout <span class="op">=</span> <span class="va">l_ukf</span>, vertex.size.range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.01</span>, <span class="fl">.025</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>,
   <span class="fu"><a href="../reference/nplot.html">nplot</a></span><span class="op">(</span><span class="va">UKfaculty</span>, layout <span class="op">=</span> <span class="va">l_ukf</span>, vertex.size.range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.02</span>, <span class="fl">.05</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>,
   ncol<span class="op">=</span><span class="fl">2</span>, nrow<span class="op">=</span><span class="fl">2</span>
 <span class="op">)</span></code></pre></div>
 <div class="figure">
-<img src="examples_files/figure-html/node-scaling-1.png" alt="Modifying `vertex.size.range`: Each figure shows a different parameter for the vertex size range. From left to right, and top down: (a) Has all vertices with the same scale of 2.5%, (b) " width="672"><p class="caption">
-Modifying <code>vertex.size.range</code>: Each figure shows a different parameter for the vertex size range. From left to right, and top down: (a) Has all vertices with the same scale of 2.5%, (b)
+<img src="examples_files/figure-html/node-scaling-1.png" alt="Modifying `vertex.size.range`: use `NULL` to keep the supplied vertex sizes unchanged." width="672"><p class="caption">
+Modifying <code>vertex.size.range</code>: use <code>NULL</code> to keep the supplied vertex sizes unchanged.
 </p>
 </div>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -258,7 +260,7 @@ Changing the number of breaks in the edge (arc) and the type of line to be drawn
 <div id="edge-width" class="section level2">
 <h2 class="hasAnchor">
 <a href="#edge-width" class="anchor"></a>Edge width</h2>
-<p>The <code>edge.width</code> parameter controls the relative width of each edge. Values are normalized and mapped to the range <code>[min, max]</code> specified by <code>edge.width.range</code> (in points). For <code>nplot.igraph</code>, this defaults to the <code>"weight"</code> edge attribute when present.</p>
+<p>The <code>edge.width</code> parameter controls the relative width of each edge. Values are normalized and mapped to the range <code>[min, max]</code> specified by <code>edge.width.range</code> (in points). For <code>nplot.igraph</code>, this defaults to the <code>"weight"</code> edge attribute when present. Use <code>edge.width.range = NULL</code> to keep supplied widths unchanged.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
 <span class="va">x_w</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/make_ring.html">make_ring</a></span><span class="op">(</span><span class="fl">8</span><span class="op">)</span>
@@ -279,12 +281,12 @@ Changing the number of breaks in the edge (arc) and the type of line to be drawn
   <span class="fu"><a href="../reference/nplot.html">nplot</a></span><span class="op">(</span><span class="va">x_w</span>, layout <span class="op">=</span> <span class="va">l_w</span>, skip.arrows <span class="op">=</span> <span class="cn">TRUE</span>,
         vertex.size.range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.05</span>, <span class="fl">.05</span><span class="op">)</span>,
         edge.width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">x_w</span><span class="op">)</span><span class="op">$</span><span class="va">weight</span>,
-        edge.width.range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span>,
+        edge.width.range <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>,
   ncol <span class="op">=</span> <span class="fl">3</span>, nrow <span class="op">=</span> <span class="fl">1</span>
 <span class="op">)</span></code></pre></div>
 <div class="figure">
-<img src="examples_files/figure-html/edge-width-1.png" alt="Effect of `edge.width` and `edge.width.range`. Left: uniform width (default). Middle: widths reflect edge weights with the default range (1–2 pt). Right: widths reflect edge weights with a wider range (1–6 pt), making differences more visible." width="672"><p class="caption">
-Effect of <code>edge.width</code> and <code>edge.width.range</code>. Left: uniform width (default). Middle: widths reflect edge weights with the default range (1–2 pt). Right: widths reflect edge weights with a wider range (1–6 pt), making differences more visible.
+<img src="examples_files/figure-html/edge-width-1.png" alt="Effect of `edge.width` and `edge.width.range`. Left: uniform width. Middle: weights mapped to 1–2 pt. Right: raw weights with `edge.width.range = NULL`." width="672"><p class="caption">
+Effect of <code>edge.width</code> and <code>edge.width.range</code>. Left: uniform width. Middle: weights mapped to 1–2 pt. Right: raw weights with <code>edge.width.range = NULL</code>.
 </p>
 </div>
 <p>You can also modify edge widths after the plot has been created using <code><a href="../reference/set_gpar.html">set_edge_gpar()</a></code>:</p>
@@ -303,13 +305,6 @@ Using <code><a href="../reference/set_gpar.html">set_edge_gpar()</a></code> to c
 </p>
 </div>
 </div>
-</div>
-<div id="node-labels" class="section level1">
-<h1 class="hasAnchor">
-<a href="#node-labels" class="anchor"></a>Node labels</h1>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">UKfaculty</span>, package <span class="op">=</span> <span class="st">"igraphdata"</span><span class="op">)</span>
-<span class="co"># fakenames &lt;- sample</span></code></pre></div>
 </div>
   </div>
 

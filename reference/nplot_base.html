@@ -195,9 +195,10 @@ the vertex. E.g. three is a triangle, and 100 approximates a circle.</p></td>
     </tr>
     <tr>
       <th>vertex.size.range</th>
-      <td><p>Numeric vector of length 3. Relative size for the
+      <td><p>Numeric vector of length 2 or 3, or <code>NULL</code>. Relative size for the
 minimum and maximum of the plot, and curvature of the scale. The third number
-is used as <code>size^rel[3]</code>.</p></td>
+is used as <code>size^rel[3]</code>. If <code>NULL</code>, scaling is suppressed and <code>vertex.size</code>
+is used as is.</p></td>
     </tr>
     <tr>
       <th>vertex.frame.color</th>
@@ -216,13 +217,18 @@ vertex does the frame occupy (values between 0 and 1).</p></td>
     </tr>
     <tr>
       <th>edge.width</th>
-      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code> from 0 to 1. All edges will be
-the same size.</p></td>
+      <td><p>Numeric vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code>. Relative edge widths.
+Values are normalized and then mapped to the range specified by <code>edge.width.range</code>,
+unless <code>edge.width.range</code> is <code>NULL</code>.
+For <code>nplot.igraph</code> and <code>nplot.network</code>, defaults to the "weight" edge
+attribute if present; otherwise all edges use width 1.</p></td>
     </tr>
     <tr>
       <th>edge.width.range</th>
-      <td><p>Vector of length <code><a href='https://rdrr.io/pkg/igraph/man/gsize.html'>ecount(x)</a></code> from 0 to 1. Adjusting
-width according to weight.</p></td>
+      <td><p>Numeric vector of length 2, or <code>NULL</code>. The minimum and maximum line
+widths (in points) to use when mapping <code>edge.width</code> values. For example,
+<code><a href='https://rdrr.io/r/base/c.html'>c(1, 4)</a></code> maps the smallest edge weight to 1pt and the largest to 4pt.
+If <code>NULL</code>, scaling is suppressed and <code>edge.width</code> is used as is.</p></td>
     </tr>
     <tr>
       <th>edge.arrow.size</th>
