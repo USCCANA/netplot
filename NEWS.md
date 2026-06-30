@@ -1,5 +1,9 @@
 # netplot 0.3-0
 
+* `edge.width` now correctly reflected in the drawn line widths. Previously,
+  the width was computed but not consistently applied via the graphical
+  parameters of each edge grob. Closes #17.
+
 * Invalid arguments passed to `nplot()` now raise an error.
 
 * Figures with legends are not drawn twice.

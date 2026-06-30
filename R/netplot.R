@@ -51,10 +51,12 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' @param edge.color A vector of length `ecount(x)`. In HEX or built in colors.
 #' Can be `NULL` in which case
 #' the color is picked as a mixture between ego and alters' `vertex.color` values.
-#' @param edge.width Vector of length `ecount(x)` from 0 to 1. All edges will be
-#' the same size.
-#' @param edge.width.range Vector of length `ecount(x)` from 0 to 1. Adjusting
-#' width according to weight.
+#' @param edge.width Numeric vector of length `ecount(x)`. Relative edge widths.
+#' Values are normalized and then mapped to the range specified by `edge.width.range`.
+#' For `nplot.igraph`, defaults to the "weight" edge attribute if present.
+#' @param edge.width.range Numeric vector of length 2. The minimum and maximum line
+#' widths (in points) to use when mapping `edge.width` values. For example,
+#' `c(1, 4)` maps the smallest edge weight to 1pt and the largest to 4pt.
 #' @param edge.arrow.size Vector of length `ecount(x)` from 0 to 1.
 #' @param edge.curvature Numeric vector of length `ecount(x)`. Curvature of edges
 #' in terms of radians.
@@ -772,6 +774,23 @@ nplot.default <- function(
       ans <- set_edge_gpar(x = ans, "arrow", fill = gp, col=gp)
 
     }
+  }
+
+  # Explicitly set edge line widths to ensure edge.width is applied
+  if (!skip.edges) {
+    ans <- set_edge_gpar(
+      x       = ans,
+      element = "line",
+      lwd     = as.vector(netenv$edge.width)
+    )
+  }
+
+  if (!skip.arrows) {
+    ans <- set_edge_gpar(
+      x       = ans,
+      element = "arrow",
+      lwd     = as.vector(netenv$edge.width)
+    )
   }
 
   ans

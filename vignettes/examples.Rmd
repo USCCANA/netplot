@@ -174,6 +174,54 @@ gridExtra::grid.arrange(
 )
 ```
 
+## Edge width
+
+The `edge.width` parameter controls the relative width of each edge. Values are
+normalized and mapped to the range `[min, max]` specified by `edge.width.range`
+(in points). For `nplot.igraph`, this defaults to the `"weight"` edge attribute
+when present.
+
+```{r edge-width-setup}
+set.seed(1)
+x_w <- make_ring(8)
+
+# Assign varying edge weights
+E(x_w)$weight <- c(1, 3, 1, 5, 2, 4, 1, 6)
+l_w <- layout_in_circle(x_w)
+```
+
+```{r edge-width, fig.width=7, fig.height=3, fig.cap="Effect of `edge.width` and `edge.width.range`. Left: uniform width (default). Middle: widths reflect edge weights with the default range (1–2 pt). Right: widths reflect edge weights with a wider range (1–6 pt), making differences more visible."}
+gridExtra::grid.arrange(
+  nplot(x_w, layout = l_w, skip.arrows = TRUE,
+        vertex.size.range = c(.05, .05),
+        edge.width = 1,
+        edge.width.range = c(1, 2)),
+  nplot(x_w, layout = l_w, skip.arrows = TRUE,
+        vertex.size.range = c(.05, .05),
+        edge.width = E(x_w)$weight,
+        edge.width.range = c(1, 2)),
+  nplot(x_w, layout = l_w, skip.arrows = TRUE,
+        vertex.size.range = c(.05, .05),
+        edge.width = E(x_w)$weight,
+        edge.width.range = c(1, 6)),
+  ncol = 3, nrow = 1
+)
+```
+
+You can also modify edge widths after the plot has been created using
+`set_edge_gpar()`:
+
+```{r edge-width-set-gpar, fig.width=7, fig.height=3, fig.cap="Using `set_edge_gpar()` to change edge widths after plotting. Left: all edges set to 1 pt. Right: all edges set to 4 pt."}
+g <- nplot(x_w, layout = l_w, skip.arrows = TRUE,
+           vertex.size.range = c(.05, .05))
+
+gridExtra::grid.arrange(
+  set_edge_gpar(g, element = "line", lwd = 1),
+  set_edge_gpar(g, element = "line", lwd = 4),
+  ncol = 2
+)
+```
+
 # Node labels
 
 ```{r}
