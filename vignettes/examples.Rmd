@@ -103,10 +103,12 @@ gridExtra::grid.arrange(
 
 # Nodes
 
-```{r node-scaling, fig.width=7, fig.height=7, fig.cap="Modifying `vertex.size.range`: Each figure shows a different parameter for the vertex size range. From left to right, and top down: (a) Has all vertices with the same scale of 2.5%, (b) "}
+```{r node-scaling, fig.width=7, fig.height=7, fig.cap="Modifying `vertex.size.range`: use `NULL` to keep the supplied vertex sizes unchanged."}
 
 gridExtra::grid.arrange(
-  nplot(UKfaculty, layout = l_ukf, vertex.size.range = c(.025, .025)),
+  nplot(UKfaculty, layout = l_ukf,
+        vertex.size = rep(.025, vcount(UKfaculty)),
+        vertex.size.range = NULL),
   nplot(UKfaculty, layout = l_ukf, vertex.size.range = c(.01, .025)),
   nplot(UKfaculty, layout = l_ukf, vertex.size.range = c(.01, .025, 4)),
   nplot(UKfaculty, layout = l_ukf, vertex.size.range = c(.02, .05, 4)),
@@ -179,7 +181,7 @@ gridExtra::grid.arrange(
 The `edge.width` parameter controls the relative width of each edge. Values are
 normalized and mapped to the range `[min, max]` specified by `edge.width.range`
 (in points). For `nplot.igraph`, this defaults to the `"weight"` edge attribute
-when present.
+when present. Use `edge.width.range = NULL` to keep supplied widths unchanged.
 
 ```{r edge-width-setup}
 set.seed(1)
@@ -190,7 +192,7 @@ E(x_w)$weight <- c(1, 3, 1, 5, 2, 4, 1, 6)
 l_w <- layout_in_circle(x_w)
 ```
 
-```{r edge-width, fig.width=7, fig.height=3, fig.cap="Effect of `edge.width` and `edge.width.range`. Left: uniform width (default). Middle: widths reflect edge weights with the default range (1–2 pt). Right: widths reflect edge weights with a wider range (1–6 pt), making differences more visible."}
+```{r edge-width, fig.width=7, fig.height=3, fig.cap="Effect of `edge.width` and `edge.width.range`. Left: uniform width. Middle: weights mapped to 1–2 pt. Right: raw weights with `edge.width.range = NULL`."}
 gridExtra::grid.arrange(
   nplot(x_w, layout = l_w, skip.arrows = TRUE,
         vertex.size.range = c(.05, .05),
@@ -203,7 +205,7 @@ gridExtra::grid.arrange(
   nplot(x_w, layout = l_w, skip.arrows = TRUE,
         vertex.size.range = c(.05, .05),
         edge.width = E(x_w)$weight,
-        edge.width.range = c(1, 20)),
+        edge.width.range = NULL),
   ncol = 3, nrow = 1
 )
 ```
@@ -221,4 +223,3 @@ gridExtra::grid.arrange(
   ncol = 2
 )
 ```
-

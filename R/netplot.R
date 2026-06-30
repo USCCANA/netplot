@@ -30,9 +30,10 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' @param vertex.nsides Numeric vector of length `vcount(x)`. Number of sizes of
 #' the vertex. E.g. three is a triangle, and 100 approximates a circle.
 #' @param vertex.color Vector of length `vcount(x)`. Vertex HEX or built in colors.
-#' @param vertex.size.range Numeric vector of length 3. Relative size for the
+#' @param vertex.size.range Numeric vector of length 2 or 3, or `NULL`. Relative size for the
 #' minimum and maximum of the plot, and curvature of the scale. The third number
-#' is used as `size^rel[3]`.
+#' is used as `size^rel[3]`. If `NULL`, scaling is suppressed and `vertex.size`
+#' is used as is.
 #' @param vertex.frame.color Vector of length `vcount(x)`. Border of vertex in
 #' HEX or built in colors.
 #' @param vertex.frame.prop Vector of length `vcount(x)`. What proportion of the
@@ -46,17 +47,21 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #' @param vertex.label.fontface See [grid::gpar]
 #' @param vertex.label.show Numeric scalar. Proportion of labels to show as the
 #' top ranking according to `vertex.size`.
-#' @param vertex.label.range Numeric vector of size 2 or 3. Relative scale of
-#' `vertex.label.fontsize` in points (see [grid::gpar]).
+#' @param vertex.label.range Numeric vector of size 2 or 3, or `NULL`. Relative scale of
+#' `vertex.label.fontsize` in points (see [grid::gpar]). If `NULL`, scaling is
+#' suppressed.
 #' @param edge.color A vector of length `ecount(x)`. In HEX or built in colors.
 #' Can be `NULL` in which case
 #' the color is picked as a mixture between ego and alters' `vertex.color` values.
 #' @param edge.width Numeric vector of length `ecount(x)`. Relative edge widths.
-#' Values are normalized and then mapped to the range specified by `edge.width.range`.
-#' For `nplot.igraph`, defaults to the "weight" edge attribute if present.
-#' @param edge.width.range Numeric vector of length 2. The minimum and maximum line
+#' Values are normalized and then mapped to the range specified by `edge.width.range`,
+#' unless `edge.width.range` is `NULL`.
+#' For `nplot.igraph` and `nplot.network`, defaults to the "weight" edge
+#' attribute if present; otherwise all edges use width 1.
+#' @param edge.width.range Numeric vector of length 2, or `NULL`. The minimum and maximum line
 #' widths (in points) to use when mapping `edge.width` values. For example,
 #' `c(1, 4)` maps the smallest edge weight to 1pt and the largest to 4pt.
+#' If `NULL`, scaling is suppressed and `edge.width` is used as is.
 #' @param edge.arrow.size Vector of length `ecount(x)` from 0 to 1.
 #' @param edge.curvature Numeric vector of length `ecount(x)`. Curvature of edges
 #' in terms of radians.
@@ -251,6 +256,9 @@ nplot.network <- function(
   zero.margins            = TRUE,
   edgelist
 ) {
+
+  if (!length(edge.width))
+    edge.width <- 1L
 
   nplot.default(
     x = x,
@@ -607,10 +615,17 @@ nplot.default <- function(
     netenv$vertex.size <- rep(0, netenv$N)
 
   # Rescaling edges
-  netenv$edge.width <- rescale_size(
-    netenv$edge.width/max(netenv$edge.width, na.rm=TRUE),
-    rel = netenv$edge.width.range
-    )
+  if (is.null(netenv$edge.width.range)) {
+    netenv$edge.width <- rescale_size(
+      netenv$edge.width,
+      rel = netenv$edge.width.range
+      )
+  } else {
+    netenv$edge.width <- rescale_size(
+      netenv$edge.width/max(netenv$edge.width, na.rm=TRUE),
+      rel = netenv$edge.width.range
+      )
+  }
 
   # Rescaling arrows
   if (!length(netenv$edge.arrow.size))
@@ -908,5 +923,3 @@ locate_vertex <- function(x = NULL) {
 
 
 # Look at `chull` from `grDevices`
-
-

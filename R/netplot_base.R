@@ -115,7 +115,10 @@ nplot_base <- function(
     edge.width <- rep(1.0, igraph::ecount(x))
 
   # Rescaling edges
-  edge.width <- rescale_size(edge.width/max(edge.width, na.rm=TRUE), rel = edge.width.range)
+  if (is.null(edge.width.range))
+    edge.width <- rescale_size(edge.width, rel = edge.width.range)
+  else
+    edge.width <- rescale_size(edge.width/max(edge.width, na.rm=TRUE), rel = edge.width.range)
 
   if (!length(edge.arrow.size))
     edge.arrow.size <- vertex.size[E[,1]]/1.5

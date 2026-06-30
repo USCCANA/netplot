@@ -14,3 +14,6 @@ netplot\._.*\.tar\.gz
 ^Rplots\.pdf$
 ^doc$
 ^Meta$
+^AGENTS\.md$
+^\.devcontainer$
+^\.vscode$
