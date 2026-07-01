@@ -42,6 +42,30 @@ if (requireNamespace("igraph", quietly = TRUE)) {
     info = "edge.width.range = NULL should use edge.width values as is"
   )
 
+  edge_ltys <- c("solid", "dashed", "dotted", "dotdash")
+  g_lty <- nplot(x, layout = l, skip.arrows = TRUE,
+                 edge.line.lty = edge_ltys)
+  expect_equal(
+    get_edge_gpar(g_lty, element = "line", "lty")$lty,
+    edge_ltys,
+    info = "edge.line.lty should set one line type per grid edge"
+  )
+
+  g_lty_scalar <- nplot(x, layout = l, skip.arrows = TRUE,
+                        edge.line.lty = "dashed")
+  expect_equal(
+    get_edge_gpar(g_lty_scalar, element = "line", "lty")$lty,
+    rep("dashed", igraph::ecount(x)),
+    info = "scalar edge.line.lty should be recycled across grid edges"
+  )
+
+  expect_error(
+    nplot(x, layout = l, skip.arrows = TRUE,
+          edge.line.lty = edge_ltys[seq_len(2)]),
+    "edge.line.lty",
+    info = "short non-scalar edge.line.lty vectors should be rejected"
+  )
+
   frame <- g_raw$children$graph$children$vertex.1$children$frame
   frame_xy <- cbind(as.numeric(frame$x), as.numeric(frame$y))
   vertex_radius <- max(sqrt(rowSums(
@@ -141,6 +165,42 @@ if (requireNamespace("igraph", quietly = TRUE)) {
     igraph::E(x)$weight,
     info = "nplot_base should also suppress edge-width scaling for NULL range"
   )
+
+  x_sample <- igraph::make_ring(5, directed = FALSE)
+  l_sample <- igraph::layout_in_circle(x_sample)
+  sampled_ltys <- c("solid", "not-a-line-type", "dotted", "dotdash", "longdash")
+
+  set.seed(1)
+  g_sample_lty <- nplot(x_sample, layout = l_sample, skip.arrows = TRUE,
+                        sample.edges = .4, edge.line.lty = sampled_ltys)
+  expect_equal(
+    get_edge_gpar(g_sample_lty, element = "line", "lty")$lty,
+    sampled_ltys[c(1, 4)],
+    info = "nplot should keep edge.line.lty aligned when sample.edges drops edges"
+  )
+
+  grDevices::pdf(NULL)
+  set.seed(1)
+  base_sample_lty <- tryCatch(
+    nplot_base(x_sample, layout = l_sample, skip.arrows = TRUE,
+               sample.edges = .4, edge.line.lty = sampled_ltys),
+    error = function(e) e
+  )
+  grDevices::dev.off()
+
+  expect_false(
+    inherits(base_sample_lty, "error"),
+    info = "nplot_base should subset edge.line.lty when sample.edges drops edges"
+  )
+
+  grDevices::pdf(NULL)
+  expect_error(
+    nplot_base(x, layout = l, skip.arrows = TRUE,
+               edge.line.lty = edge_ltys[seq_len(2)]),
+    "edge.line.lty",
+    info = "nplot_base should reject short non-scalar edge.line.lty vectors"
+  )
+  grDevices::dev.off()
 
   base_rot <- nplot_base(x, layout = l, skip.edges = TRUE, skip.arrows = TRUE,
                          vertex.size = rep(.05, 4),

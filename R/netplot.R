@@ -580,6 +580,13 @@ nplot.default <- function(
 
   # end ------------------------------------------------------------------------
 
+  if (
+    length(edge.line.lty) &&
+    length(edge.line.lty) != 1L &&
+    length(edge.line.lty) != netenv$M
+  )
+    stop("edge.line.lty must have length 1 or one value per plotted edge.")
+
   # This function will repeat a patter taking into account the number of columns
   .rep <- function(x, .times) {
     if (grepl("range$", p) | inherits(x, "formula"))

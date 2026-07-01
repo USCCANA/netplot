@@ -104,9 +104,33 @@ nplot_base <- function(
 
   # Computing shapes -----------------------------------------------------------
   E <- igraph::as_edgelist(x, names = FALSE)
+  M <- nrow(E)
 
   if (sample.edges < 1) {
-    sample.edges <- sample.int(nrow(E), floor(nrow(E)*sample.edges))
+    sample.edges <- sample.int(M, floor(M*sample.edges))
+
+    edge_par <- c(
+      "edge.width",
+      "edge.arrow.size",
+      "edge.color.mix",
+      "edge.color.alpha",
+      "edge.curvature",
+      "edge.line.lty",
+      "edge.line.breaks"
+    )
+
+    for (epar in edge_par) {
+      if (is.null(get(epar)))
+        next
+
+      if (is.matrix(get(epar)) || is.data.frame(get(epar))) {
+        if (nrow(get(epar)) == M)
+          assign(epar, get(epar)[sample.edges, , drop = FALSE])
+      } else if (length(get(epar)) == M) {
+        assign(epar, get(epar)[sample.edges])
+      }
+    }
+
     E <- E[sample.edges, , drop=FALSE]
   }
 
@@ -175,6 +199,8 @@ nplot_base <- function(
     edge.line.lty <- rep(1L, length(edge.coords))
   else if (length(edge.line.lty) == 1)
     edge.line.lty <- rep(edge.line.lty, length(edge.coords))
+  else if (length(edge.line.lty) != length(edge.coords))
+    stop("edge.line.lty must have length 1 or one value per plotted edge.")
 
   if (!length(edge.color.alpha))
     edge.color.alpha <- matrix(.5, nrow= length(edge.coords), ncol=2)
