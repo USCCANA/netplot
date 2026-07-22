@@ -1,4 +1,15 @@
-# netplot 0.3-0
+# netplot 0.4-0
+
+* Attribute formulas for `vertex.nsides`, `vertex.size`, and `edge.width` now
+  evaluate the right-hand side against the graph's attributes, so expressions
+  such as `edge.width = ~ log1p(weight)` or `vertex.size = ~ degree ^ 2` work in
+  addition to bare attribute names. Previously any non-trivial right-hand side
+  failed with a cryptic `the condition has length > 1` error. Missing attributes
+  now produce a clear, informative message.
+
+* `vertex.color = ~ attr` now draws a legend appropriate to the attribute type:
+  a categorical key for discrete attributes (factor, logical, low-cardinality
+  integer) and a continuous **color bar** for continuous ones.
 
 * Documentation overhaul: `nplot()` now documents the formula interface for
   mapping vertex/edge aesthetics from graph attributes, the README highlights
@@ -23,6 +34,9 @@
 
 * `edge.line.lty` is now validated to be length 1 or one value per plotted
   edge, and is subset correctly when `sample.edges` drops edges.
+
+
+# netplot 0.3-0
 
 * Invalid arguments passed to `nplot()` now raise an error.
 

@@ -116,13 +116,19 @@ edge_color_mixer <- function(i, j, vcols, p = .5, alpha = .15) {
 #'   Character/factor attributes are mapped to a categorical palette, numeric
 #'   attributes to a continuous gradient, and logical attributes to two colors.
 #'   When used this way, `print()`-ing the resulting plot also draws a matching
-#'   legend.
+#'   legend: a categorical key for discrete attributes and a continuous color
+#'   bar for continuous ones.
 #' - `vertex.nsides = ~ attr` maps each unique value of `attr` to a distinct
 #'   vertex shape (triangle, square, pentagon, ...).
 #' - `vertex.size = ~ attr` and `edge.width = ~ attr` scale sizes/widths from a
 #'   numeric vertex/edge attribute.
 #' - `edge.color` uses a different, richer formula grammar based on `ego()` and
 #'   `alter()` to mix the endpoints' colors; see [netplot-formulae].
+#'
+#' For `vertex.nsides`, `vertex.size`, and `edge.width` the right-hand side of
+#' the formula is *evaluated* with the graph's attributes in scope, so besides
+#' bare names you can use expressions, e.g. `edge.width = ~ log1p(weight)` or
+#' `vertex.size = ~ degree ^ 2`.
 #'
 #' For example, `nplot(x, vertex.color = ~ gender, vertex.size = ~ degree)`
 #' colors vertices by the `gender` attribute and sizes them by `degree`. The
@@ -562,12 +568,12 @@ nplot.default <- function(
 
   # Mapping attributes ---------------------------------------------------------
 
-  # Nsides
+  # Nsides. The formula RHS is evaluated against the graph's vertex attributes,
+  # so both bare names (~ group) and expressions (~ cut(age, 3)) work.
   if (length(vertex.nsides) && inherits(vertex.nsides, "formula")) {
 
-    rhs <- as.character(vertex.nsides[[2]])
     vertex.nsides <- map_attribute_to_shape(
-      get_vertex_attribute(graph = x, attribute = rhs)
+      eval_attribute_formula(graph = x, formula = vertex.nsides, type = "vertex")
     )
 
   }
@@ -575,8 +581,9 @@ nplot.default <- function(
   # And size
   if (length(vertex.size) && inherits(vertex.size, "formula")) {
 
-    rhs <- as.character(vertex.size[[2]])
-    vertex.size <- get_vertex_attribute(graph = x, attribute = rhs)
+    vertex.size <- eval_attribute_formula(
+      graph = x, formula = vertex.size, type = "vertex"
+      )
 
     # Now check if it is numeric. If not, it should return an error
     if (!is.numeric(vertex.size)) {
@@ -588,8 +595,9 @@ nplot.default <- function(
   # Edges width
   if (length(edge.width) && inherits(edge.width, "formula")) {
 
-    rhs <- as.character(edge.width[[2]])
-    edge.width <- get_edge_attribute(graph = x, attribute = rhs)
+    edge.width <- eval_attribute_formula(
+      graph = x, formula = edge.width, type = "edge"
+      )
 
     # Now check if it is numeric. If not, it should return an error
     if (!is.numeric(edge.width)) {

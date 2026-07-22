@@ -17,6 +17,7 @@ The main entry point is \code{\link[=nplot]{nplot()}}. See \code{vignette("examp
 Useful links:
 \itemize{
   \item \url{https://github.com/USCCANA/netplot}
+  \item \url{https://usccana.github.io/netplot/}
   \item Report bugs at \url{https://github.com/USCCANA/netplot/issues}
 }
 

@@ -179,6 +179,55 @@ if (requireNamespace("igraph", quietly = TRUE)) {
     info = "nplot should keep edge.line.lty aligned when sample.edges drops edges"
   )
 
+  # Attribute formulas -------------------------------------------------------
+  x_fm <- igraph::make_ring(5, directed = FALSE)
+  igraph::E(x_fm)$w   <- c(1, 2, 3, 4, 5)
+  igraph::V(x_fm)$deg <- igraph::degree(x_fm)
+  l_fm <- igraph::layout_in_circle(x_fm)
+
+  grDevices::pdf(tempfile(fileext = ".pdf"))
+
+  # Bare attribute name and an equivalent explicit vector should match
+  g_fm_name <- nplot(x_fm, layout = l_fm, skip.arrows = TRUE,
+                     edge.width = ~ w, edge.width.range = c(1, 5))
+  g_fm_vec  <- nplot(x_fm, layout = l_fm, skip.arrows = TRUE,
+                     edge.width = igraph::E(x_fm)$w, edge.width.range = c(1, 5))
+  expect_equal(
+    get_edge_gpar(g_fm_name, element = "line", "lwd")$lwd,
+    get_edge_gpar(g_fm_vec, element = "line", "lwd")$lwd,
+    info = "edge.width formula ~ w should match the explicit weight vector"
+  )
+
+  # Expression on the RHS must be evaluated (regression: used to error with
+  # 'the condition has length > 1')
+  g_fm_expr <- nplot(x_fm, layout = l_fm, skip.arrows = TRUE,
+                     edge.width = ~ w * 2, edge.width.range = c(1, 5))
+  expect_equal(
+    get_edge_gpar(g_fm_expr, element = "line", "lwd")$lwd,
+    get_edge_gpar(g_fm_name, element = "line", "lwd")$lwd,
+    info = "edge.width = ~ w * 2 should be evaluated (monotone rescaling unchanged)"
+  )
+
+  # Formulas also work for vertex.size and vertex.nsides
+  g_fm_vertex <- tryCatch(
+    nplot(x_fm, layout = l_fm, skip.arrows = TRUE,
+          vertex.size = ~ log(deg + 1), vertex.nsides = ~ deg),
+    error = function(e) e
+  )
+  expect_false(
+    inherits(g_fm_vertex, "error"),
+    info = "vertex.size/vertex.nsides expression formulas should evaluate"
+  )
+
+  # A helpful error when the referenced attribute does not exist
+  expect_error(
+    nplot(x_fm, layout = l_fm, skip.arrows = TRUE, edge.width = ~ nope),
+    "does not|exist|evaluate",
+    info = "missing attribute in an edge.width formula should raise a clear error"
+  )
+
+  grDevices::dev.off()
+
   grDevices::pdf(tempfile(fileext = ".pdf"))
   set.seed(1)
   base_sample_lty <- tryCatch(

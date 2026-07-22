@@ -74,9 +74,10 @@ nplot(UKfaculty, layout = l, vertex.color = ~ Group)
 ```
 
 The same syntax works for a **numeric** attribute, in which case a continuous
-color gradient is used:
+color gradient is used. netplot detects that the attribute is continuous and
+draws a **color bar** (rather than a set of discrete keys) as the legend:
 
-```{r color-numeric, fig.cap="Vertices colored by in-degree (a numeric attribute) using a continuous gradient."}
+```{r color-numeric, fig.cap="Vertices colored by in-degree (a numeric attribute) using a continuous gradient, with a color-bar legend."}
 nplot(UKfaculty, layout = l, vertex.color = ~ indeg)
 ```
 
@@ -151,6 +152,11 @@ nplot(
   skip.arrows      = TRUE
 )
 ```
+
+For `vertex.nsides`, `vertex.size`, and `edge.width`, the right-hand side of the
+formula is *evaluated* with the graph's attributes in scope, so you are not
+limited to bare attribute names — expressions work too, e.g.
+`edge.width = ~ log1p(weight)` or `vertex.size = ~ degree ^ 2`.
 
 # Coloring edges: `edge.color = ~ ego(...) + alter(...)`
 

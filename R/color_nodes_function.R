@@ -153,18 +153,12 @@ color_nodes_legend <- function(object) {
     stop("Object is not of class netplot_color_nodes")
   }
 
-  # Acts depending on the type
-  values <- if (attr(x, "attr_type") %in% c("logical", "factor", "integer")) {
-    attr(x, "cpal")
-  } else {
+  # Continuous attributes get a color bar rather than a set of discrete keys
+  if (legend_is_continuous(x))
+    return(color_nodes_legend_continuous(object))
 
-    # Generating values
-    structure(
-      attr(x, "cpal")(c(0, .25, .5, .75, 1)),
-      names = stats::quantile(attr(x, "value"), probs = c(0, .25, .5, .75, 1))
-      )
-
-  }
+  # Discrete attributes (factor/logical/small integer): categorical legend
+  values <- attr(x, "cpal")
 
   print(nplot_legend(
     object,
@@ -172,6 +166,101 @@ color_nodes_legend <- function(object) {
     pch    = 21,
     gp     = grid::gpar(fill = values)
   ))
+
+}
+
+#' Decide whether a color mapping should use a continuous (color bar) legend
+#'
+#' Factors and logicals are always discrete. Numeric attributes are continuous.
+#' Integer attributes are treated as continuous only when they take many
+#' distinct values (otherwise a categorical legend is clearer).
+#' @param x A `netplot_color_nodes` object.
+#' @noRd
+legend_is_continuous <- function(x) {
+
+  attr_type <- attr(x, "attr_type")
+
+  if (attr_type == "numeric")
+    return(TRUE)
+
+  if (attr_type == "integer")
+    return(length(unique(attr(x, "value"))) > 15L)
+
+  FALSE
+
+}
+
+#' Draw a `netplot` object together with a continuous color-bar legend
+#'
+#' Called by [print.netplot()] when `vertex.color` was mapped from a continuous
+#' attribute. The network is drawn first and the color bar is overlaid in the
+#' top-right corner of the device.
+#' @param object A `netplot` object with a continuous `.legend_vertex_fill`.
+#' @noRd
+color_nodes_legend_continuous <- function(object) {
+
+  x       <- object$.legend_vertex_fill
+  values  <- attr(x, "value")
+  palette <- attr(x, "palette")
+  main    <- attr(x, "attr_name")
+
+  rng  <- range(values, na.rm = TRUE)
+  cols <- grDevices::colorRampPalette(palette)(100) # low -> high
+
+  # Tick marks within the observed range
+  ticks <- pretty(rng, n = 4L)
+  ticks <- ticks[ticks >= rng[1] & ticks <= rng[2]]
+  if (length(ticks) < 2L)
+    ticks <- rng
+
+  # Draw the network first (without recursing into the legend logic)
+  print(object, legend = FALSE, newpage = TRUE)
+
+  # Overlay the color bar in the top-right corner of the device
+  vp <- grid::viewport(
+    x      = grid::unit(1, "npc") - grid::unit(1.5, "lines"),
+    y      = grid::unit(0.78, "npc"),
+    width  = grid::unit(0.6, "lines"),
+    height = grid::unit(0.30, "npc"),
+    just   = c("right", "center"),
+    yscale = rng,
+    name   = "netplot-colorkey"
+  )
+
+  grid::pushViewport(vp)
+  on.exit(grid::upViewport(), add = TRUE)
+
+  # The gradient (top = high value)
+  grid::grid.raster(
+    grDevices::as.raster(matrix(rev(cols), ncol = 1L)),
+    width       = grid::unit(1, "npc"),
+    height      = grid::unit(1, "npc"),
+    interpolate = TRUE
+  )
+
+  # A thin frame around the bar
+  grid::grid.rect(gp = grid::gpar(fill = NA, col = "gray40", lwd = .5))
+
+  # Tick labels to the right of the bar
+  grid::grid.text(
+    label = format(ticks, trim = TRUE),
+    x     = grid::unit(1, "npc") + grid::unit(0.3, "lines"),
+    y     = grid::unit(ticks, "native"),
+    just  = "left",
+    gp    = grid::gpar(fontsize = 8)
+  )
+
+  # Title above the bar
+  if (length(main) && nzchar(main))
+    grid::grid.text(
+      label = main,
+      x     = grid::unit(0.5, "npc"),
+      y     = grid::unit(1, "npc") + grid::unit(0.7, "lines"),
+      just  = "bottom",
+      gp    = grid::gpar(fontsize = 9, fontface = "bold")
+    )
+
+  invisible(object)
 
 }
 

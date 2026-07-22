@@ -341,7 +341,8 @@ hand. The mapping depends on the aesthetic:
 Character/factor attributes are mapped to a categorical palette, numeric
 attributes to a continuous gradient, and logical attributes to two colors.
 When used this way, \code{print()}-ing the resulting plot also draws a matching
-legend.
+legend: a categorical key for discrete attributes and a continuous color
+bar for continuous ones.
 \item \code{vertex.nsides = ~ attr} maps each unique value of \code{attr} to a distinct
 vertex shape (triangle, square, pentagon, ...).
 \item \code{vertex.size = ~ attr} and \code{edge.width = ~ attr} scale sizes/widths from a
@@ -349,6 +350,11 @@ numeric vertex/edge attribute.
 \item \code{edge.color} uses a different, richer formula grammar based on \code{ego()} and
 \code{alter()} to mix the endpoints' colors; see \link{netplot-formulae}.
 }
+
+For \code{vertex.nsides}, \code{vertex.size}, and \code{edge.width} the right-hand side of
+the formula is \emph{evaluated} with the graph's attributes in scope, so besides
+bare names you can use expressions, e.g. \code{edge.width = ~ log1p(weight)} or
+\code{vertex.size = ~ degree ^ 2}.
 
 For example, \code{nplot(x, vertex.color = ~ gender, vertex.size = ~ degree)}
 colors vertices by the \code{gender} attribute and sizes them by \code{degree}. The
