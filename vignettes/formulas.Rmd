@@ -52,9 +52,10 @@ data("UKfaculty", package = "igraphdata")
 set.seed(225)
 l <- layout_with_fr(UKfaculty)
 
-# A couple of extra attributes to play with
-V(UKfaculty)$indeg  <- degree(UKfaculty, mode = "in")
-V(UKfaculty)$is_hub <- V(UKfaculty)$indeg > median(V(UKfaculty)$indeg)
+# A couple of extra attributes to play with. We qualify igraph::degree()
+# explicitly because other packages (e.g. sna) also define a degree().
+V(UKfaculty)$indeg  <- igraph::degree(UKfaculty, mode = "in")
+V(UKfaculty)$is_hub <- V(UKfaculty)$indeg > stats::median(V(UKfaculty)$indeg)
 ```
 
 # Coloring vertices: `vertex.color = ~ attr`
