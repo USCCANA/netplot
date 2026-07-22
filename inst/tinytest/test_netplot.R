@@ -179,7 +179,7 @@ if (requireNamespace("igraph", quietly = TRUE)) {
     info = "nplot should keep edge.line.lty aligned when sample.edges drops edges"
   )
 
-  grDevices::pdf(NULL)
+  grDevices::pdf(tempfile(fileext = ".pdf"))
   set.seed(1)
   base_sample_lty <- tryCatch(
     nplot_base(x_sample, layout = l_sample, skip.arrows = TRUE,
@@ -193,7 +193,7 @@ if (requireNamespace("igraph", quietly = TRUE)) {
     info = "nplot_base should subset edge.line.lty when sample.edges drops edges"
   )
 
-  grDevices::pdf(NULL)
+  grDevices::pdf(tempfile(fileext = ".pdf"))
   expect_error(
     nplot_base(x, layout = l, skip.arrows = TRUE,
                edge.line.lty = edge_ltys[seq_len(2)]),

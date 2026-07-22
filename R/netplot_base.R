@@ -120,14 +120,18 @@ nplot_base <- function(
     )
 
     for (epar in edge_par) {
-      if (is.null(get(epar)))
+      # Force and cache the (possibly lazily-evaluated) argument once, so we
+      # don't re-evaluate user-supplied expressions while inspecting/subsetting.
+      val <- get(epar)
+
+      if (is.null(val))
         next
 
-      if (is.matrix(get(epar)) || is.data.frame(get(epar))) {
-        if (nrow(get(epar)) == M)
-          assign(epar, get(epar)[sample.edges, , drop = FALSE])
-      } else if (length(get(epar)) == M) {
-        assign(epar, get(epar)[sample.edges])
+      if (is.matrix(val) || is.data.frame(val)) {
+        if (nrow(val) == M)
+          assign(epar, val[sample.edges, , drop = FALSE])
+      } else if (length(val) == M) {
+        assign(epar, val[sample.edges])
       }
     }
 
