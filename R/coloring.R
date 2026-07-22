@@ -132,12 +132,34 @@ netplot_edge_formulae <- function(x, fm) {
   })
 }
 
-#' Formulas in `netplot`
+#' Edge-color formulas in `netplot`
 #'
 #' Edge colors in both [nplot()] and [set_edge_gpar()] can be specified using
 #' a formula based on `ego()` and `alter()` (source and target). This way the
 #' user can set various types of combination varying the mixing of the colors,
 #' the alpha levels, and the actual mixing colors to create edge colors.
+#'
+#' @details
+#' The formula is one-sided and combines the special terms `ego()` (the source
+#' vertex) and `alter()` (the target vertex) with `+`. Each term draws its color
+#' from the corresponding endpoint's `vertex.color` unless a `col` is supplied,
+#' and accepts:
+#'
+#' - `col`: the base color to use for that endpoint.
+#' - `alpha`: transparency, from 0 (fully transparent) to 1 (opaque).
+#' - `mix`: how much weight that endpoint's color receives when the two are
+#'   blended along the edge.
+#'
+#' For instance, `~ ego(alpha = .1, col = "gray") + alter` (the default) fades
+#' each edge from a faint gray at the source to the target's color, producing the
+#' characteristic netplot look.
+#'
+#' This grammar is specific to *edge colors*. To map other aesthetics (vertex
+#' color, shape, size, or edge width) from a graph attribute, pass a formula
+#' naming the attribute directly to [nplot()] (e.g. `vertex.color = ~ group`);
+#' see the "Mapping attributes with formulas" section of [nplot()].
+#'
+#' @seealso [nplot()] for the attribute-mapping formulas, and [set_edge_gpar()].
 #'
 #' @param col Any valid color. Can be a single color or a vector.
 #' @param alpha Number. Alpha levels

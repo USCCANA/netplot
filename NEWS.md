@@ -1,5 +1,13 @@
 # netplot 0.3-0
 
+* Documentation overhaul: `nplot()` now documents the formula interface for
+  mapping vertex/edge aesthetics from graph attributes, the README highlights
+  what sets netplot apart, a package-level help page was added, and the pkgdown
+  reference is organized by feature.
+
+* New vignette `"formulas"` demonstrating how to color, shape, and size vertices
+  (and scale edge widths) from graph attributes using formulas.
+
 * `nplot.network()` now uses the `"weight"` edge attribute for `edge.width`
   by default (like `nplot.igraph()` already did), so edge widths reflect edge
   weights instead of being drawn uniformly. `edge.width` values are also

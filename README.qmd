@@ -24,16 +24,45 @@ status](https://www.r-pkg.org/badges/version/netplot)](https://cran.r-project.or
 # netplot
 
 
-An alternative graph visualization tool that emphasizes aesthetics, providing default parameters that deliver out-of-the-box lovely visualizations.
+**netplot** is a graph visualization engine for R that emphasizes *aesthetics*.
+Its defaults are chosen so that a single call to `nplot()` produces a
+publication-quality figure out of the box, while still giving you fine-grained
+control when you need it. It works directly with `igraph`, `network`, and
+adjacency-matrix objects.
 
-Some features:
+## Why netplot?
 
-1.  Auto-scaling of vertices using sizes relative to the plotting device.
-2.  Embedded edge color mixer.
-3.  True curved edges drawing.
-4.  User-defined edge curvature.
-5.  Nicer vertex frame color.
-6.  Better use of space-filling the plotting device.
+Compared with the base `plot()` methods in `igraph` and `sna`/`network`,
+netplot aims to make the *common case beautiful* and the *hard case possible*:
+
+- **Beautiful defaults.** Vertices, edges, arrows, and labels are auto-scaled
+  *relative to the plotting device*, so figures look right regardless of size or
+  aspect ratio and fill the plotting area instead of floating in whitespace.
+- **Map data to aesthetics with formulas.** Color, shape, and size vertices (and
+  scale edge widths) straight from graph attributes: `nplot(g, vertex.color = ~
+  group, vertex.nsides = ~ group, vertex.size = ~ degree)`. Categorical,
+  numeric, and logical attributes are each handled sensibly, and a legend is
+  added automatically. See `vignette("formulas")`.
+- **Smart edges.** True curved edges with user-defined curvature, an embedded
+  edge-color mixer that blends each edge between its endpoints' colors, and
+  edge-width/arrow scaling that respects the layout.
+- **Built on `grid`.** Because netplot draws with the `grid` system (the same
+  engine as `ggplot2`), plots are first-class grid objects: you can post-edit
+  them with `set_vertex_gpar()` / `set_edge_gpar()`, arrange several with
+  `gridExtra::grid.arrange()`, add gradients, and export cleanly.
+- **Lightweight.** Following the "tinyverse" philosophy, netplot leans on base R
+  graphics facilities and keeps its dependency footprint small.
+
+A quick feature checklist:
+
+1.  Auto-scaling of vertices, edges, and labels relative to the plotting device.
+2.  Formula interface to map colors, shapes, and sizes from graph attributes.
+3.  Embedded edge color mixer (blends edges between endpoint colors).
+4.  True curved edges with user-defined curvature.
+5.  Nicer vertex frame colors and vertex shapes.
+6.  Automatic legends and color keys.
+7.  Gradient fills for vertices and edges.
+8.  Better use of space, filling the plotting device.
 
 The package uses the `grid` plotting system (just like `ggplot2`).
 

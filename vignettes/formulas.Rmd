@@ -1,0 +1,207 @@
+---
+title: "Mapping aesthetics with formulas"
+author: "George G. Vega Yon"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Mapping aesthetics with formulas}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 6,
+  fig.height = 6,
+  warning = FALSE,
+  message = FALSE
+)
+```
+
+One of the most convenient features of `nplot()` is that many aesthetics can be
+mapped **directly from graph attributes** using a one-sided formula, instead of
+building the vector of colors, shapes, or sizes by hand. This vignette walks
+through the different formula interfaces available in **netplot**.
+
+At a glance, `nplot()` understands two flavors of formula:
+
+| Aesthetic       | Formula                | What it does                                                        |
+|-----------------|------------------------|---------------------------------------------------------------------|
+| `vertex.color`  | `~ attr`               | Colors vertices by a vertex attribute (categorical, numeric, logical). |
+| `vertex.nsides` | `~ attr`               | Maps each unique value of a vertex attribute to a distinct shape.   |
+| `vertex.size`   | `~ attr`               | Scales vertex sizes from a numeric vertex attribute.                |
+| `edge.width`    | `~ attr`               | Scales edge widths from a numeric edge attribute.                   |
+| `edge.color`    | `~ ego(...) + alter(...)` | Blends edge colors from the two endpoints (see the last section).|
+
+```{r pkgs}
+library(netplot)
+library(igraph)
+```
+
+# A working example
+
+We will use the `UKfaculty` network from the **igraphdata** package, a
+friendship network among faculty at a UK university. It already carries a
+`Group` vertex attribute (the school/department each person belongs to).
+
+```{r data}
+data("UKfaculty", package = "igraphdata")
+
+set.seed(225)
+l <- layout_with_fr(UKfaculty)
+
+# A couple of extra attributes to play with
+V(UKfaculty)$indeg  <- degree(UKfaculty, mode = "in")
+V(UKfaculty)$is_hub <- V(UKfaculty)$indeg > median(V(UKfaculty)$indeg)
+```
+
+# Coloring vertices: `vertex.color = ~ attr`
+
+Passing `vertex.color = ~ Group` colors each vertex according to its `Group`
+attribute. netplot detects the type of the attribute and picks a sensible
+scale automatically:
+
+* **character / factor** attributes are mapped to a categorical palette,
+* **numeric** attributes to a continuous gradient, and
+* **logical** attributes to two contrasting colors.
+
+When you *print* a plot built this way, netplot also draws a matching legend.
+
+```{r color-factor, fig.cap="Vertices colored by the categorical `Group` attribute, with an automatic legend."}
+nplot(UKfaculty, layout = l, vertex.color = ~ Group)
+```
+
+The same syntax works for a **numeric** attribute, in which case a continuous
+color gradient is used:
+
+```{r color-numeric, fig.cap="Vertices colored by in-degree (a numeric attribute) using a continuous gradient."}
+nplot(UKfaculty, layout = l, vertex.color = ~ indeg)
+```
+
+And for a **logical** attribute, mapping the two values to two colors:
+
+```{r color-logical, fig.cap="Vertices colored by a logical attribute (hub vs. non-hub)."}
+nplot(UKfaculty, layout = l, vertex.color = ~ is_hub)
+```
+
+# Shaping vertices: `vertex.nsides = ~ attr`
+
+`vertex.nsides` controls the number of sides of each vertex polygon (3 = a
+triangle, 4 = a square, and larger numbers approximate a circle). Passing a
+formula maps every unique value of the attribute to a **distinct shape**, which
+is handy for encoding a second categorical variable alongside color:
+
+```{r shape, fig.cap="Vertex color *and* shape mapped from the same `Group` attribute."}
+nplot(
+  UKfaculty,
+  layout        = l,
+  vertex.color  = ~ Group,
+  vertex.nsides = ~ Group
+)
+```
+
+Because each group gets both a color and a shape, the figure stays readable even
+when printed in grayscale.
+
+# Sizing vertices: `vertex.size = ~ attr`
+
+`vertex.size` accepts a formula naming a **numeric** vertex attribute. Values
+are rescaled to the range given by `vertex.size.range`, so more central actors
+show up as larger nodes:
+
+```{r size, fig.cap="Vertex size mapped from in-degree."}
+nplot(
+  UKfaculty,
+  layout            = l,
+  vertex.size       = ~ indeg,
+  vertex.size.range = c(.01, .04, 4)
+)
+```
+
+# Putting it together
+
+The formula interfaces compose, so a single `nplot()` call can encode several
+variables at once — color, shape, and size — with very little code:
+
+```{r combined, fig.cap="Color, shape, and size all mapped from graph attributes in a single call."}
+nplot(
+  UKfaculty,
+  layout            = l,
+  vertex.color      = ~ Group,   # color by department
+  vertex.nsides     = ~ Group,   # distinct shape per department
+  vertex.size       = ~ indeg,   # size by popularity (in-degree)
+  vertex.size.range = c(.01, .04, 4)
+)
+```
+
+# Scaling edges: `edge.width = ~ attr`
+
+Edges have their own numeric attributes too. `edge.width = ~ attr` scales edge
+widths from a numeric **edge** attribute; the values are normalized and mapped
+to `edge.width.range`. Here we use the friendship `weight`:
+
+```{r edge-width, fig.cap="Edge width mapped from the numeric `weight` edge attribute."}
+nplot(
+  UKfaculty,
+  layout           = l,
+  edge.width       = ~ weight,
+  edge.width.range = c(1, 4, 4),
+  skip.arrows      = TRUE
+)
+```
+
+# Coloring edges: `edge.color = ~ ego(...) + alter(...)`
+
+Edge *colors* use a richer, dedicated grammar built from two special terms:
+
+* `ego()` — the **source** vertex of the edge, and
+* `alter()` — the **target** vertex.
+
+Each term borrows its color from the corresponding endpoint's `vertex.color`
+(unless you pass an explicit `col`), and each accepts three tweaks:
+
+* `col` — the base color,
+* `alpha` — transparency, from 0 (transparent) to 1 (opaque), and
+* `mix` — how much weight that endpoint contributes when the two colors are
+  blended along the edge.
+
+The default, `~ ego(alpha = .1, col = "gray") + alter`, fades each edge from a
+faint gray at the source to the target's color. The panels below vary `mix` to
+shift the blend from *alter only* to *ego only*:
+
+```{r edge-color, fig.width=7, fig.height=3, fig.cap="Varying the `mix` between `ego` and `alter` in the edge color formula. Left: alter only. Middle: an even blend. Right: ego only."}
+gridExtra::grid.arrange(
+  nplot(UKfaculty, layout = l, vertex.color = ~ Group,
+        edge.color = ~ ego(mix = 0, alpha = .1) + alter(mix = 1)),
+  nplot(UKfaculty, layout = l, vertex.color = ~ Group,
+        edge.color = ~ ego(mix = .5, alpha = .1) + alter(mix = .5)),
+  nplot(UKfaculty, layout = l, vertex.color = ~ Group,
+        edge.color = ~ ego(mix = 1, alpha = .1) + alter(mix = 0)),
+  ncol = 3
+)
+```
+
+# Applying formulas after the fact
+
+The attribute-mapping formulas for vertex color also work with
+`set_vertex_gpar()`, so you can recolor an existing plot without rebuilding it:
+
+```{r set-gpar, fig.cap="Recoloring an existing plot by attribute using `set_vertex_gpar()`."}
+np <- nplot(UKfaculty, layout = l)
+
+set_vertex_gpar(np, element = "core", fill = ~ Group)
+```
+
+# Summary
+
+* Use `vertex.color = ~ attr` to color vertices by an attribute (with an
+  automatic legend), `vertex.nsides = ~ attr` to give each category a shape, and
+  `vertex.size = ~ attr` / `edge.width = ~ attr` to scale sizes and widths from
+  numeric attributes.
+* Use `edge.color = ~ ego(...) + alter(...)` to blend edge colors from their
+  endpoints; see `?\`netplot-formulae\`` for the full grammar.
+* All of these compose, letting a single `nplot()` call encode several variables
+  at once.
+```

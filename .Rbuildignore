@@ -17,3 +17,8 @@ netplot\._.*\.tar\.gz
 ^AGENTS\.md$
 ^\.devcontainer$
 ^\.vscode$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.claude$
+^CLAUDE\.md$
