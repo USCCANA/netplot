@@ -96,7 +96,7 @@ nplot(
   vertex.label.fontface = "plain",
   vertex.label.show = 0.3,
   vertex.label.range = c(5, 15),
-  edge.width = 1,
+  edge.width = network::get.edge.attribute(x, "weight"),
   edge.width.range = c(1, 2),
   edge.arrow.size = NULL,
   edge.color = ~ego(alpha = 0.1, col = "gray") + alter,
@@ -198,9 +198,10 @@ the vertex. E.g. three is a triangle, and 100 approximates a circle.}
 
 \item{vertex.color}{Vector of length \code{vcount(x)}. Vertex HEX or built in colors.}
 
-\item{vertex.size.range}{Numeric vector of length 3. Relative size for the
+\item{vertex.size.range}{Numeric vector of length 2 or 3, or \code{NULL}. Relative size for the
 minimum and maximum of the plot, and curvature of the scale. The third number
-is used as \code{size^rel[3]}.}
+is used as \code{size^rel[3]}. If \code{NULL}, scaling is suppressed and \code{vertex.size}
+is used as is.}
 
 \item{vertex.frame.color}{Vector of length \code{vcount(x)}. Border of vertex in
 HEX or built in colors.}
@@ -227,11 +228,16 @@ top ranking according to \code{vertex.size}.}
 \item{vertex.label.range}{Numeric vector of size 2 or 3. Relative scale of
 \code{vertex.label.fontsize} in points (see \link[grid:gpar]{grid::gpar}).}
 
-\item{edge.width}{Vector of length \code{ecount(x)} from 0 to 1. All edges will be
-the same size.}
+\item{edge.width}{Numeric vector of length \code{ecount(x)}. Relative edge widths.
+Values are normalized and then mapped to the range specified by \code{edge.width.range},
+unless \code{edge.width.range} is \code{NULL}.
+For \code{nplot.igraph} and \code{nplot.network}, defaults to the "weight" edge
+attribute if present; otherwise all edges use width 1.}
 
-\item{edge.width.range}{Vector of length \code{ecount(x)} from 0 to 1. Adjusting
-width according to weight.}
+\item{edge.width.range}{Numeric vector of length 2, or \code{NULL}. The minimum and maximum line
+widths (in points) to use when mapping \code{edge.width} values. For example,
+\code{c(1, 4)} maps the smallest edge weight to 1pt and the largest to 4pt.
+If \code{NULL}, scaling is suppressed and \code{edge.width} is used as is.}
 
 \item{edge.arrow.size}{Vector of length \code{ecount(x)} from 0 to 1.}
 

@@ -2,12 +2,16 @@
 #' @param size Numeric vector. Size of the node (radious).
 #' @param rel Numeric vector of length 3. Relative size for the minimum and maximum
 #' of the plot, and curvature of the scale. The third number is used as `size^rel[3]`.
+#' If `NULL`, scaling is suppressed.
 #'
 #' @details
 #' This function is to be called after [plot.new], as it takes the parameter `usr`
 #' from the
 #' @noRd
 rescale_size <- function(size, rel=c(.01, .05, 1)) {
+
+  if (is.null(rel))
+    return(size)
 
   # Checking the rel size
   if (length(rel) == 2)
@@ -204,4 +208,3 @@ map_attribute_to_shape <- function(x) {
   names(sides_lookup)[as.numeric(factor(x))]
 
 }
-

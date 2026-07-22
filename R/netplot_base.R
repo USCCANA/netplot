@@ -104,9 +104,37 @@ nplot_base <- function(
 
   # Computing shapes -----------------------------------------------------------
   E <- igraph::as_edgelist(x, names = FALSE)
+  M <- nrow(E)
 
   if (sample.edges < 1) {
-    sample.edges <- sample.int(nrow(E), floor(nrow(E)*sample.edges))
+    sample.edges <- sample.int(M, floor(M*sample.edges))
+
+    edge_par <- c(
+      "edge.width",
+      "edge.arrow.size",
+      "edge.color.mix",
+      "edge.color.alpha",
+      "edge.curvature",
+      "edge.line.lty",
+      "edge.line.breaks"
+    )
+
+    for (epar in edge_par) {
+      # Force and cache the (possibly lazily-evaluated) argument once, so we
+      # don't re-evaluate user-supplied expressions while inspecting/subsetting.
+      val <- get(epar)
+
+      if (is.null(val))
+        next
+
+      if (is.matrix(val) || is.data.frame(val)) {
+        if (nrow(val) == M)
+          assign(epar, val[sample.edges, , drop = FALSE])
+      } else if (length(val) == M) {
+        assign(epar, val[sample.edges])
+      }
+    }
+
     E <- E[sample.edges, , drop=FALSE]
   }
 
@@ -115,7 +143,10 @@ nplot_base <- function(
     edge.width <- rep(1.0, igraph::ecount(x))
 
   # Rescaling edges
-  edge.width <- rescale_size(edge.width/max(edge.width, na.rm=TRUE), rel = edge.width.range)
+  if (is.null(edge.width.range))
+    edge.width <- rescale_size(edge.width, rel = edge.width.range)
+  else
+    edge.width <- rescale_size(edge.width/max(edge.width, na.rm=TRUE), rel = edge.width.range)
 
   if (!length(edge.arrow.size))
     edge.arrow.size <- vertex.size[E[,1]]/1.5
@@ -172,6 +203,8 @@ nplot_base <- function(
     edge.line.lty <- rep(1L, length(edge.coords))
   else if (length(edge.line.lty) == 1)
     edge.line.lty <- rep(edge.line.lty, length(edge.coords))
+  else if (length(edge.line.lty) != length(edge.coords))
+    stop("edge.line.lty must have length 1 or one value per plotted edge.")
 
   if (!length(edge.color.alpha))
     edge.color.alpha <- matrix(.5, nrow= length(edge.coords), ncol=2)
@@ -261,6 +294,8 @@ nplot_base <- function(
         edges  = vertex.nsides[i],
         radius = vertex.size[i],
         doughnut = vertex.size[i]*vertex.frame.prop[i],
+        init.angle = vertex.rot[i]*180/pi,
+        last.angle = 360 + vertex.rot[i]*180/pi,
         rescale = FALSE,
         add     = TRUE,
         skip.plot.slices = TRUE

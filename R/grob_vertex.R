@@ -1,7 +1,7 @@
   sides_lookup <- list(
     line     = list(sides = 2, rot = 0),    # 1
     triangle = list(sides = 3, rot = 0),    # 2
-    square   = list(sides = 4, rot = pi/2), # 3
+    square   = list(sides = 4, rot = pi/4), # 3
     diamond  = list(sides = 4, rot = 0),    # 4
     pentagon = list(sides = 5, rot = 0),    # 5
     hexagon  = list(sides = 6, rot = 0),    # 6
@@ -9,6 +9,31 @@
     octagon  = list(sides = 8, rot = 0),    # 8
     circle   = list(sides = 25, rot = 0)    # 9
   )
+
+resolve_vertex_shape <- function(nsides, rot) {
+
+  if (!is.numeric(nsides) & !is.character(nsides)) {
+    stop("vertex.nsides must be numeric or character")
+  }
+
+  rot <- as.numeric(rot)
+
+  if (is.character(nsides)) {
+
+    shape <- nsides
+
+    if (shape %in% names(sides_lookup)) {
+      info <- sides_lookup[[shape]]
+      return(list(sides = info$sides, rot = info$rot + rot))
+    } else {
+      stop("Invalid shape name: ", shape)
+    }
+
+  }
+
+  list(sides = nsides, rot = rot)
+
+}
 
 #' Functions to calculate graph polygons coordinates
 #' @param netenv An object of class network environment.
@@ -25,27 +50,10 @@ grob_vertex <- function(netenv, v) {
   #   netenv$vertex.nsides <- eval(netenv$vertex.nsides, envir = data)
   # }
 
-  # Relax vertex.nsides validation
-  if(!is.numeric(netenv$vertex.nsides[v]) & !is.character(netenv$vertex.nsides[v])) {
-    stop("vertex.nsides must be numeric or character")
-  }
-
-  # Handle shape names
-  if(is.character(netenv$vertex.nsides[v])) {
-
-    shape <- netenv$vertex.nsides[v]
-
-    if(shape %in% names(sides_lookup)) {
-      info <- sides_lookup[[shape]]
-      netenv$vertex.nsides[v] <- info$sides
-      netenv$vertex.rot[v] <- info$rot
-    } else {
-      stop("Invalid shape name: ", shape)
-    }
-
-  }
-
-
+  vertex_shape <- resolve_vertex_shape(
+    nsides = netenv$vertex.nsides[v],
+    rot    = netenv$vertex.rot[v]
+  )
 
   if (netenv$skip.vertex)
     return(
@@ -63,18 +71,18 @@ grob_vertex <- function(netenv, v) {
   coords <- npolygon(
     x = netenv$layout[v, 1],
     y = netenv$layout[v, 2],
-    n = as.integer(netenv$vertex.nsides[v]),
+    n = as.integer(vertex_shape$sides),
     r = netenv$vertex.size[v]*(1 - netenv$vertex.frame.prop[v]),
-    d = as.integer(netenv$vertex.rot[v])
+    d = vertex_shape$rot
   )
 
   # Frame coordinates
   framecoords <- npolygon(
     x = netenv$layout[v, 1],
     y = netenv$layout[v, 2],
-    n = as.integer(netenv$vertex.nsides[v]),
+    n = as.integer(vertex_shape$sides),
     r = netenv$vertex.size[v],
-    d = as.integer(netenv$vertex.rot[v])
+    d = vertex_shape$rot
   )
 
   # Create color palette

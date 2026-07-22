@@ -1,0 +1,19 @@
+FROM ghcr.io/rocker-org/devcontainer/r-ver:4.5
+
+# Architecture-specific variable (built in Docker BuildKit)
+ARG TARGETARCH
+
+# Install quarto-cli and the orange-book extension
+RUN wget https://github.com/quarto-dev/quarto-cli/releases/download/v1.9.35/quarto-1.9.35-linux-${TARGETARCH}.deb && \
+    dpkg -i quarto-1.9.35-linux-${TARGETARCH}.deb && \
+    rm quarto-1.9.35-linux-${TARGETARCH}.deb
+
+# Adding R packages
+RUN install2.r --error knitr rmarkdown markdown igraphdata intergraph \
+  ggraph gridGraphics ggplot2 gridExtra gridBase magrittr tinytest \
+  sna igraph network
+
+RUN apt-get update && apt-get install --no-install-recommends -y \
+  libglpk-dev
+
+CMD ["bash"]
