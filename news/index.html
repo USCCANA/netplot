@@ -134,7 +134,10 @@
 <a href="#netplot-03-0" class="anchor"></a>netplot 0.3-0<small> 2024-06-30 </small>
 </h1>
 <ul>
-<li><p><code>edge.width</code> now correctly reflected in the drawn line widths. Previously, the width was computed but not consistently applied via the graphical parameters of each edge grob. Closes <a href='https://github.com/USCCANA/netplot/issues/17'>#17</a>.</p></li>
+<li><p><code><a href="../reference/nplot.html">nplot.network()</a></code> now uses the <code>"weight"</code> edge attribute for <code>edge.width</code> by default (like <code><a href="../reference/nplot.html">nplot.igraph()</a></code> already did), so edge widths reflect edge weights instead of being drawn uniformly. <code>edge.width</code> values are also explicitly re-applied to each edge grob after color post-processing to keep the drawn line widths robust. Closes <a href='https://github.com/USCCANA/netplot/issues/17'>#17</a>.</p></li>
+<li><p><code>edge.width.range</code>, <code>vertex.size.range</code>, and <code>vertex.label.range</code> now accept <code>NULL</code> to suppress scaling and use the supplied values as-is.</p></li>
+<li><p>Fixed <code>vertex.rot</code>, which was truncated to an integer and so ignored fractional (radian) rotations; the named <code>"square"</code> shape orientation was corrected as well.</p></li>
+<li><p><code>edge.line.lty</code> is now validated to be length 1 or one value per plotted edge, and is subset correctly when <code>sample.edges</code> drops edges.</p></li>
 <li><p>Invalid arguments passed to <code><a href="../reference/nplot.html">nplot()</a></code> now raise an error.</p></li>
 <li><p>Figures with legends are not drawn twice.</p></li>
 <li><p>Values supported by <code><a href="../reference/nplot.html">nplot()</a></code> are now included in all methods (helps with argument completion).</p></li>
