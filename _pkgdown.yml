@@ -1,0 +1,53 @@
+url: https://usccana.github.io/netplot/
+
+template:
+  bootstrap: 5
+
+reference:
+- title: "Drawing networks"
+  desc: >
+    The main function of the package. `nplot()` draws a network using the grid
+    graphics system and works with igraph, network, and matrix objects.
+  contents:
+  - nplot
+
+- title: "Mapping attributes with formulas"
+  desc: >
+    Map vertex and edge aesthetics (colors, shapes, sizes, widths) directly from
+    graph attributes. Edge colors use the richer `ego()`/`alter()` grammar.
+  contents:
+  - netplot-formulae
+
+- title: "Editing and querying a plot"
+  desc: >
+    Retrieve and modify the graphical parameters of an existing `netplot`
+    object, or interactively locate a vertex.
+  contents:
+  - set_gpar
+  - locate_vertex
+
+- title: "Legends and color keys"
+  desc: "Annotate a plot with legends and color keys."
+  contents:
+  - nplot_legend
+  - colorkey
+
+- title: "Colors"
+  desc: "Helpers for building color scales and gradients."
+  contents:
+  - colorRamp2
+  - make_colors
+  - segments_gradient
+
+- title: "Low-level drawing primitives"
+  desc: >
+    Building blocks used internally by `nplot()`, exposed for advanced grid
+    graphics work.
+  contents:
+  - npolygon
+  - piechart
+
+- title: "Base-graphics backend"
+  desc: "An experimental base-graphics implementation of nplot."
+  contents:
+  - nplot_base

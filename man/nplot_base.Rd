@@ -39,14 +39,22 @@ matrices objects (see details).}
 
 \item{layout}{Numeric two-column matrix with the graph layout in x/y positions of the vertices.}
 
-\item{vertex.size}{Numeric vector of length \code{vcount(x)}. Absolute size of the vertex from 0 to 1.}
+\item{vertex.size}{Numeric vector of length \code{vcount(x)}. Absolute size of the
+vertex from 0 to 1. Can also be a one-sided formula (e.g. \code{~ degree}) naming a
+numeric vertex attribute to map sizes from (see "Mapping attributes with
+formulas").}
 
 \item{bg.col}{Color of the background.}
 
-\item{vertex.nsides}{Numeric vector of length \code{vcount(x)}. Number of sizes of
-the vertex. E.g. three is a triangle, and 100 approximates a circle.}
+\item{vertex.nsides}{Numeric vector of length \code{vcount(x)}. Number of sides of
+the vertex. E.g. three is a triangle, and 100 approximates a circle. Can also
+be a one-sided formula (e.g. \code{~ group}) naming a vertex attribute; each unique
+value is then mapped to a distinct shape (see "Mapping attributes with
+formulas").}
 
-\item{vertex.color}{Vector of length \code{vcount(x)}. Vertex HEX or built in colors.}
+\item{vertex.color}{Vector of length \code{vcount(x)}. Vertex HEX or built in
+colors. Can also be a one-sided formula (e.g. \code{~ group}) naming a vertex
+attribute to color vertices by (see "Mapping attributes with formulas").}
 
 \item{vertex.size.range}{Numeric vector of length 2 or 3, or \code{NULL}. Relative size for the
 minimum and maximum of the plot, and curvature of the scale. The third number
@@ -66,7 +74,9 @@ vertex does the frame occupy (values between 0 and 1).}
 Values are normalized and then mapped to the range specified by \code{edge.width.range},
 unless \code{edge.width.range} is \code{NULL}.
 For \code{nplot.igraph} and \code{nplot.network}, defaults to the "weight" edge
-attribute if present; otherwise all edges use width 1.}
+attribute if present; otherwise all edges use width 1. Can also be a one-sided
+formula (e.g. \code{~ weight}) naming a numeric edge attribute (see "Mapping
+attributes with formulas").}
 
 \item{edge.width.range}{Numeric vector of length 2, or \code{NULL}. The minimum and maximum line
 widths (in points) to use when mapping \code{edge.width} values. For example,

@@ -5,7 +5,7 @@
 \alias{color_formula}
 \alias{ego}
 \alias{alter}
-\title{Formulas in \code{netplot}}
+\title{Edge-color formulas in \code{netplot}}
 \usage{
 color_formula(x, col, alpha, env, type, mix = 1, postfix = NULL)
 
@@ -36,6 +36,27 @@ a formula based on \code{ego()} and \code{alter()} (source and target). This way
 user can set various types of combination varying the mixing of the colors,
 the alpha levels, and the actual mixing colors to create edge colors.
 }
+\details{
+The formula is one-sided and combines the special terms \code{ego()} (the source
+vertex) and \code{alter()} (the target vertex) with \code{+}. Each term draws its color
+from the corresponding endpoint's \code{vertex.color} unless a \code{col} is supplied,
+and accepts:
+\itemize{
+\item \code{col}: the base color to use for that endpoint.
+\item \code{alpha}: transparency, from 0 (fully transparent) to 1 (opaque).
+\item \code{mix}: how much weight that endpoint's color receives when the two are
+blended along the edge.
+}
+
+For instance, \code{~ ego(alpha = .1, col = "gray") + alter} (the default) fades
+each edge from a faint gray at the source to the target's color, producing the
+characteristic netplot look.
+
+This grammar is specific to \emph{edge colors}. To map other aesthetics (vertex
+color, shape, size, or edge width) from a graph attribute, pass a formula
+naming the attribute directly to \code{\link[=nplot]{nplot()}} (e.g. \code{vertex.color = ~ group});
+see the "Mapping attributes with formulas" section of \code{\link[=nplot]{nplot()}}.
+}
 \examples{
 if (require(gridExtra) & require(magrittr)) {
   library(igraph)
@@ -54,4 +75,7 @@ if (require(gridExtra) & require(magrittr)) {
     np \%>\% set_edge_gpar(col =~ego(mix=1) + alter(mix=0))
   )
 }
+}
+\seealso{
+\code{\link[=nplot]{nplot()}} for the attribute-mapping formulas, and \code{\link[=set_edge_gpar]{set_edge_gpar()}}.
 }

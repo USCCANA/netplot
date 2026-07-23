@@ -27,7 +27,7 @@ nplot_legend(
 
 \item{...}{Further arguments passed to \code{\link[grid:legendGrob]{grid::legendGrob()}}.}
 
-\item{packgrob.args}{List of arguments passed to \code{\link[grid:grid.pack]{grid::packGrob()}}.}
+\item{packgrob.args}{List of arguments passed to \code{\link[grid:packGrob]{grid::packGrob()}}.}
 
 \item{x}{An object of class \code{netplot_legend}.}
 
