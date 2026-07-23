@@ -4,7 +4,7 @@ author: "George G. Vega Yon"
 date: 2023-05-22
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Example with baseplots}
+  %\VignetteIndexEntry{Mixing netplot with base graphics}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
