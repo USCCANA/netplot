@@ -3,14 +3,16 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 [![CRAN
-status](https://www.r-pkg.org/badges/version/netplot)](https://cran.r-project.org/package=netplot)
-[![CRAN](https://cranlogs.r-pkg.org/badges/netplot)](https://cran.r-project.org/package=netplot)
-[![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/netplot)](https://cran.r-project.org/package=netplot)
+status](https://www.r-pkg.org/badges/version/netplot.png)](https://cran.r-project.org/package=netplot)
+[![CRAN](https://cranlogs.r-pkg.org/badges/netplot.png)](https://cran.r-project.org/package=netplot)
+[![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/rgexf.png)](https://cran.r-project.org/package=rgexf)
 [![R](https://github.com/USCCANA/netplot/actions/workflows/ci.yml/badge.svg)](https://github.com/USCCANA/netplot/actions/workflows/ci.yml)
+[![Build
+status](https://ci.appveyor.com/api/projects/status/3k2m3oq6o99qcs0r?svg=true.png)](https://ci.appveyor.com/project/gvegayon/netplot)
 [![USC’s Department of Preventive
 Medicine](https://raw.githubusercontent.com/USCbiostats/badges/master/tommy-uscprevmed-badge.svg)](https://preventivemedicine.usc.edu)
 
-# netplot
+# netplot <img src="man/figures/logo.png" align="right" height="200" alt="rgexf hex sticker logo"/>
 
 **netplot** is a graph visualization engine for R that emphasizes
 *aesthetics*. Its defaults are chosen so that a single call to `nplot()`
@@ -24,27 +26,28 @@ Compared with the base `plot()` methods in `igraph` and `sna`/`network`,
 netplot aims to make the *common case beautiful* and the *hard case
 possible*:
 
-- **Beautiful defaults.** Vertices, edges, arrows, and labels are
-  auto-scaled *relative to the plotting device*, so figures look right
-  regardless of size or aspect ratio and fill the plotting area instead
-  of floating in whitespace.
-- **Map data to aesthetics with formulas.** Color, shape, and size
-  vertices (and scale edge widths) straight from graph attributes:
-  `nplot(g, vertex.color = ~ group, vertex.nsides = ~ group, vertex.size = ~ degree)`.
-  Categorical, numeric, and logical attributes are each handled
-  sensibly, and a legend is added automatically. See
-  `vignette("formulas")`.
-- **Smart edges.** True curved edges with user-defined curvature, an
-  embedded edge-color mixer that blends each edge between its endpoints'
-  colors, and edge-width/arrow scaling that respects the layout.
-- **Built on `grid`.** Because netplot draws with the `grid` system (the
-  same engine as `ggplot2`), plots are first-class grid objects: you can
-  post-edit them with `set_vertex_gpar()` / `set_edge_gpar()`, arrange
-  several with `gridExtra::grid.arrange()`, add gradients, and export
-  cleanly.
-- **Lightweight.** Following the "tinyverse" philosophy, netplot leans
-  on base R graphics facilities and keeps its dependency footprint
-  small.
+-   **Beautiful defaults.** Vertices, edges, arrows, and labels are
+    auto-scaled *relative to the plotting device*, so figures look right
+    regardless of size or aspect ratio and fill the plotting area
+    instead of floating in whitespace.
+-   **Map data to aesthetics with formulas.** Color, shape, and size
+    vertices (and scale edge widths) straight from graph attributes:
+    `nplot(g, vertex.color = ~   group, vertex.nsides = ~ group, vertex.size = ~ degree)`.
+    Categorical, numeric, and logical attributes are each handled
+    sensibly, and a legend is added automatically. See
+    `vignette("formulas")`.
+-   **Smart edges.** True curved edges with user-defined curvature, an
+    embedded edge-color mixer that blends each edge between its
+    endpoints’ colors, and edge-width/arrow scaling that respects the
+    layout.
+-   **Built on `grid`.** Because netplot draws with the `grid` system
+    (the same engine as `ggplot2`), plots are first-class grid objects:
+    you can post-edit them with `set_vertex_gpar()` / `set_edge_gpar()`,
+    arrange several with `gridExtra::grid.arrange()`, add gradients, and
+    export cleanly.
+-   **Lightweight.** Following the “tinyverse” philosophy, netplot leans
+    on base R graphics facilities and keeps its dependency footprint
+    small.
 
 A quick feature checklist:
 
@@ -102,8 +105,8 @@ set.seed(1)
 data("UKfaculty", package = "igraphdata")
 l <- layout_with_fr(UKfaculty)
 #> This graph was created by an old(er) igraph version.
-#>   Call upgrade_graph() on it to use with the current igraph version
-#>   For now we convert it on the fly...
+#> ℹ Call `igraph::upgrade_graph()` on it to use with the current igraph version.
+#> For now we convert it on the fly...
 
 plot(UKfaculty, layout = l) # ala igraph
 ```
@@ -175,8 +178,8 @@ data(USairports, package="igraphdata")
 # Generating a layout naively
 layout   <- V(USairports)$Position
 #> This graph was created by an old(er) igraph version.
-#>   Call upgrade_graph() on it to use with the current igraph version
-#>   For now we convert it on the fly...
+#> ℹ Call `igraph::upgrade_graph()` on it to use with the current igraph version.
+#> For now we convert it on the fly...
 layout   <- do.call(rbind, lapply(layout, function(x) strsplit(x, " ")[[1]]))
 layout[] <- stringr::str_remove(layout, "^[a-zA-Z]+")
 layout   <- matrix(as.numeric(layout[]), ncol=2)

@@ -22,3 +22,4 @@ netplot\._.*\.tar\.gz
 ^pkgdown$
 ^\.claude$
 ^CLAUDE\.md$
+figures/logo\.svg
