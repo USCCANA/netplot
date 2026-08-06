@@ -10,4 +10,7 @@
 #' "netplot")` for mapping vertex/edge aesthetics from graph attributes.
 #'
 #' @keywords internal
+#' @section How to cite:
+#' If you use \pkg{netplot} in published work, please cite it. Run
+#' \code{citation("netplot")} in R for the full entry.
 "_PACKAGE"

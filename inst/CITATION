@@ -1,0 +1,25 @@
+# Year resolution: CRAN sets Date/Publication on the installed package; fall
+# back to DESCRIPTION's Date, then to the current year, so the package entry
+# never renders as "(????)".
+year <- if (!is.null(meta$`Date/Publication`)) {
+  substr(meta$`Date/Publication`, 1, 4)
+} else if (!is.null(meta$Date)) {
+  substr(meta$Date, 1, 4)
+} else {
+  format(Sys.Date(), "%Y")
+}
+note <- sprintf("R package version %s", meta$Version)
+
+bibentry(
+  bibtype = "Manual",
+  title   = "{{netplot: Beautiful Graph Drawing}}",
+  author  = c(
+    person("George", "Vega Yon", comment = c(ORCID = "0000-0002-3171-0844")),
+    person("Porter", "Bischoff", comment = c(ORCID = "0009-0004-6742-6281"))
+  ),
+  year    = year,
+  note    = note,
+  url     = "https://github.com/USCCANA/netplot",
+  doi     = "10.32614/CRAN.package.netplot",
+  header  = "To cite netplot in publications use:"
+)
