@@ -26,6 +26,16 @@ status](https://www.r-pkg.org/badges/version/netplot)](https://cran.r-project.or
 # netplot <img src="man/figures/logo.png" align="right" height="200" alt="rgexf hex sticker logo"/>
 
 
+
+<!-- how-to-cite -->
+> [!NOTE]
+> **How to cite netplot.** If you use **netplot** in published work, please cite it:
+>
+> Vega Yon G, Bischoff P. *netplot: Beautiful Graph Drawing*. doi:[10.32614/CRAN.package.netplot](https://doi.org/10.32614/CRAN.package.netplot)
+>
+> Run `citation("netplot")` in R for the BibTeX entry.
+<!-- how-to-cite -->
+
 **netplot** is a graph visualization engine for R that emphasizes *aesthetics*.
 Its defaults are chosen so that a single call to `nplot()` produces a
 publication-quality figure out of the box, while still giving you fine-grained

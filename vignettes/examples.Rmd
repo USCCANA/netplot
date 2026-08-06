@@ -9,6 +9,11 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+<!-- how-to-cite -->
+> **How to cite.** If you use **netplot** in published work, please cite it — run
+> `citation("netplot")` in R for the full entry.
+<!-- how-to-cite -->
+
 Some features:
 
 1.  Auto-scaling of vertices using sizes relative to the plotting device.

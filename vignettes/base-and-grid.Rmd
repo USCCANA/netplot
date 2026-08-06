@@ -9,6 +9,11 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+<!-- how-to-cite -->
+> **How to cite.** If you use **netplot** in published work, please cite it — run
+> `citation("netplot")` in R for the full entry.
+<!-- how-to-cite -->
+
 Working with grid graphics provides flexibility that is harder to get when using base graphics. Nevertheless, a lot of users may still be more comfortable with base graphics, so this document shows a few examples of how to mix both of them using the [`gridBase`](https://cran.r-project.org/package=gridBase) package.
 
 First, we load igraph to simulate a small network and complement that with uninteresting correlated data:
