@@ -3,6 +3,12 @@ url: https://usccana.github.io/netplot/
 template:
   bootstrap: 5
 
+authors:
+  "George Vega Yon":
+    href: "https://ggvy.cl"
+  "Porter Bischoff":
+    href: "https://orcid.org/0009-0004-6742-6281"
+
 reference:
 - title: "Drawing networks"
   desc: >
