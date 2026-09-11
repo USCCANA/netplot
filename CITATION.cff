@@ -1,0 +1,44 @@
+cff-version: 1.2.0
+message: 'To cite package "netplot" in publications use:'
+type: software
+license: MIT
+title: 'netplot: Beautiful Graph Drawing'
+version: 0.4-0
+doi: 10.32614/CRAN.package.netplot
+abstract: A graph visualization engine that emphasizes on aesthetics at the same time
+  providing default parameters that yield out-of-the-box-nice visualizations. The
+  package is built on top of 'The Grid Graphics Package' and seamlessly work with
+  'igraph' and 'network' objects.
+authors:
+- family-names: Vega Yon
+  given-names: George
+  email: g.vegayon@gmail.com
+  orcid: https://orcid.org/0000-0002-3171-0844
+- family-names: Bischoff
+  given-names: Porter
+  email: portergbischoff@gmail.com
+  orcid: https://orcid.org/0009-0004-6742-6281
+preferred-citation:
+  type: manual
+  title: 'netplot: Beautiful Graph Drawing'
+  authors:
+  - family-names: Vega Yon
+    given-names: George
+    orcid: https://orcid.org/0000-0002-3171-0844
+    email: g.vegayon@gmail.com
+  - family-names: Bischoff
+    given-names: Porter
+    orcid: https://orcid.org/0009-0004-6742-6281
+    email: portergbischoff@gmail.com
+  year: '2026'
+  notes: R package version 0.4-0
+  url: https://github.com/USCCANA/netplot
+  doi: 10.32614/CRAN.package.netplot
+repository: https://CRAN.R-project.org/package=netplot
+repository-code: https://github.com/USCCANA/netplot
+url: https://usccana.github.io/netplot/
+contact:
+- family-names: Vega Yon
+  given-names: George
+  email: g.vegayon@gmail.com
+  orcid: https://orcid.org/0000-0002-3171-0844
